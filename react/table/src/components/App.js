@@ -1,12 +1,12 @@
 import React from 'react';
-import 'components/App.css';
-import CommonComponent from 'components/common/CommonComponent';
+import EventTableContainer from 'components/EventTableContainer';
 
 function App() {
+  // TODO wrap in a web component
   return (
-    <div className="App">
-      <CommonComponent />
-    </div>
+    <>
+      <EventTableContainer />
+    </>
   );
 }
 

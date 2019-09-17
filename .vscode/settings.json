@@ -1,0 +1,5 @@
+{
+  "eslint.workingDirectories": ["./react/table"],
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "javascript.preferences.importModuleSpecifier": "non-relative"
+}
