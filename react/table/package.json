@@ -4,9 +4,11 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.4.2",
+    "i18next": "^17.0.16",
     "prop-types": "^15.7.2",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
+    "react-i18next": "^10.12.5",
     "react-scripts": "3.1.1"
   },
   "scripts": {
@@ -17,6 +19,7 @@
     "lint": "npx eslint --fix ./src"
   },
   "eslintConfig": {
+    "parser": "babel-eslint",
     "extends": [
       "eslint:recommended",
       "plugin:react/recommended",
@@ -54,7 +57,8 @@
             ".jsx"
           ]
         }
-      ]
+      ],
+      "react/state-in-constructor": 0
     }
   },
   "browserslist": {

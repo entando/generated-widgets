@@ -1,39 +1,26 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import EventTable from 'components/EventTable';
+import mockEvents from 'mockEvents';
 
-function createData(name, summary, start, end) {
-  return { name, summary, start, end };
-}
+export default class EventTableContainer extends PureComponent {
+  DOMAIN = process.env.REACT_APP_DOMAIN;
 
-export default function EventTableContainer() {
-  // TODO call backend api
+  JWT_TOKEN = process.env.REACT_APP_JWT_TOKEN;
 
-  const rows = [
-    createData(
-      'Spring Company Meeting',
-      'Spring Company Meeting',
-      new Date(2019, 3, 5, 19),
-      new Date(2019, 3, 5, 23)
-    ),
-    createData(
-      'Summer Company Meeting',
-      'Summer Company Meeting',
-      new Date(2019, 6, 10, 19),
-      new Date(2019, 6, 10, 23)
-    ),
-    createData(
-      'Autumn Company Meeting',
-      'Autumn Company Meeting',
-      new Date(2019, 9, 10, 19),
-      new Date(2019, 9, 10, 23)
-    ),
-    createData(
-      'Winter Company Meeting',
-      'Winter Company Meeting',
-      new Date(2019, 11, 15, 19),
-      new Date(2019, 11, 12, 23)
-    ),
-  ];
+  API = '/events';
 
-  return <EventTable rows={rows} />;
+  state = {
+    events: [],
+  };
+
+  async componentDidMount() {
+    this.setState({
+      events: mockEvents,
+    });
+  }
+
+  render() {
+    const { events } = this.state;
+    return <EventTable events={events} />;
+  }
 }
