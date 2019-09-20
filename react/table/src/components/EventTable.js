@@ -8,7 +8,16 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { Trans } from 'react-i18next';
 
-export default function EventTable({ events = [] }) {
+const EventTable = ({ events, onSelect }) => {
+  const tableRows = events.map(event => (
+    <TableRow hover style={{ cursor: 'pointer' }} key={event.id} onClick={() => onSelect(event)}>
+      <TableCell>{event.name}</TableCell>
+      <TableCell>{event.summary}</TableCell>
+      <TableCell>{event.start}</TableCell>
+      <TableCell>{event.end}</TableCell>
+    </TableRow>
+  ));
+
   return events.length ? (
     <Table>
       <TableHead>
@@ -27,22 +36,20 @@ export default function EventTable({ events = [] }) {
           </TableCell>
         </TableRow>
       </TableHead>
-      <TableBody>
-        {events.map(event => (
-          <TableRow key={event.name}>
-            <TableCell>{event.name}</TableCell>
-            <TableCell>{event.summary}</TableCell>
-            <TableCell>{event.start}</TableCell>
-            <TableCell>{event.end}</TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
+      <TableBody>{tableRows}</TableBody>
     </Table>
   ) : (
     <Trans i18nKey="event.noItems" />
   );
-}
+};
 
 EventTable.propTypes = {
   events: PropTypes.arrayOf(eventType).isRequired,
+  onSelect: PropTypes.func,
 };
+
+EventTable.defaultProps = {
+  onSelect: () => {},
+};
+
+export default EventTable;

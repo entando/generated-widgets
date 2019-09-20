@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import EventTable from 'components/EventTable';
 import eventsGet from 'api/events';
 
@@ -21,12 +22,24 @@ export default class EventTableContainer extends PureComponent {
         events,
       });
     } catch (err) {
-      // custom event
+      const { onError } = this.props;
+      onError(err);
     }
   }
 
   render() {
     const { events } = this.state;
-    return <EventTable events={events} />;
+    const { onSelect } = this.props;
+    return <EventTable events={events} onSelect={onSelect} />;
   }
 }
+
+EventTableContainer.propTypes = {
+  onError: PropTypes.func,
+  onSelect: PropTypes.func,
+};
+
+EventTableContainer.defaultProps = {
+  onError: () => {},
+  onSelect: () => {},
+};

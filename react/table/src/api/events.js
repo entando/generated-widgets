@@ -1,7 +1,7 @@
-import { DOMAIN, API, JWT_TOKEN } from 'api/constants';
+import { DOMAIN, JWT_TOKEN } from 'api/constants';
 
 export default async () => {
-  const url = `${DOMAIN}${API}`;
+  const url = `${DOMAIN}/events`;
   const init = {
     headers: {
       Authorization: `Bearer ${JWT_TOKEN}`,

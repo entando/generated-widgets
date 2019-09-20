@@ -1,0 +1,13 @@
+{
+  "translation": {
+    "event": {
+      "noItems": "Nessun evento disponibile",
+      "tableHeader": {
+        "name": "Nome",
+        "summary": "Descrizione",
+        "start": "Inizio",
+        "end": "Fine"
+      }
+    }
+  }
+}
