@@ -1,22 +1,28 @@
 import React, { PureComponent } from 'react';
 import EventTable from 'components/EventTable';
-import mockEvents from 'mockEvents';
+import eventsGet from 'api/events';
 
 export default class EventTableContainer extends PureComponent {
-  DOMAIN = process.env.REACT_APP_DOMAIN;
-
-  JWT_TOKEN = process.env.REACT_APP_JWT_TOKEN;
-
-  API = '/events';
-
   state = {
     events: [],
   };
 
   async componentDidMount() {
-    this.setState({
-      events: mockEvents,
-    });
+    let events = [];
+
+    try {
+      const json = await eventsGet();
+      events = json.map(event => ({
+        ...event,
+        start: new Date(event.start).toLocaleString(),
+        end: new Date(event.start).toLocaleString(),
+      }));
+      this.setState({
+        events,
+      });
+    } catch (err) {
+      // custom event
+    }
   }
 
   render() {

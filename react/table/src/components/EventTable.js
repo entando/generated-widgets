@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import eventType from 'eventType';
+import eventType from 'types/eventType';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -32,8 +32,8 @@ export default function EventTable({ events = [] }) {
           <TableRow key={event.name}>
             <TableCell>{event.name}</TableCell>
             <TableCell>{event.summary}</TableCell>
-            <TableCell>{event.start.toLocaleString()}</TableCell>
-            <TableCell>{event.end.toLocaleString()}</TableCell>
+            <TableCell>{event.start}</TableCell>
+            <TableCell>{event.end}</TableCell>
           </TableRow>
         ))}
       </TableBody>
