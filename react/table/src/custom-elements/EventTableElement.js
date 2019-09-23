@@ -8,7 +8,7 @@ class EventTableElement extends HTMLElement {
     const mountPoint = document.createElement('div');
     this.appendChild(mountPoint);
 
-    const locale = this.getAttribute('locale');
+    const locale = this.getAttribute('locale') || 'en';
     i18next.changeLanguage(locale);
 
     const customEventPrefix = 'event.table.';

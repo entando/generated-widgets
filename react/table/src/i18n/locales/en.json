@@ -1,13 +1,11 @@
 {
-  "translation": {
-    "event": {
-      "noItems": "No events available",
-      "tableHeader": {
-        "name": "Name",
-        "summary": "Summary",
-        "start": "Start",
-        "end": "End"
-      }
+  "event": {
+    "noItems": "No events available",
+    "tableHeader": {
+      "name": "Name",
+      "summary": "Summary",
+      "start": "Start",
+      "end": "End"
     }
   }
 }
