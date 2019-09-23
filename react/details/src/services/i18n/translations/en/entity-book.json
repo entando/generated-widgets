@@ -1,0 +1,7 @@
+{
+  "_entityName": "Book",
+  "id": "ID",
+  "title": "Title",
+  "releaseDate": "Release date",
+  "comments": "Comments"
+}

@@ -1,0 +1,6 @@
+{
+  "couldNotFetchData": "Unfortunatelly we could not fetch entity data",
+  "widgetName": "{{widgetNamePlaceholder}} details",
+  "name": "Name",
+  "value": "Value"
+}
