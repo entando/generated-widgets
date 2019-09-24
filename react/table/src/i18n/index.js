@@ -1,14 +1,10 @@
-import en from 'i18n/locales/en.json';
-import it from 'i18n/locales/it.json';
 import i18next from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import locales from 'i18n/locales';
+import i18nextOptions from 'i18n/i18nextOptions';
 
-const defaultNs = 'translation';
+i18next.use(initReactI18next).init(i18nextOptions);
 
-i18next.use(initReactI18next).init({
-  interpolation: { escapeValue: false },
-  ns: [defaultNs],
+Object.keys(locales).forEach(locale => {
+  i18next.addResourceBundle(locale, i18nextOptions.ns[0], locales[locale]);
 });
-
-i18next.addResourceBundle('en', defaultNs, en);
-i18next.addResourceBundle('it', defaultNs, it);
