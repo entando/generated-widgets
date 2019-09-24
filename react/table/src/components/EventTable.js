@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import eventType from 'types/eventType';
+import { withStyles } from '@material-ui/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -8,9 +9,15 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { Trans } from 'react-i18next';
 
-const EventTable = ({ events, onSelect }) => {
+const styles = {
+  root: {
+    cursor: 'pointer',
+  },
+};
+
+const EventTable = ({ classes, events, onSelect }) => {
   const tableRows = events.map(event => (
-    <TableRow hover style={{ cursor: 'pointer' }} key={event.id} onClick={() => onSelect(event)}>
+    <TableRow hover className={classes.root} key={event.id} onClick={() => onSelect(event)}>
       <TableCell>{event.name}</TableCell>
       <TableCell>{event.summary}</TableCell>
       <TableCell>{event.start}</TableCell>
@@ -44,6 +51,9 @@ const EventTable = ({ events, onSelect }) => {
 };
 
 EventTable.propTypes = {
+  classes: PropTypes.shape({
+    root: PropTypes.string.isRequired,
+  }).isRequired,
   events: PropTypes.arrayOf(eventType).isRequired,
   onSelect: PropTypes.func,
 };
@@ -52,4 +62,4 @@ EventTable.defaultProps = {
   onSelect: () => {},
 };
 
-export default EventTable;
+export default withStyles(styles)(EventTable);
