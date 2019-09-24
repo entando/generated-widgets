@@ -2,10 +2,14 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import EventTable from 'components/EventTable';
 import eventsGet from 'api/events';
+import ErrorNotification from 'components/common/ErrorNotification';
+import { ThemeProvider } from '@material-ui/styles';
+import { createMuiTheme } from '@material-ui/core';
 
 export default class EventTableContainer extends PureComponent {
   state = {
     events: [],
+    error: null,
   };
 
   async componentDidMount() {
@@ -22,15 +26,32 @@ export default class EventTableContainer extends PureComponent {
         events,
       });
     } catch (err) {
-      const { onError } = this.props;
-      onError(err);
+      this.handleError(err);
     }
   }
 
+  closeNotification = () => {
+    this.setState({ error: null });
+  };
+
+  handleError(err) {
+    const { onError } = this.props;
+    onError(err);
+    this.setState({
+      error: 'Unable to load data',
+    });
+  }
+
   render() {
-    const { events } = this.state;
+    const { error, events } = this.state;
     const { onSelect } = this.props;
-    return <EventTable events={events} onSelect={onSelect} />;
+    const theme = createMuiTheme();
+    return (
+      <ThemeProvider theme={theme}>
+        <EventTable events={events} onSelect={onSelect} />
+        <ErrorNotification message={error} onClose={this.closeNotification} />
+      </ThemeProvider>
+    );
   }
 }
 
