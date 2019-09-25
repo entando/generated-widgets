@@ -1,3 +1,4 @@
+import i18next from 'i18next';
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import EventTable from 'components/EventTable';
@@ -7,6 +8,8 @@ import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core';
 
 export default class EventTableContainer extends PureComponent {
+  theme = createMuiTheme();
+
   state = {
     events: [],
     error: null,
@@ -38,16 +41,15 @@ export default class EventTableContainer extends PureComponent {
     const { onError } = this.props;
     onError(err);
     this.setState({
-      error: 'Unable to load data',
+      error: i18next.t('event.error.dataLoading'),
     });
   }
 
   render() {
     const { error, events } = this.state;
     const { onSelect } = this.props;
-    const theme = createMuiTheme();
     return (
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={this.theme}>
         <EventTable events={events} onSelect={onSelect} />
         <ErrorNotification message={error} onClose={this.closeNotification} />
       </ThemeProvider>

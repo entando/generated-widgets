@@ -6,6 +6,9 @@
       "summary": "Summary",
       "start": "Start",
       "end": "End"
+    },
+    "error": {
+      "dataLoading": "Error during server connection"
     }
   }
 }

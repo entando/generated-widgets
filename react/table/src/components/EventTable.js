@@ -52,13 +52,16 @@ const EventTable = ({ classes, events, onSelect }) => {
 
 EventTable.propTypes = {
   classes: PropTypes.shape({
-    root: PropTypes.string.isRequired,
-  }).isRequired,
+    root: PropTypes.string,
+  }),
   events: PropTypes.arrayOf(eventType).isRequired,
   onSelect: PropTypes.func,
 };
 
 EventTable.defaultProps = {
+  classes: {
+    root: '',
+  },
   onSelect: () => {},
 };
 
