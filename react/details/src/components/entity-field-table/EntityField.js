@@ -4,7 +4,7 @@ import TableCell from '@material-ui/core/TableCell';
 import EntityFieldLabel from 'components/entity-field-table/EntityFieldLabel';
 import EntityFieldValue from 'components/entity-field-table/EntityFieldValue';
 
-import { fieldType } from 'components/prop-types/entity';
+import { fieldType } from 'components/types/entity';
 
 const EntityField = ({ field }) => (
   <>

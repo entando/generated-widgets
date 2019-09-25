@@ -1,0 +1,22 @@
+{
+  "translation": {
+    "common": {
+      "couldNotFetchData": "Unfortunately we could not fetch entity data",
+      "widgetName": "Details about {{widgetNamePlaceholder}}",
+      "name": "Name",
+      "value": "Value",
+      "loading": "Loading..."
+    },
+    "entities": {
+      "authors": {
+        "id": "ID",
+        "name": "Name",
+        "surname": "Surname",
+        "fullname": "Full name"
+      },
+      "books": {
+        "id": "ID"
+      }
+    }
+  }
+}

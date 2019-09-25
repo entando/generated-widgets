@@ -1,0 +1,22 @@
+{
+  "translation": {
+    "common": {
+      "couldNotFetchData": "Atsiprašome, bet nepatyvko gauti duomenų",
+      "widgetName": "Informacija apie {{widgetNamePlaceholder}}",
+      "name": "Pavadinimas",
+      "value": "Reikšmė",
+      "loading": "Kraunama..."
+    },
+    "entities": {
+      "authors": {
+        "id": "ID",
+        "name": "Vardas",
+        "surname": "Pavardė",
+        "fullname": "Vardas ir pavardė"
+      },
+      "books": {
+        "id": "ID"
+      }
+    }
+  }
+}

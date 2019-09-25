@@ -1,5 +1,20 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## TODOS:
+
+- Combine language files
+- Move ComponentWithError to \_\_tests\_\_ and change it to break on click
+- Move from services folder
+- Update the API logic to create all the requests for the API
+- Add error handling for missing endpoint
+
+* Add loader
+* Remove all TODOS
+* Add custom element logic
+* Add tests / remove commented tests
+* Update README
+* npm audit fix ?
+
 ## Available Scripts
 
 In the project directory, you can run:

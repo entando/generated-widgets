@@ -3,7 +3,7 @@ import { render } from '@testing-library/react';
 
 import Widget from 'components/Widget';
 
-import 'services/i18n/i18n';
+import 'i18n/i18n';
 
 test('renders widget', async () => {
   const { getByTestId } = render(<Widget />);

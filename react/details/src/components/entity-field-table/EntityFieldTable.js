@@ -8,7 +8,7 @@ import TableRow from '@material-ui/core/TableRow';
 
 import EntityField from 'components/entity-field-table/EntityField';
 
-import { entityFieldsType } from 'components/prop-types/entity';
+import { entityFieldsType } from 'components/types/entity';
 
 const EntityFieldTable = ({ entity }) => {
   const { t } = useTranslation();
@@ -17,8 +17,8 @@ const EntityFieldTable = ({ entity }) => {
     <Table>
       <TableHead>
         <TableRow>
-          <TableCell>{t('common:name')}</TableCell>
-          <TableCell>{t('common:value')}</TableCell>
+          <TableCell>{t('common.name')}</TableCell>
+          <TableCell>{t('common.value')}</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
