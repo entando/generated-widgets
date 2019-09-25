@@ -38,3 +38,5 @@ export const eventsWithDateStrings = eventsWithDateObjects.map(event => ({
   start: new Date(event.start).toLocaleString(),
   end: new Date(event.start).toLocaleString(),
 }));
+
+export const event1 = eventsWithDateStrings[0];
