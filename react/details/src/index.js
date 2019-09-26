@@ -5,7 +5,7 @@ import 'custom-elements/EntityDetailsElement';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import Widget from 'components/Widget';
+import Widget from 'components/WidgetContainer';
 
 ReactDOM.render(
   <Widget entityName="authors" entityElementId="1" />,

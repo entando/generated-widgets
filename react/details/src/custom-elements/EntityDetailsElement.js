@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import i18next from 'i18next';
-import Widget from 'components/Widget';
+import Widget from 'components/WidgetContainer';
 
 class EntityDetailsElement extends HTMLElement {
   connectedCallback() {
