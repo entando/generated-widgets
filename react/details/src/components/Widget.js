@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
+import { ThemeProvider } from '@material-ui/styles';
+import { createMuiTheme } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 
 import EntityAPI from 'api/entity-api';
@@ -40,7 +42,7 @@ function transformEntityFields(entity, entityName, t) {
   }, []);
 }
 
-const Widget = ({ entityName, entityElementId }) => {
+const Widget = ({ entityName, entityElementId, onError }) => {
   const [loading, setLoading] = useState(true);
   const [entity, setEntity] = useState({});
   const [error, setError] = useState(null);
@@ -48,32 +50,42 @@ const Widget = ({ entityName, entityElementId }) => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    EntityAPI.get(entityName, { id: entityElementId })
-      .then(response => response.json())
-      .then(response => transformEntityFields(response, entityName, t))
-      .then(response => setEntity(response))
-      .catch(e => setError(e))
-      .finally(() => setLoading(false));
-  }, [t, entityName, entityElementId]);
+    if (entityName && entityElementId) {
+      EntityAPI.get(entityName, { id: entityElementId })
+        .then(response => response.json())
+        .then(response => transformEntityFields(response, entityName, t))
+        .then(response => setEntity(response))
+        .catch(e => {
+          onError(e);
+          setError({ message: t('common.couldNotFetchData') });
+        })
+        .finally(() => setLoading(false));
+    } else {
+      setError({ message: t('common.missingProps') });
+    }
+  }, [t, entityName, entityElementId, onError]);
+
+  const theme = createMuiTheme();
 
   const renderError = () => <div>{t('common.couldNotFetchData')}</div>;
-
   const renderLoading = () => t('common.loading');
 
   return (
     <ErrorBoundary>
-      <Box>
-        {error && renderError()}
-        {!error && loading && renderLoading()}
-        {!error && !loading && (
-          <>
-            <h3 data-testid="widget-name-heading">
-              {t('common.widgetName', { widgetNamePlaceholder: entityName })}
-            </h3>
-            <EntityFieldTable entity={entity} />
-          </>
-        )}
-      </Box>
+      <ThemeProvider theme={theme}>
+        <Box>
+          {error && renderError()}
+          {!error && loading && renderLoading()}
+          {!error && !loading && (
+            <>
+              <h3 data-testid="widget-name-heading">
+                {t('common.widgetName', { widgetNamePlaceholder: entityName })}
+              </h3>
+              <EntityFieldTable entity={entity} />
+            </>
+          )}
+        </Box>
+      </ThemeProvider>
     </ErrorBoundary>
   );
 };
@@ -81,10 +93,12 @@ const Widget = ({ entityName, entityElementId }) => {
 Widget.propTypes = {
   entityName: PropTypes.string.isRequired,
   entityElementId: PropTypes.string,
+  onError: PropTypes.func,
 };
 
 Widget.defaultProps = {
   entityElementId: null,
+  onError: () => {},
 };
 
 export default Widget;

@@ -8,6 +8,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 - Update the API logic to create all the requests for the API
 - Add error handling for missing endpoint
 
+* Add error notification from Guiseppe branch
 * Add loader
 * Remove all TODOS
 * Add custom element logic

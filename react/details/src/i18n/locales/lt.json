@@ -2,10 +2,11 @@
   "translation": {
     "common": {
       "couldNotFetchData": "Atsiprašome, bet nepatyvko gauti duomenų",
-      "widgetName": "Informacija apie {{widgetNamePlaceholder}}",
+      "widgetName": "Informacija apie '{{widgetNamePlaceholder}}'",
       "name": "Pavadinimas",
       "value": "Reikšmė",
-      "loading": "Kraunama..."
+      "loading": "Kraunama...",
+      "missingProps": "Trūksta privalomų atributų"
     },
     "entities": {
       "authors": {
