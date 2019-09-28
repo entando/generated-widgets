@@ -1,21 +1,29 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Details Widget
 
-## TODOS:
+## Widget API
 
-- Combine language files
-- Move ComponentWithError to \_\_tests\_\_ and change it to break on click
-- Move from services folder
-- Update the API logic to create all the requests for the API
-- Add error handling for missing endpoint
-- Add error notification from Guiseppe branch
-- Remove all TODOS
-- Add custom element logic
-- Add tests / remove commented tests
+### Attributes
 
-* Add loader
-* Update README
-* npm audit fix ?
-* Rename from generic to entity-specific (e.g., author)
+- **locale** (default: `en`)
+- **entityName**
+- **entityElementId**
+
+
+## i18n
+
+To add a new locale:
+
+- add a new language file under `src/i18n/locales/[newLocaleName].json`
+- edit `src/i18n/locales/index.js` to add new language file
+
+## API
+
+API helper functions have been added at `src/api/entity-api.js`. 4 functions are provided - `get()`, `post()`, `put()`, `delete()`.
+
+- `get(entityName[,{ [id, options] }])` - returns list of all elements in the entity or, if `id` provided, returns details of selected element in the entity. Default options can be overwritten by providing `options` object.
+- `post(entityName[,{ [options, data] }])` - creates new element in the entity
+- `put(entityName[,{ [options, data] }])` - updates element in the entity
+- `delete(entityName,{ id[, options] })` - removes element by ID from the entity
 
 ## Available Scripts
 
@@ -60,17 +68,20 @@ This project is extending the [Airbnb Style Guide](https://github.com/airbnb/jav
 ## Folder structure
 
 - ./src
-  - ./assets `--> place to store assets like images, fonts, custom icons, etc.`
   - ./api `--> api calls, grouped by feature: the structure should mimic the api call itself`
   - ./components
     - ./\_\_tests\_\_ `sample test folder`
       - App.test.js `--> this way test files are closer to other ones, but in a separate folder in order to keep the folder structure cleaner`
+    - ./_mocks `--> mock data for tests`
+    - ./_types `--> PropTypes for components`
     - ./common `--> folder containing common components`
       - CommonComponent.js
-    - ./App `--> example of component that could have container`
+    - ./App `--> example of component`
       - App.css
       - App.js `--> keep the same name as component folder so we can find it easily when doing a file search`
       - AppContainer.js `--> container for the App component, adds state`
+    - ./RootComponent.js `--> parent presentational component that is wraps all other components`
+    - ./RootComponentContainer.js `--> parent container component that is wraps parental presentational component`
   - ./state `--> application state (e.g. redux), if any`
     - ./sample-feature `--> grouping by feature`
       - sample-feature.actions.js
@@ -79,3 +90,4 @@ This project is extending the [Airbnb Style Guide](https://github.com/airbnb/jav
       - sample-feature.types.js
     - store.js `--> configure redux store`
   - index.js `--> entry point`
+  - index.scss `--> global styling rules`
