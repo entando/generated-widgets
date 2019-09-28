@@ -1,12 +1,22 @@
 import React from 'react';
+import '@testing-library/jest-dom/extend-expect';
 import { render } from '@testing-library/react';
 
+import 'components/_mocks/i18n';
 import Widget from 'components/Widget';
+import entityDataMockup from 'components/_mocks/entity-data.json';
 
-import 'i18n/i18n';
+describe('Widget component', () => {
+  test('renders empty details widget', () => {
+    const { getByTestId, container } = render(<Widget entityName="authors" entity={[]} />);
 
-test('renders widget', async () => {
-  const { getByTestId } = render(<Widget />);
+    expect(getByTestId('widget-name-heading'));
+    expect(container.querySelector('table > tbody')).toBeEmpty();
+  });
 
-  expect(getByTestId('widget-name-heading'));
+  test('renders data in entity details widget', () => {
+    const { getByText } = render(<Widget entityName="authors" entity={entityDataMockup} />);
+
+    expect(getByText('Nick OFFERMAN')).toBeInTheDocument();
+  });
 });

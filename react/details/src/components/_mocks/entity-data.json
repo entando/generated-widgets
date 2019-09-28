@@ -1,0 +1,12 @@
+[
+  {
+    "name": "id",
+    "label": "ID",
+    "value": 1
+  },
+  {
+    "name": "fullname",
+    "label": "Vardas ir pavardė",
+    "value": "Nick OFFERMAN"
+  }
+]

@@ -8,7 +8,7 @@ import TableRow from '@material-ui/core/TableRow';
 
 import EntityField from 'components/entity-field-table/EntityField';
 
-import { entityFieldsType } from 'components/types/entity';
+import { entityFieldsType } from 'components/_types/entity';
 
 const EntityFieldTable = ({ entity }) => {
   const { t } = useTranslation();

@@ -1,7 +1,7 @@
 const generateApiHelpers = method => {
   const defaultOptions = {
     headers: new Headers({
-      // TODO: Token should be passed or auth should be implemented
+      // TODO: Token should be passed or auth process should be changed
       Authorization: `Bearer ${process.env.REACT_APP_JWT_TOKEN}`,
       'Content-Type': 'application/json',
     }),
@@ -21,12 +21,14 @@ const generateApiHelpers = method => {
       ...defaultOptions,
       ...options,
       ...(data ? { body: JSON.stringify(data) } : {}),
-    }).then(response =>
-      // making sure unsuccessful responses (e.g., 404) are treated as rejects
-      response.status >= 200 && response.status < 300
-        ? Promise.resolve(response)
-        : Promise.reject(new Error(response.statusText || response.status))
-    );
+    })
+      .then(response =>
+        // making sure unsuccessful responses (e.g., 404) are treated as rejects
+        response.status >= 200 && response.status < 300
+          ? Promise.resolve(response)
+          : Promise.reject(new Error(response.statusText || response.status))
+      )
+      .then(response => response.json());
   };
 };
 

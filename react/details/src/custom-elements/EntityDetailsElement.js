@@ -6,7 +6,7 @@ import Widget from 'components/WidgetContainer';
 class EntityDetailsElement extends HTMLElement {
   connectedCallback() {
     const mountPoint = document.createElement('div');
-    this.attachShadow({ mode: 'open' }).appendChild(mountPoint);
+    this.appendChild(mountPoint);
 
     const locale = this.getAttribute('locale') || 'en';
     i18next.changeLanguage(locale);
@@ -21,8 +21,10 @@ class EntityDetailsElement extends HTMLElement {
       });
       this.dispatchEvent(customEvent);
     };
+
     const entityName = this.getAttribute('entity');
     const entityElementId = this.getAttribute('entity-element-id');
+
     const reactComponent = React.createElement(Widget, { entityName, entityElementId, onError });
     ReactDOM.render(reactComponent, mountPoint);
   }

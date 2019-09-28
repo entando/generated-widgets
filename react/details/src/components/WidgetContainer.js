@@ -5,6 +5,7 @@ import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core';
 
 import Widget from 'components/Widget';
+import ErrorNotification from 'components/common/ErrorNotification';
 import EntityAPI from 'api/entity-api';
 
 class WidgetContainer extends React.Component {
@@ -44,13 +45,14 @@ class WidgetContainer extends React.Component {
   constructor(props) {
     super(props);
 
-    this.theme = createMuiTheme();
-
     this.state = {
       loading: true,
-      entity: {},
+      entity: [],
       error: null,
     };
+
+    this.theme = createMuiTheme();
+    this.closeNotification = this.closeNotification.bind(this);
   }
 
   componentDidMount() {
@@ -58,7 +60,6 @@ class WidgetContainer extends React.Component {
 
     if (entityName && entityElementId) {
       EntityAPI.get(entityName, { id: entityElementId })
-        .then(response => response.json())
         .then(response => WidgetContainer.transformEntityFields(response, entityName))
         .then(response => this.setState({ error: null, entity: response }))
         .catch(e => {
@@ -67,12 +68,12 @@ class WidgetContainer extends React.Component {
         })
         .finally(() => this.setState({ loading: false }));
     } else {
-      this.setState({ error: i18next.t('common.missingProps') });
+      this.setState({ loading: false, error: i18next.t('common.missingProps') });
     }
   }
 
-  static renderError() {
-    return <div>{i18next.t('common.couldNotFetchData')}</div>;
+  closeNotification() {
+    this.setState({ error: null });
   }
 
   render() {
@@ -81,11 +82,9 @@ class WidgetContainer extends React.Component {
 
     return (
       <ThemeProvider theme={this.theme}>
-        {loading ? (
-          i18next.t('common.loading')
-        ) : (
-          <Widget entity={entity} entityName={entityName} error={error} />
-        )}
+        {loading && i18next.t('common.loading')}
+        {!loading && <Widget entity={entity} entityName={entityName} />}
+        <ErrorNotification message={error} onClose={this.closeNotification} />
       </ThemeProvider>
     );
   }

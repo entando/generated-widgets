@@ -1,40 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useTranslation } from 'react-i18next';
+import i18next from 'i18next';
 import Box from '@material-ui/core/Box';
-import { withStyles } from '@material-ui/styles';
 
 import EntityFieldTable from 'components/entity-field-table/EntityFieldTable';
 
-const Widget = ({ entityName, error, entity }) => {
-  const { t } = useTranslation();
-
-  const renderError = () => <div>{t('common.couldNotFetchData')}</div>;
-
+const Widget = ({ entityName, entity }) => {
   return (
     <Box>
-      {error && renderError()}
-      {!error && (
-        <>
-          <h3 data-testid="widget-name-heading">
-            {t('common.widgetName', { widgetNamePlaceholder: entityName })}
-          </h3>
-          <EntityFieldTable entity={entity} />
-        </>
-      )}
+      <h3 data-testid="widget-name-heading">
+        {i18next.t('common.widgetName', { widgetNamePlaceholder: entityName })}
+      </h3>
+      <EntityFieldTable entity={entity} />
     </Box>
   );
 };
 
 Widget.propTypes = {
   entityName: PropTypes.string.isRequired,
-  entityElementId: PropTypes.string,
-  onError: PropTypes.func,
+  entity: PropTypes.arrayOf(PropTypes.shape()),
 };
 
 Widget.defaultProps = {
-  entityElementId: null,
-  onError: () => {},
+  entity: [],
 };
 
 export default Widget;

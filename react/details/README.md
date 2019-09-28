@@ -7,14 +7,15 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 - Move from services folder
 - Update the API logic to create all the requests for the API
 - Add error handling for missing endpoint
+- Add error notification from Guiseppe branch
+- Remove all TODOS
+- Add custom element logic
+- Add tests / remove commented tests
 
-* Add error notification from Guiseppe branch
 * Add loader
-* Remove all TODOS
-* Add custom element logic
-* Add tests / remove commented tests
 * Update README
 * npm audit fix ?
+* Rename from generic to entity-specific (e.g., author)
 
 ## Available Scripts
 
