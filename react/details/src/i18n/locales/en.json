@@ -1,21 +1,23 @@
 {
-  "common": {
-    "couldNotFetchData": "Unfortunately we could not fetch entity data",
-    "widgetName": "Details about '{{widgetNamePlaceholder}}'",
-    "name": "Name",
-    "value": "Value",
-    "loading": "Loading...",
-    "missingProps": "Required attributes are missing"
-  },
-  "entities": {
-    "authors": {
-      "id": "ID",
+  "translation": {
+    "common": {
+      "couldNotFetchData": "Unfortunately we could not fetch entity data",
+      "widgetName": "Details about '{{widgetNamePlaceholder}}'",
       "name": "Name",
-      "surname": "Surname",
-      "fullname": "Full name"
+      "value": "Value",
+      "loading": "Loading...",
+      "missingProps": "Required attributes are missing"
     },
-    "books": {
-      "id": "ID"
+    "entities": {
+      "authors": {
+        "id": "ID",
+        "name": "Name",
+        "surname": "Surname",
+        "fullname": "Full name"
+      },
+      "books": {
+        "id": "ID"
+      }
     }
   }
 }
