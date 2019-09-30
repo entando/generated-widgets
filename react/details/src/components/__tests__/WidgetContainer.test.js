@@ -2,9 +2,9 @@ import React from 'react';
 import { render, wait } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
+import 'components/__mocks__/i18n';
 import EntityAPI from 'api/entity-api';
-import entityApiResponseMockup from 'components/_mocks/entity-api-response.json';
-import 'components/_mocks/i18n';
+import entityApiResponseMockup from 'components/__mocks__/entity-api-response.json';
 import WidgetContainer from 'components/WidgetContainer';
 
 jest.mock('api/entity-api');

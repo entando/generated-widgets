@@ -2,9 +2,9 @@ import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { render } from '@testing-library/react';
 
-import 'components/_mocks/i18n';
+import 'components/__mocks__/i18n';
 import Widget from 'components/Widget';
-import entityDataMockup from 'components/_mocks/entity-data.json';
+import entityDataMockup from 'components/__mocks__/entity-data.json';
 
 describe('Widget component', () => {
   test('renders empty details widget', () => {
