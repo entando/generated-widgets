@@ -11,10 +11,7 @@ const generateApiHelpers = method => {
   return (entity, params = {}) => {
     const { options, data, id } = params;
 
-    const url =
-      `${process.env.REACT_APP_SERVER_HOST}` +
-      `${process.env.REACT_APP_SERVER_API_PATH}` +
-      `${entity}${id ? `/${id}` : ''}`;
+    const url = `${process.env.REACT_APP_DOMAIN}${entity}${id ? `/${id}` : ''}`;
 
     return fetch(url, {
       method,
