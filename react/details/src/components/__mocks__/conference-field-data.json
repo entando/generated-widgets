@@ -1,0 +1,27 @@
+[
+  {
+    "name": "id",
+    "label": "ID",
+    "value": 1
+  },
+  {
+    "name": "name",
+    "label": "Pavadinimas",
+    "value": "JSConf 2019"
+  },
+  {
+    "name": "summary",
+    "label": "Aprašymas",
+    "value": "Geriausia JavaScript konferencija!"
+  },
+  {
+    "name": "start",
+    "label": "Prasideda",
+    "value": "2019-09-11"
+  },
+  {
+    "name": "end",
+    "label": "Baigiasi",
+    "value": "2019-09-12"
+  }
+]

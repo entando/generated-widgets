@@ -9,14 +9,12 @@
       "missingProps": "Required attributes are missing"
     },
     "entities": {
-      "authors": {
+      "conference": {
         "id": "ID",
-        "name": "Name",
-        "surname": "Surname",
-        "fullname": "Full name"
-      },
-      "books": {
-        "id": "ID"
+        "name": "Title",
+        "summary": "Summary",
+        "start": "Start date",
+        "end": "End date"
       }
     }
   }

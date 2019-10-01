@@ -6,11 +6,9 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
-import EntityField from 'components/entity-field-table/EntityField';
+import { conferenceFieldsType } from 'components/__types__/conference';
 
-import { entityFieldsType } from 'components/__types__/entity';
-
-const EntityFieldTable = ({ entity }) => (
+const ConferenceFieldTable = ({ conference }) => (
   <Table>
     <TableHead>
       <TableRow>
@@ -19,21 +17,26 @@ const EntityFieldTable = ({ entity }) => (
       </TableRow>
     </TableHead>
     <TableBody>
-      {entity.map(entityField => (
-        <TableRow key={entityField.name}>
-          <EntityField field={entityField} />
+      {conference.map(field => (
+        <TableRow key={field.name}>
+          <TableCell>
+            <span>{field.label}</span>
+          </TableCell>
+          <TableCell>
+            <span>{field.value}</span>
+          </TableCell>
         </TableRow>
       ))}
     </TableBody>
   </Table>
 );
 
-EntityFieldTable.propTypes = {
-  entity: entityFieldsType,
+ConferenceFieldTable.propTypes = {
+  conference: conferenceFieldsType,
 };
 
-EntityFieldTable.defaultProps = {
-  entity: [],
+ConferenceFieldTable.defaultProps = {
+  conference: [],
 };
 
-export default EntityFieldTable;
+export default ConferenceFieldTable;

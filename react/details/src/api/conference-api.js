@@ -8,10 +8,11 @@ const generateApiHelpers = method => {
   };
 
   // returning functions
-  return (entity, params = {}) => {
+  return (params = {}) => {
     const { options, data, id } = params;
+    const entityEndpoint = 'conferences'; // lowercase plural
 
-    const url = `${process.env.REACT_APP_DOMAIN}${entity}${id ? `/${id}` : ''}`;
+    const url = `${process.env.REACT_APP_DOMAIN}${entityEndpoint}${id ? `/${id}` : ''}`;
 
     return fetch(url, {
       method,
@@ -20,7 +21,7 @@ const generateApiHelpers = method => {
       ...(data ? { body: JSON.stringify(data) } : {}),
     })
       .then(response =>
-        // making sure unsuccessful responses (e.g., 404) are treated as rejects
+        // making sure unsuccessful responses (e.g., 404) are treated as rejected requests
         response.status >= 200 && response.status < 300
           ? Promise.resolve(response)
           : Promise.reject(new Error(response.statusText || response.status))
