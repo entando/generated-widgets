@@ -8,7 +8,6 @@
 - **entityName**
 - **entityElementId**
 
-
 ## i18n
 
 To add a new locale:
@@ -73,8 +72,8 @@ This project is extending the [Airbnb Style Guide](https://github.com/airbnb/jav
   - ./components
     - ./\_\_tests\_\_ `sample test folder`
       - App.test.js `--> this way test files are closer to other ones, but in a separate folder in order to keep the folder structure cleaner`
-    - ./_mocks `--> mock data for tests`
-    - ./_types `--> PropTypes for components`
+    - ./\_mocks `--> mock data for tests`
+    - ./\_types `--> PropTypes for components`
     - ./common `--> folder containing common components`
       - CommonComponent.js
     - ./App `--> example of component`
@@ -91,4 +90,4 @@ This project is extending the [Airbnb Style Guide](https://github.com/airbnb/jav
       - sample-feature.types.js
     - store.js `--> configure redux store`
   - index.js `--> entry point`
-  - index.scss `--> global styling rules`
+  - index.css `--> global styling rules`

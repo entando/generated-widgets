@@ -1,3 +1,3 @@
 import 'i18n/i18n';
-import 'index.scss';
+import 'index.css';
 import 'custom-elements/ConferenceDetailsElement';
