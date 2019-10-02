@@ -1,0 +1,22 @@
+{
+  "translation": {
+    "common": {
+      "couldNotFetchData": "Unfortunately we could not fetch entity data",
+      "widgetName": "Details about '{{widgetNamePlaceholder}}'",
+      "name": "Name",
+      "value": "Value",
+      "loading": "Loading...",
+      "missingId": "Please provide conference ID"
+    },
+    "entities": {
+      "conference": {
+        "_type": "Conference",
+        "id": "ID",
+        "name": "Title",
+        "summary": "Summary",
+        "start": "Start date",
+        "end": "End date"
+      }
+    }
+  }
+}
