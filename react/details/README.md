@@ -15,16 +15,6 @@ To add a new locale:
 - add the created locale file to `src/i18n/locales/index.js`
 - locale file should contain `translation` as its root object
 
-## API
-
-API helper functions have been added at `src/api/[entity]Api.js`. 4 functions are provided - `get()`, `post()`, `put()`, `delete()`.
-
-- `getAll([{ options }])` - returns a list of all elements in the entity. Default options can be overwritten by providing `options` object.
-- `getById({ id[, options ]})` - returns details of specific element in the entity
-- `post([{ [options, data] }])` - creates new element in the entity
-- `put([{ [options, data] }])` - updates element in the entity
-- `delete({ id[, options] })` - removes element by ID from the entity
-
 ## Available Scripts
 
 In the project directory, you can run:
