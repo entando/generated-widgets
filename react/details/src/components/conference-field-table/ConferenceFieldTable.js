@@ -1,5 +1,6 @@
 import React from 'react';
-import i18next from 'i18next';
+import PropTypes from 'prop-types';
+import { withTranslation } from 'react-i18next';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -8,12 +9,12 @@ import TableRow from '@material-ui/core/TableRow';
 
 import { conferenceFieldsType } from 'components/__types__/conference';
 
-const ConferenceFieldTable = ({ conference }) => (
+const ConferenceFieldTable = ({ t, conference }) => (
   <Table>
     <TableHead>
       <TableRow>
-        <TableCell>{i18next.t('common.name')}</TableCell>
-        <TableCell>{i18next.t('common.value')}</TableCell>
+        <TableCell>{t('common.name')}</TableCell>
+        <TableCell>{t('common.value')}</TableCell>
       </TableRow>
     </TableHead>
     <TableBody>
@@ -33,10 +34,11 @@ const ConferenceFieldTable = ({ conference }) => (
 
 ConferenceFieldTable.propTypes = {
   conference: conferenceFieldsType,
+  t: PropTypes.func.isRequired,
 };
 
 ConferenceFieldTable.defaultProps = {
   conference: [],
 };
 
-export default ConferenceFieldTable;
+export default withTranslation()(ConferenceFieldTable);

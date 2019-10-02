@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import i18next from 'i18next';
+import { withTranslation } from 'react-i18next';
 import Box from '@material-ui/core/Box';
 
 import ConferenceFieldTable from 'components/conference-field-table/ConferenceFieldTable';
 
-const ConferenceDetails = ({ conference }) => {
+const ConferenceDetails = ({ t, conference }) => {
   return (
     <Box>
       <h3 data-testid="name-heading">
-        {i18next.t('common.widgetName', {
-          widgetNamePlaceholder: i18next.t('entities.conference._name'),
+        {t('common.widgetName', {
+          widgetNamePlaceholder: t('entities.conference._name'),
         })}
       </h3>
       <ConferenceFieldTable conference={conference} />
@@ -20,10 +20,11 @@ const ConferenceDetails = ({ conference }) => {
 
 ConferenceDetails.propTypes = {
   conference: PropTypes.arrayOf(PropTypes.object),
+  t: PropTypes.func.isRequired,
 };
 
 ConferenceDetails.defaultProps = {
   conference: [],
 };
 
-export default ConferenceDetails;
+export default withTranslation()(ConferenceDetails);

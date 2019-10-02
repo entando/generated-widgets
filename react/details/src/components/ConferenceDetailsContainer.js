@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import i18next from 'i18next';
+import { withTranslation } from 'react-i18next';
 import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core';
 
@@ -9,7 +9,40 @@ import ErrorNotification from 'components/common/ErrorNotification';
 import ConferenceAPI from 'api/conference-api';
 
 class ConferenceDetailsContainer extends React.Component {
-  static transformFields(conference) {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      loading: true,
+      conference: [],
+      error: null,
+    };
+
+    this.theme = createMuiTheme();
+    this.closeNotification = this.closeNotification.bind(this);
+    this.transformFields = this.transformFields.bind(this);
+  }
+
+  componentDidMount() {
+    const { t, elementId, onError } = this.props;
+
+    if (elementId) {
+      ConferenceAPI.get({ id: elementId })
+        .then(this.transformFields)
+        .then(response => this.setState({ error: null, conference: response }))
+        .catch(e => {
+          onError(e);
+          this.setState({ error: t('common.couldNotFetchData') });
+        })
+        .finally(() => this.setState({ loading: false }));
+    } else {
+      this.setState({ loading: false, error: t('common.missingProps') });
+    }
+  }
+
+  transformFields(conference) {
+    const { t } = this.props;
+
     const entityName = 'conference'; // lowercase singular
     const translationKeyPrefix = `entities.${entityName}.`;
 
@@ -25,41 +58,11 @@ class ConferenceDetailsContainer extends React.Component {
         ...acc,
         {
           name: field,
-          label: i18next.t(translationKeyPrefix + field),
+          label: t(translationKeyPrefix + field),
           value: isEntityRelation ? conference[field].id : conference[field],
         },
       ];
     }, []);
-  }
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      loading: true,
-      conference: [],
-      error: null,
-    };
-
-    this.theme = createMuiTheme();
-    this.closeNotification = this.closeNotification.bind(this);
-  }
-
-  componentDidMount() {
-    const { elementId, onError } = this.props;
-
-    if (elementId) {
-      ConferenceAPI.get({ id: elementId })
-        .then(response => ConferenceDetailsContainer.transformFields(response))
-        .then(response => this.setState({ error: null, conference: response }))
-        .catch(e => {
-          onError(e);
-          this.setState({ error: i18next.t('common.couldNotFetchData') });
-        })
-        .finally(() => this.setState({ loading: false }));
-    } else {
-      this.setState({ loading: false, error: i18next.t('common.missingProps') });
-    }
   }
 
   closeNotification() {
@@ -68,10 +71,11 @@ class ConferenceDetailsContainer extends React.Component {
 
   render() {
     const { conference, error, loading } = this.state;
+    const { t } = this.props;
 
     return (
       <ThemeProvider theme={this.theme}>
-        {loading && i18next.t('common.loading')}
+        {loading && t('common.loading')}
         {!loading && <ConferenceDetails conference={conference} />}
         <ErrorNotification message={error} onClose={this.closeNotification} />
       </ThemeProvider>
@@ -82,6 +86,7 @@ class ConferenceDetailsContainer extends React.Component {
 ConferenceDetailsContainer.propTypes = {
   elementId: PropTypes.string,
   onError: PropTypes.func,
+  t: PropTypes.func.isRequired,
 };
 
 ConferenceDetailsContainer.defaultProps = {
@@ -89,4 +94,4 @@ ConferenceDetailsContainer.defaultProps = {
   onError: () => {},
 };
 
-export default ConferenceDetailsContainer;
+export default withTranslation()(ConferenceDetailsContainer);
