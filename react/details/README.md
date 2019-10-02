@@ -18,12 +18,12 @@ To add a new locale:
 
 ## API
 
-API helper functions have been added at `src/api/entity-api.js`. 4 functions are provided - `get()`, `post()`, `put()`, `delete()`.
+API helper functions have been added at `src/api/[entity]-api.js`. 4 functions are provided - `get()`, `post()`, `put()`, `delete()`.
 
-- `get(entityName[,{ [id, options] }])` - returns list of all elements in the entity or, if `id` provided, returns details of selected element in the entity. Default options can be overwritten by providing `options` object.
-- `post(entityName[,{ [options, data] }])` - creates new element in the entity
-- `put(entityName[,{ [options, data] }])` - updates element in the entity
-- `delete(entityName,{ id[, options] })` - removes element by ID from the entity
+- `get([{ [id, options] }])` - returns list of all elements in the entity or, if `id` provided, returns details of selected element in the entity. Default options can be overwritten by providing `options` object.
+- `post([{ [options, data] }])` - creates new element in the entity
+- `put([{ [options, data] }])` - updates element in the entity
+- `delete({ id[, options] })` - removes element by ID from the entity
 
 ## Available Scripts
 
