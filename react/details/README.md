@@ -15,6 +15,7 @@ To add a new locale:
 
 - add a new language file under `src/i18n/locales/[newLocaleName].json`
 - edit `src/i18n/locales/index.js` to add new language file
+- language file should start with `translation` as its root object
 
 ## API
 
