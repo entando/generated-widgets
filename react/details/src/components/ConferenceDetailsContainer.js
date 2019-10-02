@@ -23,10 +23,10 @@ class ConferenceDetailsContainer extends React.Component {
   }
 
   componentDidMount() {
-    const { t, conferenceId, onError } = this.props;
+    const { t, id, onError } = this.props;
 
-    if (conferenceId) {
-      ConferenceAPI.get({ id: conferenceId })
+    if (id) {
+      ConferenceAPI.get({ id })
         .then(response => this.setState({ error: null, conference: response }))
         .catch(e => {
           onError(e);
@@ -57,7 +57,7 @@ class ConferenceDetailsContainer extends React.Component {
 }
 
 ConferenceDetailsContainer.propTypes = {
-  conferenceId: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
   onError: PropTypes.func,
   t: PropTypes.func.isRequired,
 };

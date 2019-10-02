@@ -22,10 +22,10 @@ class ConferenceDetailsElement extends HTMLElement {
       this.dispatchEvent(customEvent);
     };
 
-    const conferenceId = this.getAttribute('id');
+    const id = this.getAttribute('id');
 
     const reactComponent = React.createElement(ConferenceDetails, {
-      conferenceId,
+      id,
       onError,
     });
     ReactDOM.render(reactComponent, mountPoint);
