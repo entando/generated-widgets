@@ -6,7 +6,7 @@ import { createMuiTheme } from '@material-ui/core';
 
 import ConferenceDetails from 'components/ConferenceDetails';
 import ErrorNotification from 'components/common/ErrorNotification';
-import ConferenceAPI from 'api/conference-api';
+import ConferenceAPI from 'api/conferenceApi';
 
 class ConferenceDetailsContainer extends React.Component {
   constructor(props) {
@@ -14,13 +14,12 @@ class ConferenceDetailsContainer extends React.Component {
 
     this.state = {
       loading: true,
-      conference: [],
+      conference: {},
       error: null,
     };
 
     this.theme = createMuiTheme();
     this.closeNotification = this.closeNotification.bind(this);
-    this.transformFields = this.transformFields.bind(this);
   }
 
   componentDidMount() {
@@ -28,7 +27,6 @@ class ConferenceDetailsContainer extends React.Component {
 
     if (conferenceId) {
       ConferenceAPI.get({ id: conferenceId })
-        .then(this.transformFields)
         .then(response => this.setState({ error: null, conference: response }))
         .catch(e => {
           onError(e);
@@ -38,42 +36,6 @@ class ConferenceDetailsContainer extends React.Component {
     } else {
       this.setState({ loading: false, error: t('common.missingId') });
     }
-  }
-
-  transformFields(conference) {
-    const { t } = this.props;
-
-    const entityName = 'conference';
-    const translationKeyPrefix = `entities.${entityName}.`;
-
-    return Object.keys(conference).reduce((acc, field) => {
-      // if the field is an object or null - it's a relation to another entity
-      const isEntityRelation = typeof conference[field] === 'object';
-
-      if (isEntityRelation && conference[field] === null) {
-        return acc;
-      }
-
-      if (isEntityRelation) {
-        return [
-          ...acc,
-          {
-            name: field,
-            label: t(translationKeyPrefix + field),
-            value: conference[field].id,
-          },
-        ];
-      }
-
-      return [
-        ...acc,
-        {
-          name: field,
-          label: t(translationKeyPrefix + field),
-          value: conference[field],
-        },
-      ];
-    }, []);
   }
 
   closeNotification() {

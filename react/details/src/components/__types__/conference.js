@@ -1,9 +1,11 @@
 import PropTypes from 'prop-types';
 
-export const fieldType = PropTypes.shape({
-  name: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.bool]),
+const conferenceType = PropTypes.shape({
+  id: PropTypes.number,
+  name: PropTypes.string,
+  summary: PropTypes.string,
+  start: PropTypes.string,
+  end: PropTypes.string,
 });
 
-export const conferenceFieldsType = PropTypes.arrayOf(fieldType);
+export default conferenceType;

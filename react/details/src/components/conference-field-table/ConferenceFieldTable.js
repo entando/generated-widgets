@@ -7,33 +7,66 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
-import { conferenceFieldsType } from 'components/__types__/conference';
+import conferenceType from 'components/__types__/conference';
 
-const ConferenceFieldTable = ({ t, conference }) => (
-  <Table>
-    <TableHead>
-      <TableRow>
-        <TableCell>{t('common.name')}</TableCell>
-        <TableCell>{t('common.value')}</TableCell>
-      </TableRow>
-    </TableHead>
-    <TableBody>
-      {conference.map(field => (
-        <TableRow key={field.name}>
+const ConferenceFieldTable = ({ t, conference }) => {
+  const translationKeyPrefix = `entities.conference.`;
+  return (
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell>{t('common.name')}</TableCell>
+          <TableCell>{t('common.value')}</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        <TableRow>
           <TableCell>
-            <span>{field.label}</span>
+            <span>{t(`${translationKeyPrefix}id`)}</span>
           </TableCell>
           <TableCell>
-            <span>{field.value}</span>
+            <span>{conference.id}</span>
           </TableCell>
         </TableRow>
-      ))}
-    </TableBody>
-  </Table>
-);
+        <TableRow>
+          <TableCell>
+            <span>{t(`${translationKeyPrefix}name`)}</span>
+          </TableCell>
+          <TableCell>
+            <span>{conference.name}</span>
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>
+            <span>{t(`${translationKeyPrefix}summary`)}</span>
+          </TableCell>
+          <TableCell>
+            <span>{conference.summary}</span>
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>
+            <span>{t(`${translationKeyPrefix}start`)}</span>
+          </TableCell>
+          <TableCell>
+            <span>{conference.start}</span>
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>
+            <span>{t(`${translationKeyPrefix}end`)}</span>
+          </TableCell>
+          <TableCell>
+            <span>{conference.end}</span>
+          </TableCell>
+        </TableRow>
+      </TableBody>
+    </Table>
+  );
+};
 
 ConferenceFieldTable.propTypes = {
-  conference: conferenceFieldsType,
+  conference: conferenceType,
   t: PropTypes.func.isRequired,
 };
 
