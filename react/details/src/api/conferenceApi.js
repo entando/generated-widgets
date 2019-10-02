@@ -1,6 +1,6 @@
 import { DOMAIN, JWT_TOKEN } from 'api/constants';
 
-const generateApi = (endpoint, method) => {
+const generateApi = (endpoint, method, generationOptions = {}) => {
   const defaultOptions = {
     headers: new Headers({
       Authorization: `Bearer ${JWT_TOKEN}`,
@@ -8,12 +8,14 @@ const generateApi = (endpoint, method) => {
     }),
   };
 
+  const appendParameters = generationOptions.appendParameters || false;
+
   return (params = {}) => {
     const { options, data, id } = params;
 
     const domainWithSlash = DOMAIN.endsWith('/') ? DOMAIN : `${DOMAIN}/`;
 
-    const url = `${domainWithSlash}${endpoint}${id ? `/${id}` : ''}`;
+    const url = `${domainWithSlash}${endpoint}${appendParameters ? `/${id}` : ''}`;
 
     return fetch(url, {
       method,
@@ -30,13 +32,15 @@ const generateApi = (endpoint, method) => {
   };
 };
 
-export const getApi = generateApi('conferences', 'GET');
+export const getAllApi = generateApi('conferences', 'GET');
+export const getByIdApi = generateApi('conferences', 'GET', { appendParameters: true });
 export const postApi = generateApi('conferences', 'POST');
 export const putApi = generateApi('conferences', 'PUT');
-export const deleteApi = generateApi('conferences', 'DELETE');
+export const deleteApi = generateApi('conferences', 'DELETE', { appendParameters: true });
 
 const API = {
-  get: getApi,
+  getAll: getAllApi,
+  getById: getByIdApi,
   post: postApi,
   put: putApi,
   delete: deleteApi,

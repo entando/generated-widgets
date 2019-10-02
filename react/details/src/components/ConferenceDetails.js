@@ -11,7 +11,7 @@ const ConferenceDetails = ({ t, conference }) => {
     <Box>
       <h3 data-testid="name-heading">
         {t('common.widgetName', {
-          widgetNamePlaceholder: t('entities.conference._name'),
+          widgetNamePlaceholder: t('entities.conference._type'),
         })}
       </h3>
       <ConferenceFieldTable conference={conference} />

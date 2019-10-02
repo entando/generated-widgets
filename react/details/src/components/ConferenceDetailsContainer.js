@@ -26,7 +26,7 @@ class ConferenceDetailsContainer extends React.Component {
     const { t, id, onError } = this.props;
 
     if (id) {
-      ConferenceAPI.get({ id })
+      ConferenceAPI.getById({ id })
         .then(response => this.setState({ error: null, conference: response }))
         .catch(e => {
           onError(e);

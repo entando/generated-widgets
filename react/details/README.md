@@ -11,15 +11,16 @@
 
 To add a new locale:
 
-- add a new language file under `src/i18n/locales/[newLocaleName].json`
-- edit `src/i18n/locales/index.js` to add new language file
-- language file should start with `translation` as its root object
+- add a new locale file under `src/i18n/locales/[newLocaleName].json`
+- add the created locale file to `src/i18n/locales/index.js`
+- locale file should contain `translation` as its root object
 
 ## API
 
-API helper functions have been added at `src/api/[entity]-api.js`. 4 functions are provided - `get()`, `post()`, `put()`, `delete()`.
+API helper functions have been added at `src/api/[entity]Api.js`. 4 functions are provided - `get()`, `post()`, `put()`, `delete()`.
 
-- `get([{ [id, options] }])` - returns list of all elements in the entity or, if `id` provided, returns details of selected element in the entity. Default options can be overwritten by providing `options` object.
+- `getAll([{ options }])` - returns a list of all elements in the entity. Default options can be overwritten by providing `options` object.
+- `getById({ id[, options ]})` - returns details of specific element in the entity
 - `post([{ [options, data] }])` - creates new element in the entity
 - `put([{ [options, data] }])` - updates element in the entity
 - `delete({ id[, options] })` - removes element by ID from the entity
