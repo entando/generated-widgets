@@ -10,6 +10,7 @@
     },
     "entities": {
       "conference": {
+        "_name": "Conference",
         "id": "ID",
         "name": "Title",
         "summary": "Summary",

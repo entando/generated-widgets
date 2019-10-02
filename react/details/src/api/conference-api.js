@@ -1,18 +1,19 @@
-const generateApiHelpers = method => {
+import { DOMAIN, JWT_TOKEN } from 'api/constants';
+
+const generateApi = (endpoint, method) => {
   const defaultOptions = {
     headers: new Headers({
-      // TODO: Token should be passed or auth process should be changed
-      Authorization: `Bearer ${process.env.REACT_APP_JWT_TOKEN}`,
+      Authorization: `Bearer ${JWT_TOKEN}`,
       'Content-Type': 'application/json',
     }),
   };
 
-  // returning functions
   return (params = {}) => {
     const { options, data, id } = params;
-    const entityEndpoint = 'conferences'; // lowercase plural
 
-    const url = `${process.env.REACT_APP_DOMAIN}${entityEndpoint}${id ? `/${id}` : ''}`;
+    const domainWithSlash = DOMAIN.endsWith('/') ? DOMAIN : `${DOMAIN}/`;
+
+    const url = `${domainWithSlash}${endpoint}${id ? `/${id}` : ''}`;
 
     return fetch(url, {
       method,
@@ -21,7 +22,6 @@ const generateApiHelpers = method => {
       ...(data ? { body: JSON.stringify(data) } : {}),
     })
       .then(response =>
-        // making sure unsuccessful responses (e.g., 404) are treated as rejected requests
         response.status >= 200 && response.status < 300
           ? Promise.resolve(response)
           : Promise.reject(new Error(response.statusText || response.status))
@@ -30,11 +30,16 @@ const generateApiHelpers = method => {
   };
 };
 
+export const getApi = generateApi('conferences', 'GET');
+export const postApi = generateApi('conferences', 'POST');
+export const putApi = generateApi('conferences', 'PUT');
+export const deleteApi = generateApi('conferences', 'DELETE');
+
 const API = {
-  get: generateApiHelpers('GET'),
-  post: generateApiHelpers('POST'),
-  put: generateApiHelpers('PUT'),
-  delete: generateApiHelpers('DELETE'),
+  get: getApi,
+  post: postApi,
+  put: putApi,
+  delete: deleteApi,
 };
 
 export default API;

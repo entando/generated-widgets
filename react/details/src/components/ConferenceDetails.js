@@ -9,7 +9,9 @@ const ConferenceDetails = ({ conference }) => {
   return (
     <Box>
       <h3 data-testid="name-heading">
-        {i18next.t('common.widgetName', { widgetNamePlaceholder: 'Conference' })}
+        {i18next.t('common.widgetName', {
+          widgetNamePlaceholder: i18next.t('entities.conference._name'),
+        })}
       </h3>
       <ConferenceFieldTable conference={conference} />
     </Box>
