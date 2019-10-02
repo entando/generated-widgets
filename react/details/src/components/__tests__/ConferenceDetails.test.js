@@ -4,7 +4,7 @@ import { render } from '@testing-library/react';
 
 import 'components/__mocks__/i18n';
 import ConferenceDetails from 'components/ConferenceDetails';
-import conferenceDataMockup from 'components/__mocks__/conference-field-data.json';
+import { conferenceFields } from 'components/__mocks__/conference-mocks';
 
 describe('ConferenceDetails component', () => {
   test('renders empty details widget', () => {
@@ -15,7 +15,7 @@ describe('ConferenceDetails component', () => {
   });
 
   test('renders data in details widget', () => {
-    const { getByText } = render(<ConferenceDetails conference={conferenceDataMockup} />);
+    const { getByText } = render(<ConferenceDetails conference={conferenceFields} />);
 
     expect(getByText('JSConf 2019')).toBeInTheDocument();
   });

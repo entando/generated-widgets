@@ -4,7 +4,7 @@ import '@testing-library/jest-dom/extend-expect';
 
 import 'components/__mocks__/i18n';
 import ConferenceAPI from 'api/conference-api';
-import conferenceApiResponseMockup from 'components/__mocks__/conference-get-api-response.json';
+import { conferenceApiGetResponse } from 'components/__mocks__/conference-mocks';
 import ConferenceDetailsContainer from 'components/ConferenceDetailsContainer';
 
 jest.mock('api/conference-api');
@@ -15,7 +15,7 @@ beforeEach(() => {
 
 describe('ConferenceDetailsContainer component', () => {
   test('requests data when component is mounted', async () => {
-    ConferenceAPI.get.mockImplementation(() => Promise.resolve(conferenceApiResponseMockup));
+    ConferenceAPI.get.mockImplementation(() => Promise.resolve(conferenceApiGetResponse));
 
     render(<ConferenceDetailsContainer conferenceId="1" />);
 
@@ -25,7 +25,7 @@ describe('ConferenceDetailsContainer component', () => {
   });
 
   test('data is shown after mount API call', async () => {
-    ConferenceAPI.get.mockImplementation(() => Promise.resolve(conferenceApiResponseMockup));
+    ConferenceAPI.get.mockImplementation(() => Promise.resolve(conferenceApiGetResponse));
 
     const { getByText } = render(<ConferenceDetailsContainer conferenceId="1" />);
 
