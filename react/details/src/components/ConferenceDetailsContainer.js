@@ -6,7 +6,7 @@ import { createMuiTheme } from '@material-ui/core';
 
 import ConferenceDetails from 'components/ConferenceDetails';
 import ErrorNotification from 'components/common/ErrorNotification';
-import ConferenceAPI from 'api/conferenceApi';
+import getConference from 'api/conferenceApi';
 
 class ConferenceDetailsContainer extends React.Component {
   constructor(props) {
@@ -26,7 +26,7 @@ class ConferenceDetailsContainer extends React.Component {
     const { t, id, onError } = this.props;
 
     if (id) {
-      ConferenceAPI.getById({ id })
+      getConference({ id })
         .then(response => this.setState({ error: null, conference: response }))
         .catch(e => {
           onError(e);
