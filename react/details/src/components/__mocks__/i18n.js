@@ -6,7 +6,6 @@ i18n.use(initReactI18next).init({
   fallbackLng: 'en',
   resources: {
     en: {},
-    lt: {},
   },
   keySeparator: false,
   interpolation: {

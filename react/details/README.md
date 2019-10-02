@@ -5,8 +5,7 @@
 ### Attributes
 
 - **locale** (default: `en`)
-- **entityName**
-- **entityElementId**
+- **id**
 
 ## i18n
 

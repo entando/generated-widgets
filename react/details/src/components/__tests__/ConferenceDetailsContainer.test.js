@@ -17,7 +17,7 @@ describe('ConferenceDetailsContainer component', () => {
   test('requests data when component is mounted', async () => {
     ConferenceAPI.get.mockImplementation(() => Promise.resolve(conferenceApiResponseMockup));
 
-    render(<ConferenceDetailsContainer elementId="1" />);
+    render(<ConferenceDetailsContainer conferenceId="1" />);
 
     await wait(() => {
       expect(ConferenceAPI.get).toHaveBeenCalledTimes(1);
@@ -27,7 +27,7 @@ describe('ConferenceDetailsContainer component', () => {
   test('data is shown after mount API call', async () => {
     ConferenceAPI.get.mockImplementation(() => Promise.resolve(conferenceApiResponseMockup));
 
-    const { getByText } = render(<ConferenceDetailsContainer elementId="1" />);
+    const { getByText } = render(<ConferenceDetailsContainer conferenceId="1" />);
 
     await wait(() => {
       expect(ConferenceAPI.get).toHaveBeenCalledTimes(1);
@@ -41,7 +41,7 @@ describe('ConferenceDetailsContainer component', () => {
     ConferenceAPI.get.mockImplementation(() => Promise.reject());
 
     const { getByText } = render(
-      <ConferenceDetailsContainer elementId="1" onError={onErrorMock} />
+      <ConferenceDetailsContainer conferenceId="1" onError={onErrorMock} />
     );
 
     await wait(() => {

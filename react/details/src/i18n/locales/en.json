@@ -6,7 +6,7 @@
       "name": "Name",
       "value": "Value",
       "loading": "Loading...",
-      "missingProps": "Required attributes are missing"
+      "missingId": "Please provide element ID"
     },
     "entities": {
       "conference": {

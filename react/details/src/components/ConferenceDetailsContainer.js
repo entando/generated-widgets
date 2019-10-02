@@ -24,10 +24,10 @@ class ConferenceDetailsContainer extends React.Component {
   }
 
   componentDidMount() {
-    const { t, elementId, onError } = this.props;
+    const { t, conferenceId, onError } = this.props;
 
-    if (elementId) {
-      ConferenceAPI.get({ id: elementId })
+    if (conferenceId) {
+      ConferenceAPI.get({ id: conferenceId })
         .then(this.transformFields)
         .then(response => this.setState({ error: null, conference: response }))
         .catch(e => {
@@ -36,14 +36,14 @@ class ConferenceDetailsContainer extends React.Component {
         })
         .finally(() => this.setState({ loading: false }));
     } else {
-      this.setState({ loading: false, error: t('common.missingProps') });
+      this.setState({ loading: false, error: t('common.missingId') });
     }
   }
 
   transformFields(conference) {
     const { t } = this.props;
 
-    const entityName = 'conference'; // lowercase singular
+    const entityName = 'conference';
     const translationKeyPrefix = `entities.${entityName}.`;
 
     return Object.keys(conference).reduce((acc, field) => {
@@ -54,12 +54,23 @@ class ConferenceDetailsContainer extends React.Component {
         return acc;
       }
 
+      if (isEntityRelation) {
+        return [
+          ...acc,
+          {
+            name: field,
+            label: t(translationKeyPrefix + field),
+            value: conference[field].id,
+          },
+        ];
+      }
+
       return [
         ...acc,
         {
           name: field,
           label: t(translationKeyPrefix + field),
-          value: isEntityRelation ? conference[field].id : conference[field],
+          value: conference[field],
         },
       ];
     }, []);
@@ -84,13 +95,12 @@ class ConferenceDetailsContainer extends React.Component {
 }
 
 ConferenceDetailsContainer.propTypes = {
-  elementId: PropTypes.string,
+  conferenceId: PropTypes.string.isRequired,
   onError: PropTypes.func,
   t: PropTypes.func.isRequired,
 };
 
 ConferenceDetailsContainer.defaultProps = {
-  elementId: null,
   onError: () => {},
 };
 

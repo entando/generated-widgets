@@ -11,7 +11,7 @@ class ConferenceDetailsElement extends HTMLElement {
     const locale = this.getAttribute('locale') || 'en';
     i18next.changeLanguage(locale);
 
-    const customEventPrefix = 'conference.details.'; // lowercase singular
+    const customEventPrefix = 'conference.details.';
 
     const onError = error => {
       const customEvent = new CustomEvent(`${customEventPrefix}error`, {
@@ -22,10 +22,10 @@ class ConferenceDetailsElement extends HTMLElement {
       this.dispatchEvent(customEvent);
     };
 
-    const elementId = this.getAttribute('element-id');
+    const conferenceId = this.getAttribute('id');
 
     const reactComponent = React.createElement(ConferenceDetails, {
-      elementId,
+      conferenceId,
       onError,
     });
     ReactDOM.render(reactComponent, mountPoint);
