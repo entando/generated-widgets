@@ -9,7 +9,7 @@ import ConferenceFieldTable from 'components/conference-field-table/ConferenceFi
 const ConferenceDetails = ({ t, conference }) => {
   return (
     <Box>
-      <h3 data-testid="name-heading">
+      <h3>
         {t('common.widgetName', {
           widgetNamePlaceholder: t('entities.conference._type'),
         })}
