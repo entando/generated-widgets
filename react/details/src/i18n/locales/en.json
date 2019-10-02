@@ -6,7 +6,7 @@
       "name": "Name",
       "value": "Value",
       "loading": "Loading...",
-      "missingId": "Please provide element ID"
+      "missingId": "Please provide conference ID"
     },
     "entities": {
       "conference": {
