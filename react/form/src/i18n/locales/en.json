@@ -1,0 +1,19 @@
+{
+  "errors": {
+    "dataLoading": "Error during server connection"
+  },
+  "entities": {
+    "conference": {
+      "name": "Name",
+      "summary": "Summary",
+      "start": "Start",
+      "end": "End"
+    }
+  },
+  "common": {
+    "save": ""
+  },
+  "validation": {
+    "required": "{{field}} is required"
+  }
+}
