@@ -4,15 +4,6 @@ import ReactDOM from 'react-dom';
 import ConferenceEditFormContainer from 'components/ConferenceEditFormContainer';
 import ConferenceAddFormContainer from 'components/ConferenceAddFormContainer';
 
-const eventDispatcher = (eventId, detailPropName) => payload => {
-  const customEvent = new CustomEvent(eventId, {
-    detail: {
-      [detailPropName]: payload,
-    },
-  });
-  this.dispatchEvent(customEvent);
-};
-
 class ConferenceFormElement extends HTMLElement {
   connectedCallback() {
     const mountPoint = document.createElement('div');
@@ -23,6 +14,15 @@ class ConferenceFormElement extends HTMLElement {
     i18next.changeLanguage(locale);
 
     const prefix = 'conference.form.';
+
+    const eventDispatcher = (eventId, detailPropName) => payload => {
+      const customEvent = new CustomEvent(eventId, {
+        detail: {
+          [detailPropName]: payload,
+        },
+      });
+      this.dispatchEvent(customEvent);
+    };
 
     const onCreateError = eventDispatcher(`${prefix}createError`, 'error');
     const onUpdateError = eventDispatcher(`${prefix}updateError`, 'error');
