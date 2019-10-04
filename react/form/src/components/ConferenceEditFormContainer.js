@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import ConferenceForm from 'components/ConferenceForm';
-import ErrorNotification from 'components/common/ErrorNotification';
+import Notification from 'components/common/Notification';
 import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core';
 import { withTranslation } from 'react-i18next';
@@ -12,7 +12,7 @@ class ConferenceEditFormContainer extends PureComponent {
 
   state = {
     conference: null,
-    error: null,
+    notificationMessage: null,
   };
 
   constructor(props) {
@@ -35,29 +35,41 @@ class ConferenceEditFormContainer extends PureComponent {
   }
 
   closeNotification() {
-    this.setState({ error: null });
+    this.setState({ notificationMessage: null, notificationVariant: undefined });
   }
 
   async handleSubmit(conference) {
+    const { t } = this.props;
     const updatedConference = await putApi({ data: conference });
     const { onUpdate } = this.props;
     onUpdate(updatedConference);
+
+    this.setState({
+      conference: updatedConference,
+      notificationMessage: t('common.dataSaved'),
+      notificationVariant: 'success',
+    });
   }
 
   handleError(err) {
     const { t, onError } = this.props;
     onError(err);
     this.setState({
-      error: t('errors.dataLoading'),
+      notificationMessage: t('errors.dataLoading'),
+      notificationVariant: 'error',
     });
   }
 
   render() {
-    const { error, conference } = this.state;
+    const { notificationMessage, notificationVariant, conference } = this.state;
     return (
       <ThemeProvider theme={this.theme}>
         <ConferenceForm conference={conference} onSubmit={this.handleSubmit} />
-        <ErrorNotification message={error} onClose={this.closeNotification} />
+        <Notification
+          variant={notificationVariant}
+          message={notificationMessage}
+          onClose={this.closeNotification}
+        />
       </ThemeProvider>
     );
   }
