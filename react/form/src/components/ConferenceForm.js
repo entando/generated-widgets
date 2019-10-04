@@ -27,16 +27,7 @@ const ConferenceForm = props => {
 
   const handleDateChange = field => value => setFieldValue(field, value);
 
-  const translateObjectProperties = obj =>
-    Object.keys(obj).reduce(
-      (acc, curr) => ({ ...acc, [curr]: t(`entities.conference.${obj[curr]}`) }),
-      {}
-    );
-
-  const translateHelperText = field =>
-    errors[field] && touched[field]
-      ? t(errors[field].key, translateObjectProperties(errors[field].options, t))
-      : '';
+  const translateHelperText = field => (errors[field] && touched[field] ? errors[field] : '');
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -129,6 +120,7 @@ const emptyConference = {
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required(),
+  summary: Yup.string().required(),
   start: Yup.date().required(),
   end: Yup.date().required(),
 });
