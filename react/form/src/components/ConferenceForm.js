@@ -157,8 +157,7 @@ const formikBag = {
   validationSchema,
 
   handleSubmit: (values, { props: { onSubmit } }) => {
-    console.log('submit values', values);
-    // onSubmit(values);
+    onSubmit(values);
   },
 
   displayName: 'ConferenceForm',

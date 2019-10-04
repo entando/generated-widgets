@@ -17,8 +17,8 @@ export const formValues = shape({
 export const formTouched = shape({
   name: bool,
   summary: bool,
-  start: bool,
-  end: bool,
+  start: oneOfType([bool, shape({})]),
+  end: oneOfType([bool, shape({})]),
 });
 
 export const formErrors = shape({

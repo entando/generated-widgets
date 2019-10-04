@@ -11,7 +11,7 @@
     }
   },
   "common": {
-    "save": ""
+    "save": "Save"
   },
   "validation": {
     "required": "{{field}} is required"
