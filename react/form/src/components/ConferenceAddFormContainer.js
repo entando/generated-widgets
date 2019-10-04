@@ -40,7 +40,6 @@ class ConferenceAddFormContainer extends PureComponent {
 
   render() {
     const { error, conference } = this.state;
-    const { t } = this.props;
     return (
       <ThemeProvider theme={this.theme}>
         <ConferenceForm conference={conference} onSubmit={this.handleSubmit} />

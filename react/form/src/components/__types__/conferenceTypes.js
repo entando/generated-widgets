@@ -1,4 +1,4 @@
-import { shape, string, bool, oneOfType } from 'prop-types';
+import { shape, string, bool, oneOfType, instanceOf } from 'prop-types';
 
 export default shape({
   name: string.isRequired,
@@ -10,8 +10,8 @@ export default shape({
 export const formValues = shape({
   name: string,
   summary: string,
-  start: string,
-  end: string,
+  start: oneOfType([string, instanceOf(Date)]),
+  end: oneOfType([string, instanceOf(Date)]),
 });
 
 export const formTouched = shape({

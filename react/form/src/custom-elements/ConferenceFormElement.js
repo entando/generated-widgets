@@ -3,7 +3,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ConferenceEditFormContainer from 'components/ConferenceEditFormContainer';
 import ConferenceAddFormContainer from 'components/ConferenceAddFormContainer';
-import customEventDispatcher from 'custom-elements/customEventDispatcher';
+
+const eventDispatcher = (eventId, detailPropName) => payload => {
+  const customEvent = new CustomEvent(eventId, {
+    detail: {
+      [detailPropName]: payload,
+    },
+  });
+  this.dispatchEvent(customEvent);
+};
 
 class ConferenceFormElement extends HTMLElement {
   connectedCallback() {
@@ -16,10 +24,10 @@ class ConferenceFormElement extends HTMLElement {
 
     const prefix = 'conference.form.';
 
-    const onCreateError = customEventDispatcher(`${prefix}createError`, 'error');
-    const onUpdateError = customEventDispatcher(`${prefix}updateError`, 'error');
-    const onCreate = customEventDispatcher(`${prefix}create`, 'item');
-    const onUpdate = customEventDispatcher(`${prefix}update`, 'item');
+    const onCreateError = eventDispatcher(`${prefix}createError`, 'error');
+    const onUpdateError = eventDispatcher(`${prefix}updateError`, 'error');
+    const onCreate = eventDispatcher(`${prefix}create`, 'item');
+    const onUpdate = eventDispatcher(`${prefix}update`, 'item');
 
     const reactRoot = id
       ? React.createElement(

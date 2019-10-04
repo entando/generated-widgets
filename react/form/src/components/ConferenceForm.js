@@ -1,16 +1,27 @@
 import 'date-fns';
+import dateFnsLocales from 'i18n/dateFnsLocales';
 import DateFnsUtils from '@date-io/date-fns';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { formValues, formTouched, formErrors } from 'components/__types__/conferenceTypes';
 import { withFormik } from 'formik';
-import * as Yup from 'yup';
+import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/styles';
+import { compose } from 'recompose';
+import * as Yup from 'yup';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { withTranslation } from 'react-i18next';
-import { compose } from 'recompose';
+import Grid from '@material-ui/core/Grid';
+
+const styles = theme => ({
+  root: {
+    margin: theme.spacing(3),
+  },
+  textField: {
+    width: '100%',
+  },
+});
 
 const ConferenceForm = props => {
   const {
@@ -23,57 +34,74 @@ const ConferenceForm = props => {
     handleSubmit,
     setFieldValue,
     t,
+    i18n,
   } = props;
 
-  const handleDateChange = field => value => setFieldValue(field, value);
+  const handleDateChange = field => value => {
+    setFieldValue(field, value);
+  };
 
-  const translateHelperText = field => (errors[field] && touched[field] ? errors[field] : '');
+  const dateLabelFn = date => (date ? date.toLocaleString(i18n.language) : '');
+
+  const getHelperText = field => (errors[field] && touched[field] ? errors[field] : '');
 
   return (
-    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+    <MuiPickersUtilsProvider utils={DateFnsUtils} locale={dateFnsLocales[i18n.language]}>
       <form onSubmit={handleSubmit} className={classes.root}>
-        <TextField
-          error={errors.name && touched.name}
-          helperText={translateHelperText('name')}
-          className={classes.textField}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          value={values.name}
-          name="name"
-          label={t('entities.conference.name')}
-        />
-        <TextField
-          multiline
-          error={errors.summary && touched.summary}
-          helperText={translateHelperText('summary')}
-          className={classes.textField}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          value={values.summary}
-          name="summary"
-          label={t('entities.conference.summary')}
-        />
-        <DateTimePicker
-          error={errors.start && touched.start}
-          helperText={translateHelperText('start')}
-          className={classes.textField}
-          onChange={handleDateChange('start')}
-          value={values.start}
-          name="start"
-          label={t('entities.conference.start')}
-        />
-        <DateTimePicker
-          error={errors.end && touched.end}
-          helperText={translateHelperText('end')}
-          className={classes.textField}
-          onChange={handleDateChange('end')}
-          value={values.end}
-          name="end"
-          label={t('entities.conference.end')}
-        />
-        <Button type="submit" color="primary">
-          {t('common.save')}
-        </Button>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              error={errors.name && touched.name}
+              helperText={getHelperText('name')}
+              className={classes.textField}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.name}
+              name="name"
+              label={t('entities.conference.name')}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              multiline
+              error={errors.summary && touched.summary}
+              helperText={getHelperText('summary')}
+              className={classes.textField}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.summary}
+              name="summary"
+              label={t('entities.conference.summary')}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <DateTimePicker
+              error={errors.start && touched.start}
+              helperText={getHelperText('start')}
+              className={classes.textField}
+              onChange={handleDateChange('start')}
+              value={values.start}
+              labelFunc={dateLabelFn}
+              name="start"
+              label={t('entities.conference.start')}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <DateTimePicker
+              error={errors.end && touched.end}
+              helperText={getHelperText('end')}
+              className={classes.textField}
+              onChange={handleDateChange('end')}
+              value={values.end}
+              labelFunc={dateLabelFn}
+              name="end"
+              label={t('entities.conference.end')}
+            />
+          </Grid>
+          <Button type="submit" color="primary">
+            {t('common.save')}
+          </Button>
+        </Grid>
       </form>
     </MuiPickersUtilsProvider>
   );
@@ -83,6 +111,7 @@ ConferenceForm.propTypes = {
   classes: PropTypes.shape({
     root: PropTypes.string,
     textField: PropTypes.string,
+    submitButton: PropTypes.string,
   }),
   values: formValues,
   touched: formTouched,
@@ -92,6 +121,7 @@ ConferenceForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   setFieldValue: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired,
+  i18n: PropTypes.shape({ language: PropTypes.string }).isRequired,
 };
 
 ConferenceForm.defaultProps = {
@@ -101,28 +131,22 @@ ConferenceForm.defaultProps = {
   errors: {},
 };
 
-const styles = theme => ({
-  root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: 200,
-  },
-});
-
 const emptyConference = {
   name: '',
   summary: '',
+  start: null,
+  end: null,
 };
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required(),
-  summary: Yup.string().required(),
-  start: Yup.date().required(),
-  end: Yup.date().required(),
+  summary: Yup.string(),
+  start: Yup.date()
+    .nullable()
+    .required(),
+  end: Yup.date()
+    .nullable()
+    .required(),
 });
 
 const formikBag = {
@@ -133,7 +157,8 @@ const formikBag = {
   validationSchema,
 
   handleSubmit: (values, { props: { onSubmit } }) => {
-    onSubmit(values);
+    console.log('submit values', values);
+    // onSubmit(values);
   },
 
   displayName: 'ConferenceForm',
