@@ -1,9 +1,9 @@
 import React from 'react';
 import { render, wait } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import { conferenceWithDateObjects } from 'mocks/conferenceMocks';
+import { conferenceWithDateObjects } from 'components/__mocks__/conferenceMocks';
 import conferenceAPIGetById from 'api/conferences';
-import 'mocks/i18nMock';
+import 'i18n/__mocks__/i18nMock';
 import ConferenceFormContainer from 'components/ConferenceEditFormContainer';
 
 jest.mock('api/conferences');

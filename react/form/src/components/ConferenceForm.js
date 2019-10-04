@@ -2,7 +2,7 @@ import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { formValues, formTouched, formErrors } from 'types/conferenceTypes';
+import { formValues, formTouched, formErrors } from 'components/__types__/conferenceTypes';
 import { withFormik } from 'formik';
 import * as Yup from 'yup';
 import { withStyles } from '@material-ui/styles';

@@ -109,8 +109,8 @@
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,ts,tsx}",
       "!src/**/i18n/**/*.*",
-      "!src/**/mocks/**/*.*",
-      "!src/**/types/**/*.*",
+      "!src/**/__mocks__/**/*.*",
+      "!src/**/__types__/**/*.*",
       "!<rootDir>/node_modules/",
       "!<rootDir>/path/to/dir/"
     ],

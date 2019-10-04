@@ -1,8 +1,8 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { render } from '@testing-library/react';
-import 'mocks/i18nMock';
-import { conferenceWithDateStrings } from 'mocks/conferenceMocks';
+import 'i18n/__mocks__/i18nMock';
+import { conferenceWithDateStrings } from 'components/__mocks__/conferenceMocks';
 import ConferenceForm from 'components/ConferenceForm';
 
 describe('Conference Form', () => {
