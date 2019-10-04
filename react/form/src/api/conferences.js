@@ -30,9 +30,9 @@ const generateApi = (endpoint, method) => {
   };
 };
 
-export const getApi = generateApi('events', 'GET');
-export const postApi = generateApi('events', 'POST');
-export const putApi = generateApi('events', 'PUT');
+export const getApi = generateApi('conferences', 'GET');
+export const postApi = generateApi('conferences', 'POST');
+export const putApi = generateApi('conferences', 'PUT');
 export const deleteApi = generateApi('conferences', 'DELETE');
 
 const API = {
