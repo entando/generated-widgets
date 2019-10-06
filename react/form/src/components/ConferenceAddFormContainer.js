@@ -5,7 +5,7 @@ import Notification from 'components/common/Notification';
 import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core';
 import { withTranslation } from 'react-i18next';
-import { postApi } from 'api/conferences';
+import { apiConferencePost } from 'api/conferences';
 
 class ConferenceAddFormContainer extends PureComponent {
   theme = createMuiTheme();
@@ -21,20 +21,23 @@ class ConferenceAddFormContainer extends PureComponent {
   }
 
   closeNotification() {
-    this.setState({ notificationMessage: null, notificationVariant: undefined });
+    this.setState({ notificationMessage: null, notificationVariant: null });
   }
 
   async handleSubmit(conference) {
     const { t } = this.props;
-    const createdConference = await postApi({ data: conference });
-    const { onCreate } = this.props;
-    onCreate(createdConference);
+    try {
+      const createdConference = await apiConferencePost(conference);
+      const { onCreate } = this.props;
+      onCreate(createdConference);
 
-    this.setState({
-      conference: createdConference,
-      notificationMessage: t('common.dataSaved'),
-      notificationVariant: 'success',
-    });
+      this.setState({
+        notificationMessage: t('common.dataSaved'),
+        notificationVariant: 'success',
+      });
+    } catch (err) {
+      this.handleError(err);
+    }
   }
 
   handleError(err) {
@@ -47,10 +50,10 @@ class ConferenceAddFormContainer extends PureComponent {
   }
 
   render() {
-    const { notificationMessage, notificationVariant, conference } = this.state;
+    const { notificationMessage, notificationVariant } = this.state;
     return (
       <ThemeProvider theme={this.theme}>
-        <ConferenceForm conference={conference} onSubmit={this.handleSubmit} />
+        <ConferenceForm onSubmit={this.handleSubmit} />
         <Notification
           variant={notificationVariant}
           message={notificationMessage}

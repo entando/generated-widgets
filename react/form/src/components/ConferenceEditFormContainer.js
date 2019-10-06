@@ -5,7 +5,7 @@ import Notification from 'components/common/Notification';
 import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core';
 import { withTranslation } from 'react-i18next';
-import { getApi, putApi } from 'api/conferences';
+import { apiConferenceGet, apiConferencePut } from 'api/conferences';
 
 class ConferenceEditFormContainer extends PureComponent {
   theme = createMuiTheme();
@@ -25,7 +25,7 @@ class ConferenceEditFormContainer extends PureComponent {
     const { id } = this.props;
     if (!id) return;
     try {
-      const conference = await getApi({ id });
+      const conference = await apiConferenceGet(id);
       this.setState({
         conference,
       });
@@ -35,20 +35,24 @@ class ConferenceEditFormContainer extends PureComponent {
   }
 
   closeNotification() {
-    this.setState({ notificationMessage: null, notificationVariant: undefined });
+    this.setState({ notificationMessage: null, notificationVariant: null });
   }
 
   async handleSubmit(conference) {
     const { t } = this.props;
-    const updatedConference = await putApi({ data: conference });
-    const { onUpdate } = this.props;
-    onUpdate(updatedConference);
+    try {
+      const updatedConference = await apiConferencePut(conference);
+      const { onUpdate } = this.props;
+      onUpdate(updatedConference);
 
-    this.setState({
-      conference: updatedConference,
-      notificationMessage: t('common.dataSaved'),
-      notificationVariant: 'success',
-    });
+      this.setState({
+        conference: updatedConference,
+        notificationMessage: t('common.dataSaved'),
+        notificationVariant: 'success',
+      });
+    } catch (err) {
+      this.handleError(err);
+    }
   }
 
   handleError(err) {

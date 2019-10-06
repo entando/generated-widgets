@@ -1,45 +1,47 @@
 import { DOMAIN, JWT_TOKEN } from 'api/constants';
 
-const generateApi = (endpoint, method) => {
-  const defaultOptions = {
-    headers: new Headers({
-      Authorization: `Bearer ${JWT_TOKEN}`,
-      'Content-Type': 'application/json',
-    }),
-  };
+const resource = 'conferences';
 
-  return (params = {}) => {
-    const { options, data, id } = params;
-
-    const domainWithSlash = DOMAIN.endsWith('/') ? DOMAIN : `${DOMAIN}/`;
-
-    const url = `${domainWithSlash}${endpoint}${id ? `/${id}` : ''}`;
-
-    return fetch(url, {
-      method,
-      ...defaultOptions,
-      ...options,
-      ...(data ? { body: JSON.stringify(data) } : {}),
-    })
-      .then(response =>
-        response.status >= 200 && response.status < 300
-          ? Promise.resolve(response)
-          : Promise.reject(new Error(response.statusText || response.status))
-      )
-      .then(response => response.json());
-  };
+const defaultOptions = {
+  headers: new Headers({
+    Authorization: `Bearer ${JWT_TOKEN}`,
+    'Content-Type': 'application/json',
+  }),
 };
 
-export const getApi = generateApi('conferences', 'GET');
-export const postApi = generateApi('conferences', 'POST');
-export const putApi = generateApi('conferences', 'PUT');
-export const deleteApi = generateApi('conferences', 'DELETE');
+const request = async (url, options) => {
+  const response = await fetch(url, options);
 
-const API = {
-  get: getApi,
-  post: postApi,
-  put: putApi,
-  delete: deleteApi,
+  return response.status >= 200 && response.status < 300
+    ? response.json()
+    : Promise.reject(new Error(response.statusText || response.status));
 };
 
-export default API;
+export const apiConferenceGet = async id => {
+  const url = `${DOMAIN}/${resource}/${id}`;
+  const options = {
+    ...defaultOptions,
+    method: 'GET',
+  };
+  return request(url, options);
+};
+
+export const apiConferencePost = async conference => {
+  const url = `${DOMAIN}/${resource}`;
+  const options = {
+    ...defaultOptions,
+    method: 'POST',
+    body: conference ? JSON.stringify(conference) : null,
+  };
+  return request(url, options);
+};
+
+export const apiConferencePut = async conference => {
+  const url = `${DOMAIN}/${resource}`;
+  const options = {
+    ...defaultOptions,
+    method: 'PUT',
+    body: conference ? JSON.stringify(conference) : null,
+  };
+  return request(url, options);
+};

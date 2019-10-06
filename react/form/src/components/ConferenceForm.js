@@ -51,6 +51,7 @@ const ConferenceForm = props => {
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
             <TextField
+              id="conference-name"
               error={errors.name && touched.name}
               helperText={getHelperText('name')}
               className={classes.textField}
@@ -63,6 +64,7 @@ const ConferenceForm = props => {
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
+              id="conference-summary"
               multiline
               error={errors.summary && touched.summary}
               helperText={getHelperText('summary')}
@@ -76,6 +78,7 @@ const ConferenceForm = props => {
           </Grid>
           <Grid item xs={12} sm={6}>
             <DateTimePicker
+              id="conference-start"
               error={errors.start && touched.start}
               helperText={getHelperText('start')}
               className={classes.textField}
@@ -88,6 +91,7 @@ const ConferenceForm = props => {
           </Grid>
           <Grid item xs={12} sm={6}>
             <DateTimePicker
+              id="conference-end"
               error={errors.end && touched.end}
               helperText={getHelperText('end')}
               className={classes.textField}
@@ -98,7 +102,7 @@ const ConferenceForm = props => {
               label={t('entities.conference.end')}
             />
           </Grid>
-          <Button type="submit" color="primary">
+          <Button type="submit" color="primary" data-testid="submit-btn">
             {t('common.save')}
           </Button>
         </Grid>
