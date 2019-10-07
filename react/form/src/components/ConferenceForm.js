@@ -41,7 +41,7 @@ const ConferenceForm = props => {
     setFieldValue(field, value);
   };
 
-  const dateLabelFn = date => (date ? date.toLocaleString(i18n.language) : '');
+  const dateLabelFn = date => (date ? new Date(date).toLocaleString(i18n.language) : '');
 
   const getHelperText = field => (errors[field] && touched[field] ? errors[field] : '');
 

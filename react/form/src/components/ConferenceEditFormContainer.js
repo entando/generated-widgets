@@ -35,7 +35,7 @@ class ConferenceEditFormContainer extends PureComponent {
   }
 
   closeNotification() {
-    this.setState({ notificationMessage: null, notificationVariant: null });
+    this.setState({ notificationMessage: null, notificationStatus: null });
   }
 
   async handleSubmit(conference) {
@@ -48,7 +48,7 @@ class ConferenceEditFormContainer extends PureComponent {
       this.setState({
         conference: updatedConference,
         notificationMessage: t('common.dataSaved'),
-        notificationVariant: 'success',
+        notificationStatus: 'success',
       });
     } catch (err) {
       this.handleError(err);
@@ -60,17 +60,17 @@ class ConferenceEditFormContainer extends PureComponent {
     onError(err);
     this.setState({
       notificationMessage: t('errors.dataLoading'),
-      notificationVariant: 'error',
+      notificationStatus: 'error',
     });
   }
 
   render() {
-    const { notificationMessage, notificationVariant, conference } = this.state;
+    const { notificationMessage, notificationStatus, conference } = this.state;
     return (
       <ThemeProvider theme={this.theme}>
         <ConferenceForm conference={conference} onSubmit={this.handleSubmit} />
         <Notification
-          variant={notificationVariant}
+          variant={notificationStatus}
           message={notificationMessage}
           onClose={this.closeNotification}
         />

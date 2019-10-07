@@ -4,12 +4,15 @@
 
 ### Attributes
 
+- **id** (if not present, the form will create a new entity; otherwise, it will update the one having that id)
 - **locale** (default: `en`)
 
 ### Events
 
-- **_[entityName]_.table.error** (fired when an error occurs)
-- **_[entityName]_.table.select** (fired when a table row is selected)
+- **conference.form.createError** (fired when an error occurs during conference creation)
+- **conference.form.create** (fired when the conference is successfully created)
+- **conference.form.updateError** (fired when an error occurs during conference update)
+- **conference.form.update** (fired when the conference is successfully updated)
 
 ## i18n
 
