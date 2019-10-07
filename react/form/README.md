@@ -21,6 +21,8 @@ To add a new locale:
   - import the newly generated JSON file (use the en locale import as a reference)
   - export it alongside the other locales
 
+Further translations can be required depending on the generated entity field types (e.g. if the entity has dates, we will need to add the `date-fns` locale used by the [Material UI Date Picker component](https://material-ui-pickers.dev/) and, potentially, we can [override `DateFnsUtils`'s methods](https://github.com/dmtrKovalenko/date-io/blob/master/packages/date-fns/src/date-fns-utils.ts) to customize date/time strings displayed in the date picker).
+
 ## Available Scripts
 
 In the project directory, you can run:
