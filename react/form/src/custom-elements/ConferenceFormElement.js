@@ -1,8 +1,8 @@
-import i18next from 'i18next';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ConferenceEditFormContainer from 'components/ConferenceEditFormContainer';
 import ConferenceAddFormContainer from 'components/ConferenceAddFormContainer';
+import setLocale from 'i18n/setLocale';
 
 class ConferenceFormElement extends HTMLElement {
   connectedCallback() {
@@ -10,8 +10,9 @@ class ConferenceFormElement extends HTMLElement {
     this.appendChild(mountPoint);
 
     const id = this.getAttribute('id');
-    const locale = this.getAttribute('locale') || 'en';
-    i18next.changeLanguage(locale);
+    const locale = this.getAttribute('locale');
+
+    setLocale(locale);
 
     const prefix = 'conference.form.';
 
