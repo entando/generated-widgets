@@ -18,9 +18,6 @@ export const setI18nextLocale = (locale, defaultLocale) => {
     interpolation: {
       escapeValue: false,
     },
-    react: {
-      useSuspense: false,
-    },
     resources,
     lng: locale,
     fallbackLng: defaultLocale,
