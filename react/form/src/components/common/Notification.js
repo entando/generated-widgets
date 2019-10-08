@@ -40,6 +40,8 @@ const variantIcon = {
 };
 
 const Notification = ({ className, classes, variant, message, onClose }) => {
+  if (!message) return '';
+
   const Icon = variantIcon[variant];
   const messageTemplate = (
     <span className={classes.message}>
@@ -48,7 +50,7 @@ const Notification = ({ className, classes, variant, message, onClose }) => {
     </span>
   );
 
-  return message ? (
+  return (
     <Snackbar open onClose={onClose}>
       <SnackbarContent
         className={clsx(classes[variant], className)}
@@ -60,8 +62,6 @@ const Notification = ({ className, classes, variant, message, onClose }) => {
         ]}
       />
     </Snackbar>
-  ) : (
-    ''
   );
 };
 
