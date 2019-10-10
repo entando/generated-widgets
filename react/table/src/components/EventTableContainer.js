@@ -15,7 +15,24 @@ export default class EventTableContainer extends PureComponent {
     error: null,
   };
 
-  async componentDidMount() {
+  componentDidMount() {
+    this.loadEvents();
+    window.addEventListener('conference.form.update', this.handleEvent);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('conference.form.update', this.handleEvent);
+  }
+
+  closeNotification = () => {
+    this.setState({ error: null });
+  };
+
+  handleEvent = evt => {
+    console.warn(evt.type, evt.detail);
+  };
+
+  async loadEvents() {
     let events = [];
 
     try {
@@ -33,10 +50,6 @@ export default class EventTableContainer extends PureComponent {
     }
   }
 
-  closeNotification = () => {
-    this.setState({ error: null });
-  };
-
   handleError(err) {
     const { onError } = this.props;
     onError(err);
@@ -46,8 +59,9 @@ export default class EventTableContainer extends PureComponent {
   }
 
   render() {
-    const { error, events } = this.state;
     const { onSelect } = this.props;
+    const { error, events } = this.state;
+
     return (
       <ThemeProvider theme={this.theme}>
         <EventTable events={events} onSelect={onSelect} />

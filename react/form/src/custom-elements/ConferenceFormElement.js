@@ -21,6 +21,7 @@ class ConferenceFormElement extends HTMLElement {
         detail: {
           [detailPropName]: payload,
         },
+        bubbles: true,
       });
       this.dispatchEvent(customEvent);
     };

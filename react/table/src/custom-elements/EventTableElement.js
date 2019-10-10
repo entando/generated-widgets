@@ -1,7 +1,7 @@
 import i18next from 'i18next';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import EventTableContainer from 'components/EventTableContainer';
+import EventTableContainerWithHooks from 'components/EventTableContainerWithHooks';
 
 class EventTableElement extends HTMLElement {
   connectedCallback() {
@@ -31,7 +31,11 @@ class EventTableElement extends HTMLElement {
       this.dispatchEvent(customEvent);
     };
 
-    const reactRoot = React.createElement(EventTableContainer, { onError, onSelect }, null);
+    const reactRoot = React.createElement(
+      EventTableContainerWithHooks,
+      { onError, onSelect },
+      null
+    );
     ReactDOM.render(reactRoot, mountPoint);
   }
 }

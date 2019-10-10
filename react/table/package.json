@@ -32,7 +32,8 @@
       "prettier"
     ],
     "plugins": [
-      "prettier"
+      "prettier",
+      "react-hooks"
     ],
     "env": {
       "browser": true,
@@ -63,7 +64,9 @@
           ]
         }
       ],
-      "react/state-in-constructor": 0
+      "react/state-in-constructor": 0,
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn"
     }
   },
   "eslintIgnore": [
