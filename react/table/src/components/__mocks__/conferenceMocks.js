@@ -36,7 +36,7 @@ export const conferencesWithDateObjects = [
 export const conferencesWithDateStrings = conferencesWithDateObjects.map(item => ({
   ...item,
   start: new Date(item.start).toLocaleString(),
-  end: new Date(item.start).toLocaleString(),
+  end: new Date(item.end).toLocaleString(),
 }));
 
 export const conferenceWithDateString = conferencesWithDateStrings[0];

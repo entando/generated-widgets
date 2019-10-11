@@ -1,21 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import conferenceType from 'components/__types__/conferenceType';
-import { withStyles } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
-const styles = {
+const useStyles = makeStyles({
   root: {
     cursor: 'pointer',
   },
-};
+});
 
-const ConferenceTable = ({ classes, items, onSelect }) => {
+const ConferenceTable = props => {
+  const { items, onSelect } = props;
+  const { t } = useTranslation();
+  const classes = useStyles(props);
+
   const tableRows = items.map(item => (
     <TableRow hover className={classes.root} key={item.id} onClick={() => onSelect(item)}>
       <TableCell>{item.name}</TableCell>
@@ -29,24 +33,16 @@ const ConferenceTable = ({ classes, items, onSelect }) => {
     <Table>
       <TableHead>
         <TableRow>
-          <TableCell>
-            <Trans i18nKey="conference.tableHeader.name" />
-          </TableCell>
-          <TableCell>
-            <Trans i18nKey="conference.tableHeader.summary" />
-          </TableCell>
-          <TableCell>
-            <Trans i18nKey="conference.tableHeader.start" />
-          </TableCell>
-          <TableCell>
-            <Trans i18nKey="conference.tableHeader.end" />
-          </TableCell>
+          <TableCell>{t('conference.tableHeader.name')}</TableCell>
+          <TableCell>{t('conference.tableHeader.summary')}</TableCell>
+          <TableCell>{t('conference.tableHeader.start')}</TableCell>
+          <TableCell>{t('conference.tableHeader.end')}</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>{tableRows}</TableBody>
     </Table>
   ) : (
-    <Trans i18nKey="conference.noItems" />
+    t('conference.noItems')
   );
 };
 
@@ -65,4 +61,4 @@ ConferenceTable.defaultProps = {
   onSelect: () => {},
 };
 
-export default withStyles(styles)(ConferenceTable);
+export default ConferenceTable;
