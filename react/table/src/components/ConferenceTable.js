@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import eventType from 'types/eventType';
+import eventType from 'components/__types__/conferenceType';
 import { withStyles } from '@material-ui/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -15,54 +15,54 @@ const styles = {
   },
 };
 
-const EventTable = ({ classes, events, onSelect }) => {
-  const tableRows = events.map(event => (
-    <TableRow hover className={classes.root} key={event.id} onClick={() => onSelect(event)}>
-      <TableCell>{event.name}</TableCell>
-      <TableCell>{event.summary}</TableCell>
-      <TableCell>{event.start}</TableCell>
-      <TableCell>{event.end}</TableCell>
+const ConferenceTable = ({ classes, items, onSelect }) => {
+  const tableRows = items.map(item => (
+    <TableRow hover className={classes.root} key={item.id} onClick={() => onSelect(item)}>
+      <TableCell>{item.name}</TableCell>
+      <TableCell>{item.summary}</TableCell>
+      <TableCell>{item.start}</TableCell>
+      <TableCell>{item.end}</TableCell>
     </TableRow>
   ));
 
-  return events.length ? (
+  return items.length ? (
     <Table>
       <TableHead>
         <TableRow>
           <TableCell>
-            <Trans i18nKey="event.tableHeader.name" />
+            <Trans i18nKey="conference.tableHeader.name" />
           </TableCell>
           <TableCell>
-            <Trans i18nKey="event.tableHeader.summary" />
+            <Trans i18nKey="conference.tableHeader.summary" />
           </TableCell>
           <TableCell>
-            <Trans i18nKey="event.tableHeader.start" />
+            <Trans i18nKey="conference.tableHeader.start" />
           </TableCell>
           <TableCell>
-            <Trans i18nKey="event.tableHeader.end" />
+            <Trans i18nKey="conference.tableHeader.end" />
           </TableCell>
         </TableRow>
       </TableHead>
       <TableBody>{tableRows}</TableBody>
     </Table>
   ) : (
-    <Trans i18nKey="event.noItems" />
+    <Trans i18nKey="conference.noItems" />
   );
 };
 
-EventTable.propTypes = {
+ConferenceTable.propTypes = {
   classes: PropTypes.shape({
     root: PropTypes.string,
   }),
-  events: PropTypes.arrayOf(eventType).isRequired,
+  items: PropTypes.arrayOf(eventType).isRequired,
   onSelect: PropTypes.func,
 };
 
-EventTable.defaultProps = {
+ConferenceTable.defaultProps = {
   classes: {
     root: '',
   },
   onSelect: () => {},
 };
 
-export default withStyles(styles)(EventTable);
+export default withStyles(styles)(ConferenceTable);

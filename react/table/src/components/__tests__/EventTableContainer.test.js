@@ -1,32 +1,37 @@
 import React from 'react';
 import { render, wait } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import { eventsWithDateObjects } from 'mocks/eventMocks';
-import eventsGet from 'api/events';
-import 'mocks/i18nMock';
-import EventTableContainer from 'components/EventTableContainer';
+import { conferencesWithDateObjects as conferences } from 'components/__mocks__/conferenceMocks';
+import { apiConferencesGet } from 'api/conferences';
+import 'i18n/__mocks__/i18nMock';
+import ConferenceTableContainer from 'components/ConferenceTableContainer';
 
-jest.mock('api/events');
+jest.mock('api/conferences');
 
-describe('EventTableContainer', () => {
-  const errorMessageKey = 'event.error.dataLoading';
+describe('ConferenceTableContainer', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  const errorMessageKey = 'conference.error.dataLoading';
 
   it('calls API', async () => {
-    eventsGet.mockImplementation(() => Promise.resolve(eventsWithDateObjects));
-    const { queryByText } = render(<EventTableContainer />);
+    apiConferencesGet.mockImplementation(() => Promise.resolve(conferences));
+    const { queryByText } = render(<ConferenceTableContainer />);
 
     await wait(() => {
-      expect(eventsGet).toHaveBeenCalledTimes(1);
+      expect(apiConferencesGet).toHaveBeenCalledTimes(1);
       expect(queryByText(errorMessageKey)).not.toBeInTheDocument();
     });
   });
 
   it('shows an error if the API call is not successful', async () => {
     const onErrorMock = jest.fn();
-    eventsGet.mockImplementation(() => Promise.reject());
-    const { getByText } = render(<EventTableContainer onError={onErrorMock} />);
+    apiConferencesGet.mockImplementation(() => Promise.reject());
+    const { getByText } = render(<ConferenceTableContainer onError={onErrorMock} />);
 
     await wait(() => {
+      expect(apiConferencesGet).toHaveBeenCalledTimes(1);
       expect(onErrorMock).toHaveBeenCalledTimes(1);
       expect(getByText(errorMessageKey)).toBeInTheDocument();
     });

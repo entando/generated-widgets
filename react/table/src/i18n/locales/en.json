@@ -1,6 +1,6 @@
 {
-  "event": {
-    "noItems": "No events available",
+  "conference": {
+    "noItems": "No conferences available",
     "tableHeader": {
       "name": "Name",
       "summary": "Summary",

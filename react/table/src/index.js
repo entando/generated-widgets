@@ -1,3 +1,3 @@
 import 'i18n';
 import 'index.css';
-import 'custom-elements/EventTableElement';
+import 'custom-elements/ConferenceTableElement';
