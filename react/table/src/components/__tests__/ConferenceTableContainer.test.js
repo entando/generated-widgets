@@ -9,11 +9,11 @@ import ConferenceTableContainer from 'components/ConferenceTableContainer';
 jest.mock('api/conferences');
 
 describe('ConferenceTableContainer', () => {
+  const errorMessageKey = 'conference.error.dataLoading';
+
   beforeEach(() => {
     jest.clearAllMocks();
   });
-
-  const errorMessageKey = 'conference.error.dataLoading';
 
   it('calls API', async () => {
     apiConferencesGet.mockImplementation(() => Promise.resolve(conferences));

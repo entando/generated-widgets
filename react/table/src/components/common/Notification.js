@@ -68,12 +68,6 @@ const Notification = props => {
 };
 
 Notification.propTypes = {
-  classes: PropTypes.shape({
-    message: PropTypes.string.isRequired,
-    icon: PropTypes.string.isRequired,
-    iconVariant: PropTypes.string.isRequired,
-    error: PropTypes.string.isRequired,
-  }).isRequired,
   className: PropTypes.string,
   variant: PropTypes.oneOf(['success', 'error', 'info']),
   message: PropTypes.string,

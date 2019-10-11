@@ -9,8 +9,13 @@ import {
 import ConferenceTable from 'components/ConferenceTable';
 
 describe('ConferenceTable', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('shows items', () => {
     const { getByText } = render(<ConferenceTable items={conferences} />);
+
     expect(getByText('Conference name 1')).toBeInTheDocument();
     expect(getByText('Conference summary 1')).toBeInTheDocument();
     expect(getByText('Conference name 2')).toBeInTheDocument();
@@ -23,6 +28,7 @@ describe('ConferenceTable', () => {
 
   it('shows no items message', () => {
     const { queryByText } = render(<ConferenceTable items={[]} />);
+
     expect(queryByText('Conference name 1')).not.toBeInTheDocument();
     expect(queryByText('Conference summary 1')).not.toBeInTheDocument();
     expect(queryByText('Conference name 2')).not.toBeInTheDocument();
@@ -38,7 +44,9 @@ describe('ConferenceTable', () => {
   it('calls onSelect when the user clicks a table row', () => {
     const onSelectMock = jest.fn();
     const { getByText } = render(<ConferenceTable items={conferences} onSelect={onSelectMock} />);
+
     fireEvent.click(getByText('Conference name 1'));
+
     expect(onSelectMock).toHaveBeenCalledTimes(1);
     expect(onSelectMock).toHaveBeenCalledWith(conference);
   });

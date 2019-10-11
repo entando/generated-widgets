@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import ConferenceTable from 'components/ConferenceTable';
 
 import Notification from 'components/common/Notification';
-import { ThemeProvider } from '@material-ui/styles';
-import { createMuiTheme } from '@material-ui/core';
 import { apiConferencesGet } from 'api/conferences';
 import { useTranslation } from 'react-i18next';
 
@@ -39,9 +37,12 @@ const reducer = (state, action) => {
   }
 };
 
-const ConferenceTableContainer = ({ onError, onSelect }) => {
-  const theme = createMuiTheme();
-  const { t } = useTranslation();
+const ConferenceTableContainer = props => {
+  const { onError, onSelect } = props;
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation();
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
@@ -77,8 +78,8 @@ const ConferenceTableContainer = ({ onError, onSelect }) => {
         const json = await apiConferencesGet();
         const conferences = json.map(conference => ({
           ...conference,
-          start: new Date(conference.start).toLocaleString(),
-          end: new Date(conference.start).toLocaleString(),
+          start: new Date(conference.start).toLocaleString(language),
+          end: new Date(conference.start).toLocaleString(language),
         }));
 
         dispatch({ type: 'readAll', payload: conferences });
@@ -87,15 +88,16 @@ const ConferenceTableContainer = ({ onError, onSelect }) => {
       }
     };
     fetchData();
-  }, [onError, t]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const closeNotification = () => dispatch({ type: 'clearErrors' });
 
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <ConferenceTable items={state.items} onSelect={onSelect} />
       <Notification variant="error" message={state.errorMessage} onClose={closeNotification} />
-    </ThemeProvider>
+    </>
   );
 };
 
