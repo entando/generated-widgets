@@ -17,19 +17,10 @@ export default class EventTableContainer extends PureComponent {
 
   componentDidMount() {
     this.loadEvents();
-    window.addEventListener('conference.form.update', this.handleEvent);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('conference.form.update', this.handleEvent);
   }
 
   closeNotification = () => {
     this.setState({ error: null });
-  };
-
-  handleEvent = evt => {
-    console.warn(evt.type, evt.detail);
   };
 
   async loadEvents() {
