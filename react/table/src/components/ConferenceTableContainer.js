@@ -1,4 +1,3 @@
-import i18next from 'i18next';
 import React, { useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import ConferenceTable from 'components/ConferenceTable';
@@ -7,6 +6,7 @@ import Notification from 'components/common/Notification';
 import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core';
 import { apiConferencesGet } from 'api/conferences';
+import { useTranslation } from 'react-i18next';
 
 const initialState = {
   items: [],
@@ -39,9 +39,9 @@ const reducer = (state, action) => {
   }
 };
 
-const ConferenceTableContainerWithHooks = ({ onError, onSelect }) => {
+const ConferenceTableContainer = ({ onError, onSelect }) => {
   const theme = createMuiTheme();
-
+  const { t } = useTranslation();
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
@@ -69,7 +69,7 @@ const ConferenceTableContainerWithHooks = ({ onError, onSelect }) => {
   useEffect(() => {
     const handleError = err => {
       onError(err);
-      dispatch({ type: 'error', payload: i18next.t('conference.error.dataLoading') });
+      dispatch({ type: 'error', payload: t('conference.error.dataLoading') });
     };
 
     const fetchData = async () => {
@@ -87,7 +87,7 @@ const ConferenceTableContainerWithHooks = ({ onError, onSelect }) => {
       }
     };
     fetchData();
-  }, [onError]);
+  }, [onError, t]);
 
   const closeNotification = () => dispatch({ type: 'clearErrors' });
 
@@ -99,14 +99,14 @@ const ConferenceTableContainerWithHooks = ({ onError, onSelect }) => {
   );
 };
 
-ConferenceTableContainerWithHooks.propTypes = {
+ConferenceTableContainer.propTypes = {
   onError: PropTypes.func,
   onSelect: PropTypes.func,
 };
 
-ConferenceTableContainerWithHooks.defaultProps = {
+ConferenceTableContainer.defaultProps = {
   onError: () => {},
   onSelect: () => {},
 };
 
-export default ConferenceTableContainerWithHooks;
+export default ConferenceTableContainer;
