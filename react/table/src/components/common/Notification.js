@@ -4,8 +4,11 @@ import clsx from 'clsx';
 import { Snackbar, SnackbarContent } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 import ErrorIcon from '@material-ui/icons/Error';
+import InfoIcon from '@material-ui/icons/Info';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CloseIcon from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
+import { green } from '@material-ui/core/colors';
 
 const styles = theme => ({
   message: {
@@ -19,23 +22,38 @@ const styles = theme => ({
     opacity: 0.9,
     marginRight: theme.spacing(1),
   },
+  success: {
+    backgroundColor: green[600],
+  },
   error: {
     backgroundColor: theme.palette.error.dark,
   },
+  info: {
+    backgroundColor: theme.palette.primary.main,
+  },
 });
 
-const ErrorNotification = ({ classes, message, onClose }) => {
+const variantIcon = {
+  success: CheckCircleIcon,
+  error: ErrorIcon,
+  info: InfoIcon,
+};
+
+const Notification = ({ className, classes, variant, message, onClose }) => {
+  if (!message) return '';
+
+  const Icon = variantIcon[variant];
   const messageTemplate = (
     <span className={classes.message}>
-      <ErrorIcon className={clsx(classes.icon, classes.iconVariant)} />
+      <Icon className={clsx(classes.icon, classes.iconVariant)} />
       {message}
     </span>
   );
 
-  return message ? (
+  return (
     <Snackbar open onClose={onClose}>
       <SnackbarContent
-        className={classes.error}
+        className={clsx(classes[variant], className)}
         message={messageTemplate}
         action={[
           <IconButton key="close" aria-label="close" color="inherit" onClick={onClose}>
@@ -44,25 +62,27 @@ const ErrorNotification = ({ classes, message, onClose }) => {
         ]}
       />
     </Snackbar>
-  ) : (
-    ''
   );
 };
 
-ErrorNotification.propTypes = {
+Notification.propTypes = {
   classes: PropTypes.shape({
     message: PropTypes.string.isRequired,
     icon: PropTypes.string.isRequired,
     iconVariant: PropTypes.string.isRequired,
     error: PropTypes.string.isRequired,
   }).isRequired,
+  className: PropTypes.string,
+  variant: PropTypes.oneOf(['success', 'error', 'info']),
   message: PropTypes.string,
   onClose: PropTypes.func,
 };
 
-ErrorNotification.defaultProps = {
+Notification.defaultProps = {
   message: null,
+  className: '',
+  variant: 'info',
   onClose: () => {},
 };
 
-export default withStyles(styles, { withTheme: true })(ErrorNotification);
+export default withStyles(styles, { withTheme: true })(Notification);

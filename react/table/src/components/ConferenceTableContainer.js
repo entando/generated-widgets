@@ -3,7 +3,7 @@ import React, { useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import ConferenceTable from 'components/ConferenceTable';
 
-import ErrorNotification from 'components/common/ErrorNotification';
+import Notification from 'components/common/Notification';
 import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core';
 import { apiConferencesGet } from 'api/conferences';
@@ -94,7 +94,7 @@ const ConferenceTableContainerWithHooks = ({ onError, onSelect }) => {
   return (
     <ThemeProvider theme={theme}>
       <ConferenceTable items={state.items} onSelect={onSelect} />
-      <ErrorNotification message={state.errorMessage} onClose={closeNotification} />
+      <Notification variant="error" message={state.errorMessage} onClose={closeNotification} />
     </ThemeProvider>
   );
 };
