@@ -1,6 +1,6 @@
 {
-  "event": {
-    "noItems": "Nessun evento disponibile",
+  "conferenceType": {
+    "noItems": "Nessuna conferenza disponibile",
     "tableHeader": {
       "name": "Nome",
       "summary": "Descrizione",

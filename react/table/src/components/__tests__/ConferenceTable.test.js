@@ -9,7 +9,7 @@ import {
 import ConferenceTable from 'components/ConferenceTable';
 
 describe('ConferenceTable', () => {
-  it('shows events', () => {
+  it('shows items', () => {
     const { getByText } = render(<ConferenceTable items={conferences} />);
     expect(getByText('Conference name 1')).toBeInTheDocument();
     expect(getByText('Conference summary 1')).toBeInTheDocument();
@@ -21,7 +21,7 @@ describe('ConferenceTable', () => {
     expect(getByText('Conference summary 4')).toBeInTheDocument();
   });
 
-  it('shows no events message', () => {
+  it('shows no items message', () => {
     const { queryByText } = render(<ConferenceTable items={[]} />);
     expect(queryByText('Conference name 1')).not.toBeInTheDocument();
     expect(queryByText('Conference summary 1')).not.toBeInTheDocument();

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import eventType from 'components/__types__/conferenceType';
+import conferenceType from 'components/__types__/conferenceType';
 import { withStyles } from '@material-ui/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -54,7 +54,7 @@ ConferenceTable.propTypes = {
   classes: PropTypes.shape({
     root: PropTypes.string,
   }),
-  items: PropTypes.arrayOf(eventType).isRequired,
+  items: PropTypes.arrayOf(conferenceType).isRequired,
   onSelect: PropTypes.func,
 };
 

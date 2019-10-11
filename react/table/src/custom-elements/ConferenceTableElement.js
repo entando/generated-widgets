@@ -3,7 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ConferenceTableContainer from 'components/ConferenceTableContainer';
 
-class EventTableElement extends HTMLElement {
+class ConferenceTableElement extends HTMLElement {
   connectedCallback() {
     const mountPoint = document.createElement('div');
     this.appendChild(mountPoint);
@@ -11,7 +11,7 @@ class EventTableElement extends HTMLElement {
     const locale = this.getAttribute('locale') || 'en';
     i18next.changeLanguage(locale);
 
-    const customEventPrefix = 'event.table.';
+    const customEventPrefix = 'conference.table.';
 
     const onError = error => {
       const customEvent = new CustomEvent(`${customEventPrefix}error`, {
@@ -36,4 +36,4 @@ class EventTableElement extends HTMLElement {
   }
 }
 
-customElements.define('event-table', EventTableElement);
+customElements.define('conference-table', ConferenceTableElement);
