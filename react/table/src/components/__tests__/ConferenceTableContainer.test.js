@@ -26,13 +26,11 @@ describe('ConferenceTableContainer', () => {
   });
 
   it('shows an error if the API call is not successful', async () => {
-    const onErrorMock = jest.fn();
     apiConferencesGet.mockImplementation(() => Promise.reject());
-    const { getByText } = render(<ConferenceTableContainer onError={onErrorMock} />);
+    const { getByText } = render(<ConferenceTableContainer />);
 
     await wait(() => {
       expect(apiConferencesGet).toHaveBeenCalledTimes(1);
-      expect(onErrorMock).toHaveBeenCalledTimes(1);
       expect(getByText(errorMessageKey)).toBeInTheDocument();
     });
   });

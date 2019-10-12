@@ -11,27 +11,7 @@ class ConferenceTableElement extends HTMLElement {
     const locale = this.getAttribute('locale');
     setLocale(locale);
 
-    const customEventPrefix = 'conference.table.';
-
-    const onError = error => {
-      const customEvent = new CustomEvent(`${customEventPrefix}error`, {
-        detail: {
-          error,
-        },
-      });
-      this.dispatchEvent(customEvent);
-    };
-
-    const onSelect = item => {
-      const customEvent = new CustomEvent(`${customEventPrefix}select`, {
-        detail: {
-          item,
-        },
-      });
-      this.dispatchEvent(customEvent);
-    };
-
-    const reactRoot = React.createElement(ConferenceTableContainer, { onError, onSelect }, null);
+    const reactRoot = React.createElement(ConferenceTableContainer);
     ReactDOM.render(reactRoot, mountPoint);
   }
 }

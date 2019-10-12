@@ -1,5 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
-import PropTypes from 'prop-types';
+import React, { useCallback, useEffect, useReducer } from 'react';
 import ConferenceTable from 'components/ConferenceTable';
 
 import Notification from 'components/common/Notification';
@@ -37,8 +36,27 @@ const reducer = (state, action) => {
   }
 };
 
-const ConferenceTableContainer = props => {
-  const { onError, onSelect } = props;
+const ConferenceTableContainer = () => {
+  const customEventPrefix = 'conference.table.';
+
+  const onError = error => {
+    const customEvent = new CustomEvent(`${customEventPrefix}error`, {
+      detail: {
+        error,
+      },
+    });
+    window.dispatchEvent(customEvent);
+  };
+
+  const onSelect = item => {
+    const customEvent = new CustomEvent(`${customEventPrefix}select`, {
+      detail: {
+        item,
+      },
+    });
+    window.dispatchEvent(customEvent);
+  };
+
   const {
     t,
     i18n: { language },
@@ -67,29 +85,29 @@ const ConferenceTableContainer = props => {
     };
   }, []);
 
-  useEffect(() => {
+  const fetchData = useCallback(async () => {
     const handleError = err => {
       onError(err);
       dispatch({ type: 'error', payload: t('conference.error.dataLoading') });
     };
 
-    const fetchData = async () => {
-      try {
-        const json = await apiConferencesGet();
-        const conferences = json.map(conference => ({
-          ...conference,
-          start: new Date(conference.start).toLocaleString(language),
-          end: new Date(conference.start).toLocaleString(language),
-        }));
+    try {
+      const json = await apiConferencesGet();
+      const conferences = json.map(conference => ({
+        ...conference,
+        start: new Date(conference.start).toLocaleString(language),
+        end: new Date(conference.start).toLocaleString(language),
+      }));
 
-        dispatch({ type: 'readAll', payload: conferences });
-      } catch (err) {
-        handleError(err);
-      }
-    };
+      dispatch({ type: 'readAll', payload: conferences });
+    } catch (err) {
+      handleError(err);
+    }
+  }, [language, t]);
+
+  useEffect(() => {
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [fetchData]);
 
   const closeNotification = () => dispatch({ type: 'clearErrors' });
 
@@ -99,16 +117,6 @@ const ConferenceTableContainer = props => {
       <Notification variant="error" message={state.errorMessage} onClose={closeNotification} />
     </>
   );
-};
-
-ConferenceTableContainer.propTypes = {
-  onError: PropTypes.func,
-  onSelect: PropTypes.func,
-};
-
-ConferenceTableContainer.defaultProps = {
-  onError: () => {},
-  onSelect: () => {},
 };
 
 export default ConferenceTableContainer;
