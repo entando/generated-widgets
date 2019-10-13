@@ -19,7 +19,7 @@ export const setI18nextLocale = (locale, defaultLocale) => {
       escapeValue: false,
     },
     resources,
-    lng: locale,
+    lng: locale || defaultLocale,
     fallbackLng: defaultLocale,
     react: { useSuspense: false },
   });
