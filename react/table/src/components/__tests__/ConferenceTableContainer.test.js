@@ -26,7 +26,9 @@ describe('ConferenceTableContainer', () => {
   });
 
   it('shows an error if the API call is not successful', async () => {
-    apiConferencesGet.mockImplementation(() => Promise.reject());
+    apiConferencesGet.mockImplementation(() => {
+      throw new Error();
+    });
     const { getByText } = render(<ConferenceTableContainer />);
 
     wait(() => {
