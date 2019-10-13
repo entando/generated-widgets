@@ -21,5 +21,6 @@ export const setI18nextLocale = (locale, defaultLocale) => {
     resources,
     lng: locale,
     fallbackLng: defaultLocale,
+    react: { useSuspense: false },
   });
 };
