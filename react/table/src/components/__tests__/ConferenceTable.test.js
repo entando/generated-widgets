@@ -9,7 +9,7 @@ import {
 import ConferenceTable from 'components/ConferenceTable';
 
 describe('ConferenceTable', () => {
-  beforeEach(() => {
+  afterEach(() => {
     jest.clearAllMocks();
   });
 
