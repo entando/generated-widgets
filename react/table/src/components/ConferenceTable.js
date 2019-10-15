@@ -17,15 +17,15 @@ const useStyles = makeStyles({
 
 const ConferenceTable = props => {
   const { items, onSelect } = props;
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const classes = useStyles(props);
 
   const tableRows = items.map(item => (
     <TableRow hover className={classes.root} key={item.id} onClick={() => onSelect(item)}>
       <TableCell>{item.name}</TableCell>
       <TableCell>{item.summary}</TableCell>
-      <TableCell>{item.start}</TableCell>
-      <TableCell>{item.end}</TableCell>
+      <TableCell>{item.start ? new Date(item.start).toLocaleString(i18n.language) : ''}</TableCell>
+      <TableCell>{item.end ? new Date(item.end).toLocaleString(i18n.language) : ''}</TableCell>
     </TableRow>
   ));
 

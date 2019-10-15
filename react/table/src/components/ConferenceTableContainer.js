@@ -4,37 +4,7 @@ import ConferenceTable from 'components/ConferenceTable';
 import Notification from 'components/common/Notification';
 import { apiConferencesGet } from 'api/conferences';
 import { useTranslation } from 'react-i18next';
-
-const initialState = {
-  items: [],
-  errorMessage: null,
-  loading: false,
-};
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case 'readAll':
-      return { ...state, items: action.payload };
-    case 'create':
-      return { ...state, items: [...state.items, action.payload] };
-    case 'update': {
-      const i = state.items.findIndex(item => {
-        return item.id === action.payload.id;
-      });
-      const items = [...state.items];
-      items[i] = action.payload;
-      return { ...state, items };
-    }
-    case 'delete':
-      return { ...state, items: state.items.filter(item => item.id !== action.payload.id) };
-    case 'error':
-      return { ...state, errorMessage: action.payload };
-    case 'clearErrors':
-      return { ...state, errorMessage: null };
-    default:
-      return state;
-  }
-};
+import { reducer, initialState } from 'state/conference.reducer';
 
 const ConferenceTableContainer = () => {
   const customEventPrefix = 'conference.table.';
@@ -57,10 +27,7 @@ const ConferenceTableContainer = () => {
     window.dispatchEvent(customEvent);
   };
 
-  const {
-    t,
-    i18n: { language },
-  } = useTranslation();
+  const { t } = useTranslation();
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
@@ -92,18 +59,12 @@ const ConferenceTableContainer = () => {
     };
 
     try {
-      const json = await apiConferencesGet();
-      const conferences = json.map(conference => ({
-        ...conference,
-        start: new Date(conference.start).toLocaleString(language),
-        end: new Date(conference.start).toLocaleString(language),
-      }));
-
+      const conferences = await apiConferencesGet();
       dispatch({ type: 'readAll', payload: conferences });
     } catch (err) {
       handleError(err);
     }
-  }, [language, t]);
+  }, [t]);
 
   useEffect(() => {
     fetchData();
