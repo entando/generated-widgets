@@ -14,30 +14,9 @@ class ConferenceFormElement extends HTMLElement {
 
     setLocale(locale);
 
-    const prefix = 'conference.form.';
-
-    const eventDispatcher = (eventId, detailPropName) => payload => {
-      const customEvent = new CustomEvent(eventId, {
-        detail: {
-          [detailPropName]: payload,
-        },
-        bubbles: true,
-      });
-      this.dispatchEvent(customEvent);
-    };
-
-    const onCreateError = eventDispatcher(`${prefix}createError`, 'error');
-    const onUpdateError = eventDispatcher(`${prefix}updateError`, 'error');
-    const onCreate = eventDispatcher(`${prefix}create`, 'item');
-    const onUpdate = eventDispatcher(`${prefix}update`, 'item');
-
     const reactRoot = id
-      ? React.createElement(
-          ConferenceEditFormContainer,
-          { id, onError: onUpdateError, onUpdate },
-          null
-        )
-      : React.createElement(ConferenceAddFormContainer, { onError: onCreateError, onCreate }, null);
+      ? React.createElement(ConferenceEditFormContainer, { id }, null)
+      : React.createElement(ConferenceAddFormContainer);
     ReactDOM.render(reactRoot, mountPoint);
   }
 }
