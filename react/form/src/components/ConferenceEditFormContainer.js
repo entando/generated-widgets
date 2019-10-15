@@ -35,7 +35,7 @@ class ConferenceEditFormContainer extends PureComponent {
   }
 
   closeNotification() {
-    this.setState({ notificationMessage: null, notificationStatus: null });
+    this.setState({ notificationMessage: null });
   }
 
   async handleSubmit(conference) {

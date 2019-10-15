@@ -38,13 +38,21 @@ const variantIcon = {
   info: InfoIcon,
 };
 
+const autoHideDurations = {
+  success: 3000,
+  error: null,
+  info: 5000,
+};
+
 const Notification = props => {
   const { className, variant, message, onClose } = props;
   const classes = useStyles(props);
 
-  if (!message) return '';
+  const isOpen = !!message;
 
   const Icon = variantIcon[variant];
+  const autoHideDuration = autoHideDurations[variant];
+
   const messageTemplate = (
     <span className={classes.message}>
       <Icon className={clsx(classes.icon, classes.iconVariant)} />
@@ -53,7 +61,7 @@ const Notification = props => {
   );
 
   return (
-    <Snackbar open onClose={onClose}>
+    <Snackbar open={isOpen} onClose={onClose} autoHideDuration={autoHideDuration}>
       <SnackbarContent
         className={clsx(classes[variant], className)}
         message={messageTemplate}
