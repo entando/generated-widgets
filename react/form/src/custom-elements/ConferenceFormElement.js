@@ -4,20 +4,30 @@ import ConferenceEditFormContainer from 'components/ConferenceEditFormContainer'
 import ConferenceAddFormContainer from 'components/ConferenceAddFormContainer';
 import setLocale from 'i18n/setLocale';
 
+import { StylesProvider, jssPreset } from '@material-ui/styles';
+import { create } from 'jss';
+
 class ConferenceFormElement extends HTMLElement {
   connectedCallback() {
     const mountPoint = document.createElement('div');
-    this.appendChild(mountPoint);
+
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(mountPoint);
 
     const id = this.getAttribute('id');
     const locale = this.getAttribute('locale');
 
     setLocale(locale);
 
-    const reactRoot = id
+    const jss = create({
+      ...jssPreset(),
+      insertionPoint: mountPoint,
+    });
+
+    const ReactRoot = id
       ? React.createElement(ConferenceEditFormContainer, { id }, null)
       : React.createElement(ConferenceAddFormContainer);
-    ReactDOM.render(reactRoot, mountPoint);
+    ReactDOM.render(<StylesProvider jss={jss}>{ReactRoot}</StylesProvider>, mountPoint);
   }
 }
 
