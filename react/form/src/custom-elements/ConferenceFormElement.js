@@ -6,13 +6,14 @@ import setLocale from 'i18n/setLocale';
 
 import { StylesProvider, jssPreset } from '@material-ui/core/styles';
 import { create } from 'jss';
+import retargetEvents from 'react-shadow-dom-retarget-events';
 
 class ConferenceFormElement extends HTMLElement {
   connectedCallback() {
     const mountPoint = document.createElement('div');
 
-    const shadow = this.attachShadow({ mode: 'open' });
-    shadow.appendChild(mountPoint);
+    const shadowRoot = this.attachShadow({ mode: 'open' });
+    shadowRoot.appendChild(mountPoint);
 
     const id = this.getAttribute('id');
     const locale = this.getAttribute('locale');
@@ -28,6 +29,7 @@ class ConferenceFormElement extends HTMLElement {
       ? React.createElement(ConferenceEditFormContainer, { id }, null)
       : React.createElement(ConferenceAddFormContainer);
     ReactDOM.render(<StylesProvider jss={jss}>{ReactRoot}</StylesProvider>, mountPoint);
+    retargetEvents(shadowRoot);
   }
 }
 
