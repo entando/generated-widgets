@@ -5,7 +5,7 @@ import 'i18n/__mocks__/i18nMock';
 import { mockConferenceWithDateStrings } from 'components/__mocks__/conferenceMocks';
 import ConferenceForm from 'components/ConferenceForm';
 import { createMuiTheme } from '@material-ui/core';
-import { ThemeProvider } from '@material-ui/styles';
+import { ThemeProvider } from '@material-ui/core/styles';
 
 const theme = createMuiTheme();
 

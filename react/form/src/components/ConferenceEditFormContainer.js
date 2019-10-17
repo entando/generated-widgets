@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import ConferenceForm from 'components/ConferenceForm';
 import Notification from 'components/common/Notification';
-import { ThemeProvider } from '@material-ui/styles';
+import { ThemeProvider } from '@material-ui/core/styles';
 import { createMuiTheme } from '@material-ui/core';
 import { withTranslation } from 'react-i18next';
 import { apiConferenceGet, apiConferencePut } from 'api/conferences';
@@ -19,7 +19,6 @@ class ConferenceEditFormContainer extends PureComponent {
   removeCustomEventListeners;
 
   state = {
-    conference: null,
     notificationMessage: null,
   };
 
@@ -43,7 +42,10 @@ class ConferenceEditFormContainer extends PureComponent {
   addCustomEventListeners() {
     const handleCustomEvent = evt => {
       // TODO use reducer
-      this.setState({ conference: evt.detail.item });
+      console.log('handleCustomEvent');
+      this.setState(() => ({
+        conference: evt.detail.item,
+      }));
     };
     this.removeCustomEventListeners = listenToCustomEvents(inputEvents, handleCustomEvent);
   }
@@ -53,16 +55,16 @@ class ConferenceEditFormContainer extends PureComponent {
     if (!id) return;
     try {
       const conference = await apiConferenceGet(id);
-      this.setState({
+      this.setState(() => ({
         conference,
-      });
+      }));
     } catch (err) {
       this.handleError(err);
     }
   }
 
   closeNotification() {
-    this.setState({ notificationMessage: null });
+    this.setState(() => ({ notificationMessage: null }));
   }
 
   async handleSubmit(conference) {
@@ -84,10 +86,10 @@ class ConferenceEditFormContainer extends PureComponent {
   handleError(err) {
     const { t } = this.props;
     onUpdateError(err);
-    this.setState({
+    this.setState(() => ({
       notificationMessage: t('errors.dataLoading'),
       notificationStatus: 'error',
-    });
+    }));
   }
 
   render() {

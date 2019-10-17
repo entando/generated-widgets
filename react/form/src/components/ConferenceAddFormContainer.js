@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import ConferenceForm from 'components/ConferenceForm';
 import Notification from 'components/common/Notification';
-import { ThemeProvider } from '@material-ui/styles';
+import { ThemeProvider } from '@material-ui/core/styles';
 import { createMuiTheme } from '@material-ui/core';
 import { withTranslation } from 'react-i18next';
 import { apiConferencePost } from 'api/conferences';

@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { formValues, formTouched, formErrors } from 'components/__types__/conferenceTypes';
 import { withFormik } from 'formik';
 import { withTranslation } from 'react-i18next';
-import { withStyles } from '@material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import { compose } from 'recompose';
 import * as Yup from 'yup';
 import Button from '@material-ui/core/Button';

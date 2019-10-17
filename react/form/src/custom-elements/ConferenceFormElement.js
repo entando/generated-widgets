@@ -4,7 +4,7 @@ import ConferenceEditFormContainer from 'components/ConferenceEditFormContainer'
 import ConferenceAddFormContainer from 'components/ConferenceAddFormContainer';
 import setLocale from 'i18n/setLocale';
 
-import { StylesProvider, jssPreset } from '@material-ui/styles';
+import { StylesProvider, jssPreset } from '@material-ui/core/styles';
 import { create } from 'jss';
 
 class ConferenceFormElement extends HTMLElement {
