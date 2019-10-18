@@ -7,6 +7,7 @@ import setLocale from 'i18n/setLocale';
 import { StylesProvider, jssPreset } from '@material-ui/core/styles';
 import { create } from 'jss';
 import retargetEvents from 'react-shadow-dom-retarget-events';
+import MountPointContext from 'components/MountPointContext';
 
 class ConferenceFormElement extends HTMLElement {
   connectedCallback() {
@@ -28,7 +29,12 @@ class ConferenceFormElement extends HTMLElement {
     const ReactRoot = id
       ? React.createElement(ConferenceEditFormContainer, { id }, null)
       : React.createElement(ConferenceAddFormContainer);
-    ReactDOM.render(<StylesProvider jss={jss}>{ReactRoot}</StylesProvider>, mountPoint);
+    ReactDOM.render(
+      <StylesProvider jss={jss}>
+        <MountPointContext.Provider value={mountPoint}>{ReactRoot}</MountPointContext.Provider>
+      </StylesProvider>,
+      mountPoint
+    );
     retargetEvents(shadowRoot);
   }
 }

@@ -16,20 +16,16 @@ describe('ConferenceEditFormContainer', () => {
   const errorMessageKey = 'errors.dataLoading';
   const successMessageKey = 'common.dataSaved';
 
-  const onErrorMock = jest.fn();
   const onUpdateMock = jest.fn();
 
   it('loads data', async () => {
     apiConferenceGet.mockImplementation(() => Promise.resolve(mockConference));
-    const { queryByText } = render(
-      <ConferenceEditFormContainer id="1" onError={onErrorMock} onUpdate={onUpdateMock} />
-    );
+    const { queryByText } = render(<ConferenceEditFormContainer id="1" onUpdate={onUpdateMock} />);
 
     await wait(() => {
       expect(apiConferenceGet).toHaveBeenCalledTimes(1);
       expect(apiConferenceGet).toHaveBeenCalledWith('1');
       expect(queryByText(errorMessageKey)).not.toBeInTheDocument();
-      expect(onErrorMock).toHaveBeenCalledTimes(0);
     });
   });
 
@@ -38,7 +34,7 @@ describe('ConferenceEditFormContainer', () => {
     apiConferencePut.mockImplementation(() => Promise.resolve(mockConference));
 
     const { findByTestId, queryByText } = render(
-      <ConferenceEditFormContainer id="1" onError={onErrorMock} onUpdate={onUpdateMock} />
+      <ConferenceEditFormContainer id="1" onUpdate={onUpdateMock} />
     );
 
     const saveButton = await findByTestId('submit-btn');
@@ -49,21 +45,17 @@ describe('ConferenceEditFormContainer', () => {
       expect(apiConferencePut).toHaveBeenCalledTimes(1);
       expect(apiConferencePut).toHaveBeenCalledWith(mockConference);
       expect(queryByText(successMessageKey)).toBeInTheDocument();
-      expect(onErrorMock).toHaveBeenCalledTimes(0);
       expect(queryByText(errorMessageKey)).not.toBeInTheDocument();
     });
   });
 
   it('shows an error if data is not successfully loaded', async () => {
     apiConferenceGet.mockImplementation(() => Promise.reject());
-    const { queryByText } = render(
-      <ConferenceEditFormContainer id="1" onError={onErrorMock} onUpdate={onUpdateMock} />
-    );
+    const { queryByText } = render(<ConferenceEditFormContainer id="1" onUpdate={onUpdateMock} />);
 
     await wait(() => {
       expect(apiConferenceGet).toHaveBeenCalledTimes(1);
       expect(apiConferenceGet).toHaveBeenCalledWith('1');
-      expect(onErrorMock).toHaveBeenCalledTimes(1);
       expect(queryByText(errorMessageKey)).toBeInTheDocument();
       expect(queryByText(successMessageKey)).not.toBeInTheDocument();
     });
@@ -72,9 +64,7 @@ describe('ConferenceEditFormContainer', () => {
   it('shows an error if data is not successfully saved', async () => {
     apiConferenceGet.mockImplementation(() => Promise.resolve(mockConference));
     apiConferencePut.mockImplementation(() => Promise.reject());
-    const { findByTestId, getByText } = render(
-      <ConferenceEditFormContainer id="1" onError={onErrorMock} />
-    );
+    const { findByTestId, getByText } = render(<ConferenceEditFormContainer id="1" />);
 
     const saveButton = await findByTestId('submit-btn');
 
@@ -87,7 +77,6 @@ describe('ConferenceEditFormContainer', () => {
       expect(apiConferencePut).toHaveBeenCalledTimes(1);
       expect(apiConferencePut).toHaveBeenCalledWith(mockConference);
 
-      expect(onErrorMock).toHaveBeenCalledTimes(1);
       expect(getByText(errorMessageKey)).toBeInTheDocument();
     });
   });

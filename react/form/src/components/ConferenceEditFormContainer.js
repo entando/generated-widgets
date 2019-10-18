@@ -42,7 +42,6 @@ class ConferenceEditFormContainer extends PureComponent {
   addCustomEventListeners() {
     const handleCustomEvent = evt => {
       // TODO use reducer
-      console.log('handleCustomEvent');
       this.setState(() => ({
         conference: evt.detail.item,
       }));
