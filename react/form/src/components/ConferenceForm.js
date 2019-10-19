@@ -38,7 +38,8 @@ class ConferenceForm extends PureComponent {
       errors,
       handleChange,
       handleBlur,
-      handleSubmit,
+      handleSubmit: formikHandleSubmit,
+      isSubmitting,
       setFieldValue,
       t,
       i18n,
@@ -52,9 +53,14 @@ class ConferenceForm extends PureComponent {
 
     const getHelperText = field => (errors[field] && touched[field] ? errors[field] : '');
 
+    const handleSubmit = e => {
+      e.stopPropagation(); // avoids double submission caused by react-shadow-dom-retarget-events
+      formikHandleSubmit(e);
+    };
+
     return (
       <MuiPickersUtilsProvider utils={DateFnsUtils} locale={dateFnsLocales[i18n.language]}>
-        <form onSubmit={handleSubmit} className={classes.root}>
+        <form onSubmit={handleSubmit} className={classes.root} data-testid="conference-form">
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -111,7 +117,7 @@ class ConferenceForm extends PureComponent {
                 label={t('entities.conference.end')}
               />
             </Grid>
-            <Button type="submit" color="primary" data-testid="submit-btn">
+            <Button type="submit" color="primary" disabled={isSubmitting} data-testid="submit-btn">
               {t('common.save')}
             </Button>
           </Grid>
@@ -133,6 +139,7 @@ ConferenceForm.propTypes = {
   handleChange: PropTypes.func.isRequired,
   handleBlur: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
+  isSubmitting: PropTypes.bool.isRequired,
   setFieldValue: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired,
   i18n: PropTypes.shape({ language: PropTypes.string }).isRequired,
@@ -155,12 +162,8 @@ const emptyConference = {
 const validationSchema = Yup.object().shape({
   name: Yup.string().required(),
   summary: Yup.string(),
-  start: Yup.date()
-    .nullable()
-    .required(),
-  end: Yup.date()
-    .nullable()
-    .required(),
+  start: Yup.date().nullable(),
+  end: Yup.date().nullable(),
 });
 
 const formikBag = {
@@ -170,8 +173,9 @@ const formikBag = {
 
   validationSchema,
 
-  handleSubmit: (values, { props: { onSubmit } }) => {
+  handleSubmit: (values, { setSubmitting, props: { onSubmit } }) => {
     onSubmit(values);
+    setSubmitting(false);
   },
 
   displayName: 'ConferenceForm',

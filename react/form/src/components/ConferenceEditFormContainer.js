@@ -6,17 +6,9 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import { createMuiTheme } from '@material-ui/core';
 import { withTranslation } from 'react-i18next';
 import { apiConferenceGet, apiConferencePut } from 'api/conferences';
-import { createCustomEventDispatcher, listenToCustomEvents } from 'helpers/customEvents';
-
-const inputEvents = ['conference.table.select'];
-const outputEventPrefix = 'conference.form.';
-const onUpdateError = createCustomEventDispatcher(`${outputEventPrefix}updateError`, 'error');
-const onUpdate = createCustomEventDispatcher(`${outputEventPrefix}update`, 'item');
 
 class ConferenceEditFormContainer extends PureComponent {
   theme = createMuiTheme();
-
-  removeCustomEventListeners;
 
   state = {
     notificationMessage: null,
@@ -30,23 +22,13 @@ class ConferenceEditFormContainer extends PureComponent {
 
   async componentDidMount() {
     this.fetchConference();
-    this.addCustomEventListeners();
   }
 
-  componentWillUnmount() {
-    if (this.removeCustomEventListeners) {
-      this.removeCustomEventListeners();
+  componentDidUpdate(prevProps) {
+    const { id } = this.props;
+    if (id && id !== prevProps.id) {
+      this.fetchConference();
     }
-  }
-
-  addCustomEventListeners() {
-    const handleCustomEvent = evt => {
-      // TODO use reducer
-      this.setState(() => ({
-        conference: evt.detail.item,
-      }));
-    };
-    this.removeCustomEventListeners = listenToCustomEvents(inputEvents, handleCustomEvent);
   }
 
   async fetchConference() {
@@ -67,7 +49,7 @@ class ConferenceEditFormContainer extends PureComponent {
   }
 
   async handleSubmit(conference) {
-    const { t } = this.props;
+    const { t, onUpdate } = this.props;
     try {
       const updatedConference = await apiConferencePut(conference);
       onUpdate(updatedConference);
@@ -83,8 +65,8 @@ class ConferenceEditFormContainer extends PureComponent {
   }
 
   handleError(err) {
-    const { t } = this.props;
-    onUpdateError(err);
+    const { t, onError } = this.props;
+    onError(err);
     this.setState(() => ({
       notificationMessage: t('errors.dataLoading'),
       notificationStatus: 'error',
@@ -108,7 +90,14 @@ class ConferenceEditFormContainer extends PureComponent {
 
 ConferenceEditFormContainer.propTypes = {
   id: PropTypes.string.isRequired,
+  onError: PropTypes.func,
+  onUpdate: PropTypes.func,
   t: PropTypes.func.isRequired,
+};
+
+ConferenceEditFormContainer.defaultProps = {
+  onUpdate: () => {},
+  onError: () => {},
 };
 
 export default withTranslation()(ConferenceEditFormContainer);

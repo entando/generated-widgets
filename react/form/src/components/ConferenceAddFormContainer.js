@@ -25,12 +25,10 @@ class ConferenceAddFormContainer extends PureComponent {
   }
 
   async handleSubmit(conference) {
-    const { t } = this.props;
+    const { t, onCreate } = this.props;
     try {
       const createdConference = await apiConferencePost(conference);
-      const { onCreate } = this.props;
       onCreate(createdConference);
-
       this.setState({
         notificationMessage: t('common.dataSaved'),
         notificationStatus: 'success',
