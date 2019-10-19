@@ -6,11 +6,14 @@ import { apiConferencesGet } from 'api/conferences';
 import { useTranslation } from 'react-i18next';
 import { reducer, initialState } from 'state/conference.reducer';
 import { createCustomEventDispatcher, listenToCustomEvents } from 'helpers/customEvents';
+import { Fab } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
 
 const inputEvents = ['conference.form.update', 'conference.form.create', 'conference.form.delete'];
 const outputEventPrefix = 'conference.table.';
 const onError = createCustomEventDispatcher(`${outputEventPrefix}error`, 'error');
 const onSelect = createCustomEventDispatcher(`${outputEventPrefix}select`, 'item');
+const onAdd = createCustomEventDispatcher(`${outputEventPrefix}add`, 'item');
 
 const ConferenceTableContainer = () => {
   const { t } = useTranslation();
@@ -47,6 +50,9 @@ const ConferenceTableContainer = () => {
 
   return (
     <>
+      <Fab color="primary" aria-label="add" onClick={onAdd}>
+        <AddIcon />
+      </Fab>
       <ConferenceTable items={state.items} onSelect={onSelect} />
       <Notification variant="error" message={state.errorMessage} onClose={closeNotification} />
     </>

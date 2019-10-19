@@ -10,13 +10,13 @@ import retargetEvents from 'react-shadow-dom-retarget-events';
 import MountPointContext from 'components/MountPointContext';
 import { listenToWidgetEvents, createWidgetEventDispatcher } from 'helpers/widgetEvents';
 
-const EVT_NEW = 'conference.table.add';
+const EVT_ADD = 'conference.table.add';
 const EVT_SELECT = 'conference.table.select';
 
 const ID_ATTR = 'id';
 const LOCALE_ATTR = 'locale';
 
-const inputEvents = [EVT_NEW, EVT_SELECT];
+const inputEvents = [EVT_ADD, EVT_SELECT];
 const outputEventPrefix = 'conference.form.';
 
 class ConferenceFormElement extends HTMLElement {
@@ -33,7 +33,7 @@ class ConferenceFormElement extends HTMLElement {
   addWidgetEventListeners() {
     const handleWidgetEvent = evt => {
       switch (evt.type) {
-        case EVT_NEW: {
+        case EVT_ADD: {
           this.setAttribute(ID_ATTR, '');
           break;
         }
