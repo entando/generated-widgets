@@ -5,15 +5,14 @@ import Notification from 'components/common/Notification';
 import { apiConferencesGet } from 'api/conferences';
 import { useTranslation } from 'react-i18next';
 import { reducer, initialState } from 'state/conference.reducer';
-import { createCustomEventDispatcher, listenToCustomEvents } from 'helpers/customEvents';
 import { Fab } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
+import { publishWidgetEvent, subscribeToWidgetEvents } from 'helpers/widgetEvents';
 
 const inputEvents = ['conference.form.update', 'conference.form.create', 'conference.form.delete'];
-const outputEventPrefix = 'conference.table.';
-const onError = createCustomEventDispatcher(`${outputEventPrefix}error`, 'error');
-const onSelect = createCustomEventDispatcher(`${outputEventPrefix}select`, 'item');
-const onAdd = createCustomEventDispatcher(`${outputEventPrefix}add`, 'item');
+const onError = payload => publishWidgetEvent('conference.table.error', payload);
+const onSelect = payload => publishWidgetEvent('conference.table.select', payload);
+const onAdd = payload => publishWidgetEvent('conference.table.add', payload);
 
 const ConferenceTableContainer = () => {
   const { t } = useTranslation();
@@ -21,10 +20,10 @@ const ConferenceTableContainer = () => {
 
   useEffect(() => {
     const handleCustomEvent = evt => {
-      dispatch({ type: evt.type.replace('conference.form.', ''), payload: evt.detail.item });
+      dispatch({ type: evt.type.replace('conference.form.', ''), payload: evt.detail.payload });
     };
 
-    const removeCustomEventListenersFn = listenToCustomEvents(inputEvents, handleCustomEvent);
+    const removeCustomEventListenersFn = subscribeToWidgetEvents(inputEvents, handleCustomEvent);
     return removeCustomEventListenersFn;
   }, []);
 

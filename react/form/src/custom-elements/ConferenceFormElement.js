@@ -8,16 +8,25 @@ import { StylesProvider, jssPreset } from '@material-ui/core/styles';
 import { create } from 'jss';
 import retargetEvents from 'react-shadow-dom-retarget-events';
 import MountPointContext from 'components/MountPointContext';
-import { listenToWidgetEvents, createWidgetEventDispatcher } from 'helpers/widgetEvents';
+import { subscribeToWidgetEvents, publishWidgetEvent } from 'helpers/widgetEvents';
 
-const EVT_ADD = 'conference.table.add';
-const EVT_SELECT = 'conference.table.select';
+const ATTRIBUTES = {
+  id: 'id',
+  locale: 'locale',
+};
 
-const ID_ATTR = 'id';
-const LOCALE_ATTR = 'locale';
-
-const inputEvents = [EVT_ADD, EVT_SELECT];
-const outputEventPrefix = 'conference.form.';
+const EVENT_TYPES = {
+  input: {
+    tableAdd: 'conference.table.add',
+    tableSelect: 'conference.table.select',
+  },
+  output: {
+    create: 'conference.form.create',
+    update: 'conference.form.update',
+    errorCreate: 'conference.form.errorCreate',
+    errorUpdate: 'conference.form.errorUpdate',
+  },
+};
 
 class ConferenceFormElement extends HTMLElement {
   mountPoint;
@@ -27,42 +36,44 @@ class ConferenceFormElement extends HTMLElement {
   removeWidgetEventListeners;
 
   static get observedAttributes() {
-    return [ID_ATTR, LOCALE_ATTR];
+    return Object.values(ATTRIBUTES);
   }
 
-  addWidgetEventListeners() {
-    const handleWidgetEvent = evt => {
+  createWidgetEventHandler() {
+    return evt => {
+      const { tableAdd, tableSelect } = EVENT_TYPES.input;
+      const { id } = ATTRIBUTES;
       switch (evt.type) {
-        case EVT_ADD: {
-          this.setAttribute(ID_ATTR, '');
+        case tableAdd: {
+          this.setAttribute(id, '');
           break;
         }
-        case EVT_SELECT: {
-          this.setAttribute(ID_ATTR, evt.detail.item.id);
+        case tableSelect: {
+          this.setAttribute(id, evt.detail.payload.id);
           break;
         }
         default:
-          throw new Error('unsupported event for ConferenceFormElement');
+          throw new Error(`Unsupported event: ${evt.type}`);
       }
     };
-    this.removeWidgetEventListeners = listenToWidgetEvents(inputEvents, handleWidgetEvent);
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
     if (!this.mountPoint || oldValue === newValue) {
       return;
     }
+    const { id, locale } = ATTRIBUTES;
     switch (name) {
-      case ID_ATTR: {
+      case id: {
         this.render(newValue);
         break;
       }
-      case LOCALE_ATTR: {
+      case locale: {
         setLocale(newValue);
         break;
       }
       default: {
-        throw new Error('Untracked attribute change');
+        throw new Error(`Untracked changed attribute: ${name}`);
       }
     }
   }
@@ -73,9 +84,9 @@ class ConferenceFormElement extends HTMLElement {
     const shadowRoot = this.attachShadow({ mode: 'open' });
     shadowRoot.appendChild(this.mountPoint);
 
-    const id = this.getAttribute(ID_ATTR);
+    const id = this.getAttribute(ATTRIBUTES.id);
 
-    const locale = this.getAttribute(LOCALE_ATTR);
+    const locale = this.getAttribute(ATTRIBUTES.locale);
     setLocale(locale);
 
     this.jss = create({
@@ -83,7 +94,12 @@ class ConferenceFormElement extends HTMLElement {
       insertionPoint: this.mountPoint,
     });
 
-    this.addWidgetEventListeners();
+    const handleWidgetEvent = this.createWidgetEventHandler();
+
+    this.removeWidgetEventListeners = subscribeToWidgetEvents(
+      Object.values(EVENT_TYPES.input),
+      handleWidgetEvent
+    );
 
     this.render(id);
 
@@ -97,18 +113,18 @@ class ConferenceFormElement extends HTMLElement {
   }
 
   render(id) {
-    const onCreateError = createWidgetEventDispatcher(`${outputEventPrefix}createError`, 'error');
-    const onUpdateError = createWidgetEventDispatcher(`${outputEventPrefix}updateError`, 'error');
-    const onCreate = createWidgetEventDispatcher(`${outputEventPrefix}create`, 'item');
-    const onUpdate = createWidgetEventDispatcher(`${outputEventPrefix}update`, 'item');
+    const onCreate = payload => publishWidgetEvent(EVENT_TYPES.output.create, payload);
+    const onUpdate = payload => publishWidgetEvent(EVENT_TYPES.output.update, payload);
+    const onErrorCreate = payload => publishWidgetEvent(EVENT_TYPES.output.errorCreate, payload);
+    const onErrorUpdate = payload => publishWidgetEvent(EVENT_TYPES.output.errorUpdate, payload);
 
     const FormContainer = id
       ? React.createElement(
           ConferenceEditFormContainer,
-          { id, onUpdate, onError: onUpdateError },
+          { id, onUpdate, onError: onErrorUpdate },
           null
         )
-      : React.createElement(ConferenceAddFormContainer, { onCreate, onError: onCreateError }, null);
+      : React.createElement(ConferenceAddFormContainer, { onCreate, onError: onErrorCreate }, null);
 
     ReactDOM.render(
       <StylesProvider jss={this.jss}>
@@ -122,24 +138,3 @@ class ConferenceFormElement extends HTMLElement {
 }
 
 customElements.define('conference-form', ConferenceFormElement);
-
-// TODO REMOVE
-window.newItem = () => {
-  const customEvent = new CustomEvent('conference.table.add');
-  window.dispatchEvent(customEvent);
-};
-
-window.tableCE = name => {
-  const customEvent = new CustomEvent('conference.table.select', {
-    detail: {
-      item: {
-        id: '3',
-        name: name || 'pippppo',
-        summary: 'summaryyy',
-        start: new Date().toLocaleString('en-US'),
-        end: new Date().toLocaleString('en-US'),
-      },
-    },
-  });
-  window.dispatchEvent(customEvent);
-};
