@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { reducer, initialState } from 'state/conference.reducer';
 import { Fab } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
+import fluxStandardActionType from './__types__/fluxStandardActionType';
 
 const ConferenceTableContainer = ({ onError, onSelect, onAdd, action }) => {
   const { t } = useTranslation();
@@ -51,7 +52,7 @@ const ConferenceTableContainer = ({ onError, onSelect, onAdd, action }) => {
 };
 
 ConferenceTableContainer.propTypes = {
-  action: PropTypes.func,
+  action: fluxStandardActionType,
   onAdd: PropTypes.func,
   onError: PropTypes.func,
   onSelect: PropTypes.func,
