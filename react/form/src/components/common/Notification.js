@@ -73,6 +73,10 @@ const Notification = ({ className, classes, variant, message, onClose }) => {
   );
 };
 
+Notification.SUCCESS = 'success';
+Notification.ERROR = 'error';
+Notification.INFO = 'info';
+
 Notification.propTypes = {
   classes: PropTypes.shape({
     message: PropTypes.string.isRequired,
@@ -81,7 +85,7 @@ Notification.propTypes = {
     error: PropTypes.string.isRequired,
   }).isRequired,
   className: PropTypes.string,
-  variant: PropTypes.oneOf(['success', 'error', 'info']),
+  variant: PropTypes.oneOf([Notification.SUCCESS, Notification.ERROR, Notification.INFO]),
   message: PropTypes.string,
   onClose: PropTypes.func,
 };
@@ -89,7 +93,7 @@ Notification.propTypes = {
 Notification.defaultProps = {
   message: null,
   className: '',
-  variant: 'info',
+  variant: Notification.INFO,
   onClose: () => {},
 };
 

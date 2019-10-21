@@ -1,18 +1,21 @@
+import setLocale from 'i18n/setLocale';
+import { createWidgetEventPublisher, subscribeToWidgetEvents } from 'helpers/widgetEvents';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ConferenceEditFormContainer from 'components/ConferenceEditFormContainer';
 import ConferenceAddFormContainer from 'components/ConferenceAddFormContainer';
-import setLocale from 'i18n/setLocale';
 
 import { StylesProvider, jssPreset } from '@material-ui/core/styles';
 import { create } from 'jss';
 import retargetEvents from 'react-shadow-dom-retarget-events';
 import MountPointContext from 'components/MountPointContext';
-import { subscribeToWidgetEvents, publishWidgetEvent } from 'helpers/widgetEvents';
 
 const ATTRIBUTES = {
   id: 'id',
+  hidden: 'hidden',
   locale: 'locale',
+  disableEventHandler: 'disableEventHandler',
 };
 
 const EVENT_TYPES = {
@@ -29,14 +32,54 @@ const EVENT_TYPES = {
 };
 
 class ConferenceFormElement extends HTMLElement {
-  mountPoint;
-
   jss;
 
-  removeWidgetEventListeners;
+  mountPoint;
+
+  unsubscribeFromWidgetEvents;
+
+  onCreate = createWidgetEventPublisher(EVENT_TYPES.output.create);
+
+  onUpdate = createWidgetEventPublisher(EVENT_TYPES.output.update);
+
+  onErrorCreate = createWidgetEventPublisher(EVENT_TYPES.output.errorCreate);
+
+  onErrorUpdate = createWidgetEventPublisher(EVENT_TYPES.output.errorUpdate);
 
   static get observedAttributes() {
     return Object.values(ATTRIBUTES);
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (!this.mountPoint || oldValue === newValue) {
+      return;
+    }
+    if (!Object.values(ATTRIBUTES).includes(name)) {
+      throw new Error(`Untracked changed attribute: ${name}`);
+    }
+    this.render();
+  }
+
+  connectedCallback() {
+    this.mountPoint = document.createElement('div');
+
+    const shadowRoot = this.attachShadow({ mode: 'open' });
+    shadowRoot.appendChild(this.mountPoint);
+
+    this.jss = create({
+      ...jssPreset(),
+      insertionPoint: this.mountPoint,
+    });
+
+    this.render();
+
+    retargetEvents(shadowRoot);
+  }
+
+  disconnectedCallback() {
+    if (this.unsubscribeFromWidgetEvents) {
+      this.unsubscribeFromWidgetEvents();
+    }
   }
 
   defaultWidgetEventHandler() {
@@ -58,81 +101,39 @@ class ConferenceFormElement extends HTMLElement {
     };
   }
 
-  attributeChangedCallback(name, oldValue, newValue) {
-    if (!this.mountPoint || oldValue === newValue) {
-      return;
-    }
-    const { id, locale } = ATTRIBUTES;
-    switch (name) {
-      case id: {
-        this.render(newValue);
-        break;
-      }
-      case locale: {
-        setLocale(newValue);
-        break;
-      }
-      default: {
-        throw new Error(`Untracked changed attribute: ${name}`);
-      }
-    }
-  }
-
-  connectedCallback() {
-    this.mountPoint = document.createElement('div');
-
-    const shadowRoot = this.attachShadow({ mode: 'open' });
-    shadowRoot.appendChild(this.mountPoint);
-
-    const hidden = this.getAttribute('hidden') === 'true';
+  render() {
+    const hidden = this.getAttribute(ATTRIBUTES.hidden) === 'true';
     if (hidden) {
+      ReactDOM.render(<></>);
       return;
     }
-
-    const id = this.getAttribute(ATTRIBUTES.id);
 
     const locale = this.getAttribute(ATTRIBUTES.locale);
     setLocale(locale);
 
-    this.jss = create({
-      ...jssPreset(),
-      insertionPoint: this.mountPoint,
-    });
+    const disableEventHandler = this.getAttribute(ATTRIBUTES.disableEventHandler) === 'true';
+    if (!disableEventHandler) {
+      const defaultWidgetEventHandler = this.defaultWidgetEventHandler();
 
-    const overrideEventHandler = this.getAttribute('overrideEventHandler') === 'true';
-    if (!overrideEventHandler) {
-      const handleWidgetEvent = this.defaultWidgetEventHandler();
-
-      this.removeWidgetEventListeners = subscribeToWidgetEvents(
+      this.unsubscribeFromWidgetEvents = subscribeToWidgetEvents(
         Object.values(EVENT_TYPES.input),
-        handleWidgetEvent
+        defaultWidgetEventHandler
       );
     }
 
-    this.render(id);
-
-    retargetEvents(shadowRoot);
-  }
-
-  disconnectedCallback() {
-    if (this.removeWidgetEventListeners) {
-      this.removeWidgetEventListeners();
-    }
-  }
-
-  render(id) {
-    const onCreate = payload => publishWidgetEvent(EVENT_TYPES.output.create, payload);
-    const onUpdate = payload => publishWidgetEvent(EVENT_TYPES.output.update, payload);
-    const onErrorCreate = payload => publishWidgetEvent(EVENT_TYPES.output.errorCreate, payload);
-    const onErrorUpdate = payload => publishWidgetEvent(EVENT_TYPES.output.errorUpdate, payload);
+    const id = this.getAttribute(ATTRIBUTES.id);
 
     const FormContainer = id
       ? React.createElement(
           ConferenceEditFormContainer,
-          { id, onUpdate, onError: onErrorUpdate },
+          { id, onUpdate: this.onUpdate, onError: this.onErrorUpdate },
           null
         )
-      : React.createElement(ConferenceAddFormContainer, { onCreate, onError: onErrorCreate }, null);
+      : React.createElement(
+          ConferenceAddFormContainer,
+          { onCreate: this.onCreate, onError: this.onErrorCreate },
+          null
+        );
 
     ReactDOM.render(
       <StylesProvider jss={this.jss}>

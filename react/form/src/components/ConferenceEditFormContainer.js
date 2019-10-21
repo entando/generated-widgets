@@ -57,7 +57,7 @@ class ConferenceEditFormContainer extends PureComponent {
       this.setState({
         conference: updatedConference,
         notificationMessage: t('common.dataSaved'),
-        notificationStatus: 'success',
+        notificationStatus: Notification.SUCCESS,
       });
     } catch (err) {
       this.handleError(err);
@@ -69,7 +69,7 @@ class ConferenceEditFormContainer extends PureComponent {
     onError(err);
     this.setState(() => ({
       notificationMessage: t('errors.dataLoading'),
-      notificationStatus: 'error',
+      notificationStatus: Notification.ERROR,
     }));
   }
 

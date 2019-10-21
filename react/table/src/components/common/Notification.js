@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { Snackbar, SnackbarContent, makeStyles } from '@material-ui/core';
+import { Snackbar, SnackbarContent } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 import ErrorIcon from '@material-ui/icons/Error';
 import InfoIcon from '@material-ui/icons/Info';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
@@ -9,7 +10,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
 import { green } from '@material-ui/core/colors';
 
-const useStyles = makeStyles(theme => ({
+const styles = theme => ({
   message: {
     display: 'flex',
     alignItems: 'center',
@@ -30,7 +31,7 @@ const useStyles = makeStyles(theme => ({
   info: {
     backgroundColor: theme.palette.primary.main,
   },
-}));
+});
 
 const variantIcon = {
   success: CheckCircleIcon,
@@ -44,10 +45,7 @@ const autoHideDurations = {
   info: 5000,
 };
 
-const Notification = props => {
-  const { className, variant, message, onClose } = props;
-  const classes = useStyles(props);
-
+const Notification = ({ className, classes, variant, message, onClose }) => {
   const isOpen = !!message;
 
   const Icon = variantIcon[variant];
@@ -75,9 +73,19 @@ const Notification = props => {
   );
 };
 
+Notification.SUCCESS = 'success';
+Notification.ERROR = 'error';
+Notification.INFO = 'info';
+
 Notification.propTypes = {
+  classes: PropTypes.shape({
+    message: PropTypes.string.isRequired,
+    icon: PropTypes.string.isRequired,
+    iconVariant: PropTypes.string.isRequired,
+    error: PropTypes.string.isRequired,
+  }).isRequired,
   className: PropTypes.string,
-  variant: PropTypes.oneOf(['success', 'error', 'info']),
+  variant: PropTypes.oneOf([Notification.SUCCESS, Notification.ERROR, Notification.INFO]),
   message: PropTypes.string,
   onClose: PropTypes.func,
 };
@@ -85,8 +93,8 @@ Notification.propTypes = {
 Notification.defaultProps = {
   message: null,
   className: '',
-  variant: 'info',
+  variant: Notification.INFO,
   onClose: () => {},
 };
 
-export default Notification;
+export default withStyles(styles, { withTheme: true })(Notification);

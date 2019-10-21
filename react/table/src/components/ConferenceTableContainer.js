@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { reducer, initialState } from 'state/conference.reducer';
 import { Fab } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import fluxStandardActionType from './__types__/fluxStandardActionType';
+import fluxStandardActionType from 'components/__types__/fluxStandardActionType';
 
 const ConferenceTableContainer = ({ onError, onSelect, onAdd, action }) => {
   const { t } = useTranslation();
@@ -46,7 +46,11 @@ const ConferenceTableContainer = ({ onError, onSelect, onAdd, action }) => {
         <AddIcon />
       </Fab>
       <ConferenceTable items={state.items} onSelect={onSelect} />
-      <Notification variant="error" message={state.errorMessage} onClose={closeNotification} />
+      <Notification
+        variant={Notification.ERROR}
+        message={state.errorMessage}
+        onClose={closeNotification}
+      />
     </>
   );
 };

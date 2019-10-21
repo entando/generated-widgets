@@ -31,7 +31,7 @@ class ConferenceAddFormContainer extends PureComponent {
       onCreate(createdConference);
       this.setState({
         notificationMessage: t('common.dataSaved'),
-        notificationStatus: 'success',
+        notificationStatus: Notification.SUCCESS,
       });
     } catch (err) {
       this.handleError(err);
@@ -43,7 +43,7 @@ class ConferenceAddFormContainer extends PureComponent {
     onError(err);
     this.setState({
       notificationMessage: t('errors.dataLoading'),
-      notificationStatus: 'error',
+      notificationStatus: Notification.ERROR,
     });
   }
 
