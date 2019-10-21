@@ -14,3 +14,12 @@ export const subscribeToWidgetEvents = (widgetEvents, eventHandler) => {
     widgetEvents.forEach(eventType => window.removeEventListener(eventType, eventHandler));
   };
 };
+
+export const widgetEventToFSA = widgetEvent => {
+  // for info about Flux Standard Action (FSA) see https://github.com/redux-utilities/flux-standard-action
+  const {
+    type,
+    detail: { payload, error, meta },
+  } = widgetEvent;
+  return { type, payload, error, meta };
+};

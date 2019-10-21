@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useReducer } from 'react';
 import ConferenceTable from 'components/ConferenceTable';
 
@@ -7,25 +8,10 @@ import { useTranslation } from 'react-i18next';
 import { reducer, initialState } from 'state/conference.reducer';
 import { Fab } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import { publishWidgetEvent, subscribeToWidgetEvents } from 'helpers/widgetEvents';
 
-const inputEvents = ['conference.form.update', 'conference.form.create', 'conference.form.delete'];
-const onError = payload => publishWidgetEvent('conference.table.error', payload);
-const onSelect = payload => publishWidgetEvent('conference.table.select', payload);
-const onAdd = payload => publishWidgetEvent('conference.table.add', payload);
-
-const ConferenceTableContainer = () => {
+const ConferenceTableContainer = ({ onError, onSelect, onAdd, action }) => {
   const { t } = useTranslation();
   const [state, dispatch] = useReducer(reducer, initialState);
-
-  useEffect(() => {
-    const handleCustomEvent = evt => {
-      dispatch({ type: evt.type.replace('conference.form.', ''), payload: evt.detail.payload });
-    };
-
-    const removeCustomEventListenersFn = subscribeToWidgetEvents(inputEvents, handleCustomEvent);
-    return removeCustomEventListenersFn;
-  }, []);
 
   const fetchData = useCallback(async () => {
     const handleError = err => {
@@ -39,11 +25,17 @@ const ConferenceTableContainer = () => {
     } catch (err) {
       handleError(err);
     }
-  }, [t]);
+  }, [onError, t]);
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
+  useEffect(() => {
+    if (action) {
+      dispatch(action);
+    }
+  }, [action]);
 
   const closeNotification = () => dispatch({ type: 'clearErrors' });
 
@@ -56,6 +48,20 @@ const ConferenceTableContainer = () => {
       <Notification variant="error" message={state.errorMessage} onClose={closeNotification} />
     </>
   );
+};
+
+ConferenceTableContainer.propTypes = {
+  action: PropTypes.func,
+  onAdd: PropTypes.func,
+  onError: PropTypes.func,
+  onSelect: PropTypes.func,
+};
+
+ConferenceTableContainer.defaultProps = {
+  action: undefined,
+  onAdd: () => {},
+  onError: () => {},
+  onSelect: () => {},
 };
 
 export default ConferenceTableContainer;

@@ -39,7 +39,7 @@ class ConferenceFormElement extends HTMLElement {
     return Object.values(ATTRIBUTES);
   }
 
-  createWidgetEventHandler() {
+  defaultWidgetEventHandler() {
     return evt => {
       const { tableAdd, tableSelect } = EVENT_TYPES.input;
       const { id } = ATTRIBUTES;
@@ -84,6 +84,11 @@ class ConferenceFormElement extends HTMLElement {
     const shadowRoot = this.attachShadow({ mode: 'open' });
     shadowRoot.appendChild(this.mountPoint);
 
+    const hidden = this.getAttribute('hidden') === 'true';
+    if (hidden) {
+      return;
+    }
+
     const id = this.getAttribute(ATTRIBUTES.id);
 
     const locale = this.getAttribute(ATTRIBUTES.locale);
@@ -94,12 +99,15 @@ class ConferenceFormElement extends HTMLElement {
       insertionPoint: this.mountPoint,
     });
 
-    const handleWidgetEvent = this.createWidgetEventHandler();
+    const overrideEventHandler = this.getAttribute('overrideEventHandler') === 'true';
+    if (!overrideEventHandler) {
+      const handleWidgetEvent = this.defaultWidgetEventHandler();
 
-    this.removeWidgetEventListeners = subscribeToWidgetEvents(
-      Object.values(EVENT_TYPES.input),
-      handleWidgetEvent
-    );
+      this.removeWidgetEventListeners = subscribeToWidgetEvents(
+        Object.values(EVENT_TYPES.input),
+        handleWidgetEvent
+      );
+    }
 
     this.render(id);
 
