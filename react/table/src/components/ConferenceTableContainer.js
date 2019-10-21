@@ -1,65 +1,82 @@
 import PropTypes from 'prop-types';
-import React, { useCallback, useEffect, useReducer } from 'react';
+import React from 'react';
 import ConferenceTable from 'components/ConferenceTable';
-
+import { withTranslation } from 'react-i18next';
 import Notification from 'components/common/Notification';
 import { apiConferencesGet } from 'api/conferences';
-import { useTranslation } from 'react-i18next';
 import { reducer, initialState } from 'state/conference.reducer';
 import { Fab } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import fluxStandardActionType from 'components/__types__/fluxStandardActionType';
 
-const ConferenceTableContainer = ({ onError, onSelect, onAdd, action }) => {
-  const { t } = useTranslation();
-  const [state, dispatch] = useReducer(reducer, initialState);
+class ConferenceTableContainer extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleError = this.handleError.bind(this);
+    this.closeNotification = this.closeNotification.bind(this);
+  }
 
-  const fetchData = useCallback(async () => {
-    const handleError = err => {
-      onError(err);
-      dispatch({ type: 'error', payload: t('conference.error.dataLoading') });
-    };
+  state = initialState;
 
+  componentDidMount() {
+    this.fetchData();
+  }
+
+  componentDidUpdate(prevProps) {
+    const { action } = this.props;
+    if (action && action !== prevProps.action) {
+      this.dispatch(action);
+    }
+  }
+
+  dispatch(action) {
+    this.setState(prevState => reducer(prevState, action));
+  }
+
+  async fetchData() {
     try {
       const conferences = await apiConferencesGet();
-      dispatch({ type: 'readAll', payload: conferences });
+      this.dispatch({ type: 'readAll', payload: conferences });
     } catch (err) {
-      handleError(err);
+      this.handleError(err);
     }
-  }, [onError, t]);
+  }
 
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+  closeNotification() {
+    this.dispatch({ type: 'clearErrors' });
+  }
 
-  useEffect(() => {
-    if (action) {
-      dispatch(action);
-    }
-  }, [action]);
+  handleError(err) {
+    const { onError, t } = this.props;
+    onError(err);
+    this.dispatch({ type: 'error', payload: t('conference.error.dataLoading') });
+  }
 
-  const closeNotification = () => dispatch({ type: 'clearErrors' });
-
-  return (
-    <>
-      <Fab color="primary" aria-label="add" onClick={onAdd}>
-        <AddIcon />
-      </Fab>
-      <ConferenceTable items={state.items} onSelect={onSelect} />
-      <Notification
-        variant={Notification.ERROR}
-        message={state.errorMessage}
-        onClose={closeNotification}
-      />
-    </>
-  );
-};
+  render() {
+    const { onSelect, onAdd } = this.props;
+    const { items, errorMessage } = this.state;
+    return (
+      <>
+        <Fab color="primary" aria-label="add" onClick={onAdd}>
+          <AddIcon />
+        </Fab>
+        <ConferenceTable items={items} onSelect={onSelect} />
+        <Notification
+          variant={Notification.ERROR}
+          message={errorMessage}
+          onClose={this.closeNotification}
+        />
+      </>
+    );
+  }
+}
 
 ConferenceTableContainer.propTypes = {
   action: fluxStandardActionType,
   onAdd: PropTypes.func,
   onError: PropTypes.func,
   onSelect: PropTypes.func,
+  t: PropTypes.func.isRequired,
 };
 
 ConferenceTableContainer.defaultProps = {
@@ -69,4 +86,4 @@ ConferenceTableContainer.defaultProps = {
   onSelect: () => {},
 };
 
-export default ConferenceTableContainer;
+export default withTranslation()(ConferenceTableContainer);

@@ -8,9 +8,13 @@ export const reducer = (state, action) => {
   switch (action.type) {
     case 'readAll':
       return { ...state, items: action.payload };
-    case 'create':
+    case 'error':
+      return { ...state, errorMessage: action.payload };
+    case 'clearErrors':
+      return { ...state, errorMessage: null };
+    case 'conference.form.create':
       return { ...state, items: [...state.items, action.payload] };
-    case 'update': {
+    case 'conference.form.update': {
       const i = state.items.findIndex(item => {
         return item.id === action.payload.id;
       });
@@ -18,12 +22,8 @@ export const reducer = (state, action) => {
       items[i] = action.payload;
       return { ...state, items };
     }
-    case 'delete':
+    case 'conference.form.delete':
       return { ...state, items: state.items.filter(item => item.id !== action.payload.id) };
-    case 'error':
-      return { ...state, errorMessage: action.payload };
-    case 'clearErrors':
-      return { ...state, errorMessage: null };
     default:
       return state;
   }

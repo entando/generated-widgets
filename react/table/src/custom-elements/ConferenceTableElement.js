@@ -94,7 +94,7 @@ class ConferenceTableElement extends HTMLElement {
       return;
     }
 
-    const locale = this.getAttribute('locale');
+    const locale = this.getAttribute(ATTRIBUTES.locale);
     setLocale(locale);
 
     const disableEventHandler = this.getAttribute(ATTRIBUTES.disableEventHandler) === 'true';

@@ -1,25 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withTranslation } from 'react-i18next';
 import conferenceType from 'components/__types__/conferenceType';
-import { makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { useTranslation } from 'react-i18next';
+import TableHead from '@material-ui/core/TableHead';
 
-const useStyles = makeStyles({
+const styles = {
   root: {
     cursor: 'pointer',
   },
-});
+};
 
-const ConferenceTable = props => {
-  const { items, onSelect } = props;
-  const { t, i18n } = useTranslation();
-  const classes = useStyles(props);
-
+const ConferenceTable = ({ items, onSelect, classes, t, i18n }) => {
   const tableRows = items.map(item => (
     <TableRow hover className={classes.root} key={item.id} onClick={() => onSelect(item)}>
       <TableCell>{item.name}</TableCell>
@@ -47,18 +43,20 @@ const ConferenceTable = props => {
 };
 
 ConferenceTable.propTypes = {
+  items: PropTypes.arrayOf(conferenceType).isRequired,
+  onSelect: PropTypes.func,
   classes: PropTypes.shape({
     root: PropTypes.string,
   }),
-  items: PropTypes.arrayOf(conferenceType).isRequired,
-  onSelect: PropTypes.func,
+  t: PropTypes.func.isRequired,
+  i18n: PropTypes.shape({ language: PropTypes.string.isRequired }).isRequired,
 };
 
 ConferenceTable.defaultProps = {
+  onSelect: () => {},
   classes: {
     root: '',
   },
-  onSelect: () => {},
 };
 
-export default ConferenceTable;
+export default withStyles(styles)(withTranslation()(ConferenceTable));
