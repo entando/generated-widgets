@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { Component } from 'react';
 import ConferenceTable from 'components/ConferenceTable';
 import { withTranslation } from 'react-i18next';
 import Notification from 'components/common/Notification';
@@ -7,9 +7,8 @@ import { apiConferencesGet } from 'api/conferences';
 import { reducer, initialState } from 'state/conference.reducer';
 import { Fab } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import fluxStandardActionType from 'components/__types__/fluxStandardActionType';
 
-class ConferenceTableContainer extends React.Component {
+class ConferenceTableContainer extends Component {
   constructor(props) {
     super(props);
     this.handleError = this.handleError.bind(this);
@@ -20,13 +19,6 @@ class ConferenceTableContainer extends React.Component {
 
   componentDidMount() {
     this.fetchData();
-  }
-
-  componentDidUpdate(prevProps) {
-    const { action } = this.props;
-    if (action && action !== prevProps.action) {
-      this.dispatch(action);
-    }
   }
 
   dispatch(action) {
@@ -72,7 +64,6 @@ class ConferenceTableContainer extends React.Component {
 }
 
 ConferenceTableContainer.propTypes = {
-  action: fluxStandardActionType,
   onAdd: PropTypes.func,
   onError: PropTypes.func,
   onSelect: PropTypes.func,
@@ -80,10 +71,9 @@ ConferenceTableContainer.propTypes = {
 };
 
 ConferenceTableContainer.defaultProps = {
-  action: undefined,
   onAdd: () => {},
   onError: () => {},
   onSelect: () => {},
 };
 
-export default withTranslation()(ConferenceTableContainer);
+export default withTranslation(undefined, { withRef: true })(ConferenceTableContainer);

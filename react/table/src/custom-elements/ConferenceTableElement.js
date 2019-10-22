@@ -45,6 +45,8 @@ class ConferenceTableElement extends HTMLElement {
 
   onSelect = createWidgetEventPublisher(EVENT_TYPES.output.select);
 
+  reactRootRef = React.createRef();
+
   static get observedAttributes() {
     return Object.values(ATTRIBUTES);
   }
@@ -84,11 +86,11 @@ class ConferenceTableElement extends HTMLElement {
   defaultWidgetEventHandler() {
     return evt => {
       const action = widgetEventToFSA(evt);
-      this.render(action);
+      this.reactRootRef.current.dispatch(action);
     };
   }
 
-  render(action) {
+  render() {
     const hidden = this.getAttribute(ATTRIBUTES.hidden) === 'true';
     if (hidden) {
       return;
@@ -110,7 +112,7 @@ class ConferenceTableElement extends HTMLElement {
     ReactDOM.render(
       <StylesProvider jss={this.jss}>
         <ConferenceTableContainer
-          action={action}
+          ref={this.reactRootRef}
           onAdd={this.onAdd}
           onSelect={this.onSelect}
           onError={this.onError}
