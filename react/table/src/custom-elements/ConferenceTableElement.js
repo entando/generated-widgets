@@ -8,6 +8,7 @@ import {
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ConferenceTableContainer from 'components/ConferenceTableContainer';
+import { INPUT_EVENT_TYPES, OUTPUT_EVENT_TYPES } from 'custom-elements/widgetEventTypes';
 
 import { StylesProvider, jssPreset } from '@material-ui/core/styles';
 import { create } from 'jss';
@@ -16,22 +17,8 @@ import retargetEvents from 'react-shadow-dom-retarget-events';
 const ATTRIBUTES = {
   hidden: 'hidden',
   locale: 'locale',
-  disableEventHandler: 'disableEventHandler',
+  disableDefaultEventHandler: 'disable-default-event-handler', // custom element attribute names MUST be written in kebab-case
 };
-
-const EVENT_TYPES = {
-  input: {
-    formUpdate: 'conference.form.update',
-    formCreate: 'conference.form.create',
-    formDelete: 'conference.form.delete',
-  },
-  output: {
-    select: 'conference.table.select',
-    add: 'conference.table.add',
-    error: 'conference.table.error',
-  },
-};
-
 class ConferenceTableElement extends HTMLElement {
   jss;
 
@@ -39,11 +26,11 @@ class ConferenceTableElement extends HTMLElement {
 
   unsubscribeFromWidgetEvents;
 
-  onAdd = createWidgetEventPublisher(EVENT_TYPES.output.add);
+  onAdd = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.add);
 
-  onError = createWidgetEventPublisher(EVENT_TYPES.output.error);
+  onError = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.error);
 
-  onSelect = createWidgetEventPublisher(EVENT_TYPES.output.select);
+  onSelect = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.select);
 
   reactRootRef = React.createRef();
 
@@ -99,14 +86,16 @@ class ConferenceTableElement extends HTMLElement {
     const locale = this.getAttribute(ATTRIBUTES.locale);
     setLocale(locale);
 
-    const disableEventHandler = this.getAttribute(ATTRIBUTES.disableEventHandler) === 'true';
+    const disableEventHandler = this.getAttribute(ATTRIBUTES.disableDefaultEventHandler) === 'true';
     if (!disableEventHandler) {
       const defaultWidgetEventHandler = this.defaultWidgetEventHandler();
 
       this.unsubscribeFromWidgetEvents = subscribeToWidgetEvents(
-        Object.values(EVENT_TYPES.input),
+        Object.values(INPUT_EVENT_TYPES),
         defaultWidgetEventHandler
       );
+    } else if (this.unsubscribeFromWidgetEvents) {
+      this.unsubscribeFromWidgetEvents();
     }
 
     ReactDOM.render(

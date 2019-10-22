@@ -1,3 +1,13 @@
+import { INPUT_EVENT_TYPES } from 'custom-elements/widgetEventTypes';
+import {
+  READ_ALL,
+  ERROR_FETCH,
+  CLEAR_ERRORS,
+  CREATE,
+  UPDATE,
+  DELETE,
+} from 'state/conference.types';
+
 export const initialState = {
   items: [],
   errorMessage: null,
@@ -6,15 +16,17 @@ export const initialState = {
 
 export const reducer = (state, action) => {
   switch (action.type) {
-    case 'readAll':
+    case READ_ALL:
       return { ...state, items: action.payload };
-    case 'error':
+    case ERROR_FETCH:
       return { ...state, errorMessage: action.payload };
-    case 'clearErrors':
+    case CLEAR_ERRORS:
       return { ...state, errorMessage: null };
-    case 'conference.form.create':
+    case CREATE:
+    case INPUT_EVENT_TYPES.formCreate:
       return { ...state, items: [...state.items, action.payload] };
-    case 'conference.form.update': {
+    case UPDATE:
+    case INPUT_EVENT_TYPES.formUpdate: {
       const i = state.items.findIndex(item => {
         return item.id === action.payload.id;
       });
@@ -22,7 +34,8 @@ export const reducer = (state, action) => {
       items[i] = action.payload;
       return { ...state, items };
     }
-    case 'conference.form.delete':
+    case DELETE:
+    case INPUT_EVENT_TYPES.formDelete:
       return { ...state, items: state.items.filter(item => item.id !== action.payload.id) };
     default:
       return state;

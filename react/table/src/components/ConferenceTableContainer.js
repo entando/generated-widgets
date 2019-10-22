@@ -7,6 +7,7 @@ import { apiConferencesGet } from 'api/conferences';
 import { reducer, initialState } from 'state/conference.reducer';
 import { Fab } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
+import { ERROR_FETCH, CLEAR_ERRORS, READ_ALL } from 'state/conference.types';
 
 class ConferenceTableContainer extends Component {
   constructor(props) {
@@ -28,20 +29,20 @@ class ConferenceTableContainer extends Component {
   async fetchData() {
     try {
       const conferences = await apiConferencesGet();
-      this.dispatch({ type: 'readAll', payload: conferences });
+      this.dispatch({ type: READ_ALL, payload: conferences });
     } catch (err) {
       this.handleError(err);
     }
   }
 
   closeNotification() {
-    this.dispatch({ type: 'clearErrors' });
+    this.dispatch({ type: CLEAR_ERRORS });
   }
 
   handleError(err) {
     const { onError, t } = this.props;
     onError(err);
-    this.dispatch({ type: 'error', payload: t('conference.error.dataLoading') });
+    this.dispatch({ type: ERROR_FETCH, payload: t('conference.error.dataLoading') });
   }
 
   render() {

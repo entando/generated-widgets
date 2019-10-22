@@ -5,6 +5,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ConferenceEditFormContainer from 'components/ConferenceEditFormContainer';
 import ConferenceAddFormContainer from 'components/ConferenceAddFormContainer';
+import { INPUT_EVENT_TYPES, OUTPUT_EVENT_TYPES } from 'custom-elements/widgetEventTypes';
 
 import { StylesProvider, jssPreset } from '@material-ui/core/styles';
 import { create } from 'jss';
@@ -15,20 +16,7 @@ const ATTRIBUTES = {
   id: 'id',
   hidden: 'hidden',
   locale: 'locale',
-  disableEventHandler: 'disableEventHandler',
-};
-
-const EVENT_TYPES = {
-  input: {
-    tableAdd: 'conference.table.add',
-    tableSelect: 'conference.table.select',
-  },
-  output: {
-    create: 'conference.form.create',
-    update: 'conference.form.update',
-    errorCreate: 'conference.form.errorCreate',
-    errorUpdate: 'conference.form.errorUpdate',
-  },
+  disableDefaultEventHandler: 'disable-default-event-handler', // custom element attribute names MUST be written in kebab-case
 };
 
 class ConferenceFormElement extends HTMLElement {
@@ -38,13 +26,13 @@ class ConferenceFormElement extends HTMLElement {
 
   unsubscribeFromWidgetEvents;
 
-  onCreate = createWidgetEventPublisher(EVENT_TYPES.output.create);
+  onCreate = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.create);
 
-  onUpdate = createWidgetEventPublisher(EVENT_TYPES.output.update);
+  onUpdate = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.update);
 
-  onErrorCreate = createWidgetEventPublisher(EVENT_TYPES.output.errorCreate);
+  onErrorCreate = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.errorCreate);
 
-  onErrorUpdate = createWidgetEventPublisher(EVENT_TYPES.output.errorUpdate);
+  onErrorUpdate = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.errorUpdate);
 
   static get observedAttributes() {
     return Object.values(ATTRIBUTES);
@@ -84,7 +72,7 @@ class ConferenceFormElement extends HTMLElement {
 
   defaultWidgetEventHandler() {
     return evt => {
-      const { tableAdd, tableSelect } = EVENT_TYPES.input;
+      const { tableAdd, tableSelect } = INPUT_EVENT_TYPES;
       const { id } = ATTRIBUTES;
       switch (evt.type) {
         case tableAdd: {
@@ -111,14 +99,16 @@ class ConferenceFormElement extends HTMLElement {
     const locale = this.getAttribute(ATTRIBUTES.locale);
     setLocale(locale);
 
-    const disableEventHandler = this.getAttribute(ATTRIBUTES.disableEventHandler) === 'true';
+    const disableEventHandler = this.getAttribute(ATTRIBUTES.disableDefaultEventHandler) === 'true';
     if (!disableEventHandler) {
       const defaultWidgetEventHandler = this.defaultWidgetEventHandler();
 
       this.unsubscribeFromWidgetEvents = subscribeToWidgetEvents(
-        Object.values(EVENT_TYPES.input),
+        Object.values(INPUT_EVENT_TYPES),
         defaultWidgetEventHandler
       );
+    } else if (this.unsubscribeFromWidgetEvents) {
+      this.unsubscribeFromWidgetEvents();
     }
 
     const id = this.getAttribute(ATTRIBUTES.id);
