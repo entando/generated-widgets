@@ -47,16 +47,13 @@ ConferenceTable.propTypes = {
   onSelect: PropTypes.func,
   classes: PropTypes.shape({
     root: PropTypes.string,
-  }),
+  }).isRequired,
   t: PropTypes.func.isRequired,
   i18n: PropTypes.shape({ language: PropTypes.string.isRequired }).isRequired,
 };
 
 ConferenceTable.defaultProps = {
   onSelect: () => {},
-  classes: {
-    root: '',
-  },
 };
 
 export default withStyles(styles)(withTranslation()(ConferenceTable));

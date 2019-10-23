@@ -6,8 +6,15 @@ import Notification from 'components/common/Notification';
 import { apiConferencesGet } from 'api/conferences';
 import { reducer, initialState } from 'state/conference.reducer';
 import { Fab } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import { ERROR_FETCH, CLEAR_ERRORS, READ_ALL } from 'state/conference.types';
+
+const styles = {
+  fab: {
+    float: 'right',
+  },
+};
 
 class ConferenceTableContainer extends Component {
   constructor(props) {
@@ -46,11 +53,11 @@ class ConferenceTableContainer extends Component {
   }
 
   render() {
-    const { onSelect, onAdd } = this.props;
+    const { classes, onSelect, onAdd } = this.props;
     const { items, errorMessage } = this.state;
     return (
       <>
-        <Fab color="primary" aria-label="add" onClick={onAdd}>
+        <Fab color="primary" aria-label="add" className={classes.fab} onClick={onAdd}>
           <AddIcon />
         </Fab>
         <ConferenceTable items={items} onSelect={onSelect} />
@@ -65,6 +72,9 @@ class ConferenceTableContainer extends Component {
 }
 
 ConferenceTableContainer.propTypes = {
+  classes: PropTypes.shape({
+    fab: PropTypes.string,
+  }).isRequired,
   onAdd: PropTypes.func,
   onError: PropTypes.func,
   onSelect: PropTypes.func,
@@ -77,4 +87,6 @@ ConferenceTableContainer.defaultProps = {
   onSelect: () => {},
 };
 
-export default withTranslation(undefined, { withRef: true })(ConferenceTableContainer);
+export default withStyles(styles)(
+  withTranslation(undefined, { withRef: true })(ConferenceTableContainer)
+);
