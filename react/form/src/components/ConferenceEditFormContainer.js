@@ -2,14 +2,10 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import ConferenceForm from 'components/ConferenceForm';
 import Notification from 'components/common/Notification';
-import { ThemeProvider } from '@material-ui/core/styles';
-import { createMuiTheme } from '@material-ui/core';
 import { withTranslation } from 'react-i18next';
 import { apiConferenceGet, apiConferencePut } from 'api/conferences';
 
 class ConferenceEditFormContainer extends PureComponent {
-  theme = createMuiTheme();
-
   state = {
     notificationMessage: null,
   };
@@ -76,14 +72,14 @@ class ConferenceEditFormContainer extends PureComponent {
   render() {
     const { notificationMessage, notificationStatus, conference } = this.state;
     return (
-      <ThemeProvider theme={this.theme}>
+      <>
         <ConferenceForm conference={conference} onSubmit={this.handleSubmit} />
         <Notification
           variant={notificationStatus}
           message={notificationMessage}
           onClose={this.closeNotification}
         />
-      </ThemeProvider>
+      </>
     );
   }
 }

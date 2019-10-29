@@ -7,10 +7,10 @@ import ConferenceEditFormContainer from 'components/ConferenceEditFormContainer'
 import ConferenceAddFormContainer from 'components/ConferenceAddFormContainer';
 import { INPUT_EVENT_TYPES, OUTPUT_EVENT_TYPES } from 'custom-elements/widgetEventTypes';
 
-import { StylesProvider, jssPreset } from '@material-ui/core/styles';
+import { StylesProvider, ThemeProvider, jssPreset } from '@material-ui/core/styles';
+import { createMuiTheme } from '@material-ui/core';
 import { create } from 'jss';
 import retargetEvents from 'react-shadow-dom-retarget-events';
-import MountPointContext from 'components/MountPointContext';
 
 const ATTRIBUTES = {
   id: 'id',
@@ -33,6 +33,8 @@ class ConferenceFormElement extends HTMLElement {
   onErrorCreate = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.errorCreate);
 
   onErrorUpdate = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.errorUpdate);
+
+  muiTheme;
 
   static get observedAttributes() {
     return Object.values(ATTRIBUTES);
@@ -59,6 +61,13 @@ class ConferenceFormElement extends HTMLElement {
       insertionPoint: this.mountPoint,
     });
 
+    this.muiTheme = createMuiTheme({
+      props: {
+        MuiDialog: {
+          container: this.mountPoint,
+        },
+      },
+    });
     this.render();
 
     retargetEvents(shadowRoot);
@@ -127,9 +136,7 @@ class ConferenceFormElement extends HTMLElement {
 
     ReactDOM.render(
       <StylesProvider jss={this.jss}>
-        <MountPointContext.Provider value={this.mountPoint}>
-          {FormContainer}
-        </MountPointContext.Provider>
+        <ThemeProvider theme={this.muiTheme}>{FormContainer}</ThemeProvider>
       </StylesProvider>,
       this.mountPoint
     );
