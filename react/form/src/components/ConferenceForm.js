@@ -25,9 +25,6 @@ const styles = theme => ({
 });
 
 class ConferenceForm extends PureComponent {
-  // eslint-disable-next-line react/static-property-placement
-  static contextType = MountPointContext;
-
   render() {
     const mountPoint = this.context;
 
@@ -126,6 +123,8 @@ class ConferenceForm extends PureComponent {
     );
   }
 }
+
+ConferenceForm.contextType = MountPointContext;
 
 ConferenceForm.propTypes = {
   classes: PropTypes.shape({

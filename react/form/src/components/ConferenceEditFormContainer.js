@@ -20,7 +20,7 @@ class ConferenceEditFormContainer extends PureComponent {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     this.fetchConference();
   }
 
