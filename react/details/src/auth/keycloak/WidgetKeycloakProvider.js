@@ -4,7 +4,6 @@ import Keycloak from 'keycloak-js';
 import { KeycloakProvider } from 'react-keycloak';
 
 import keycloakConfig from 'auth/keycloak/keycloakConfig';
-// import { KeycloakContextProvider } from 'auth/keycloak/KeycloakContext';
 
 const keycloak = new Keycloak(keycloakConfig);
 
@@ -14,19 +13,8 @@ const keycloakInitConfig = {
 
 const WidgetKeycloakProvider = ({ children }) => {
   return (
-    <KeycloakProvider
-      keycloak={keycloak}
-      initConfig={keycloakInitConfig}
-      onEvent={(event, error) => {
-        console.log('onKeycloakEvent', event, error);
-      }}
-      onTokens={tokens => {
-        console.log('onKeycloakTokens', tokens);
-      }}
-    >
-      {/* <KeycloakContextProvider value={ keycloakState }> */}
+    <KeycloakProvider keycloak={keycloak} initConfig={keycloakInitConfig}>
       {children}
-      {/* </KeycloakContextProvider> */}
     </KeycloakProvider>
   );
 };

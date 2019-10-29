@@ -11,15 +11,15 @@ jest.mock('api/conferenceApi');
 
 jest.mock('react-keycloak', () => {
   return {
-    withKeycloak: function(Component) {
+    withKeycloak(Component) {
       return props => (
         <Component
-          {...props}
+          {...props} // eslint-disable-line react/jsx-props-no-spreading
           keycloak={{
             authenticated: true,
             token: null,
           }}
-          keycloakInitialized={true}
+          keycloakInitialized
         />
       );
     },
