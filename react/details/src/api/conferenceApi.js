@@ -1,12 +1,12 @@
 import { DOMAIN, JWT_TOKEN } from 'api/constants';
 
-export default (params = {}) => {
+export default (params = {}, token) => {
   const { id, options } = params;
 
-  const url = `${DOMAIN}conferences/${id}`;
+  const url = `${DOMAIN}${DOMAIN.endsWith('/') ? '' : '/'}conferences/${id}`;
   const defaultOptions = {
     headers: new Headers({
-      Authorization: `Bearer ${JWT_TOKEN}`,
+      Authorization: `Bearer ${JWT_TOKEN || token}`, // TODO: defaults to JWT, should be token only
       'Content-Type': 'application/json',
     }),
   };

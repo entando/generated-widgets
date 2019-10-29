@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
+import { withKeycloak } from 'react-keycloak';
 import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core';
 
 import ConferenceDetails from 'components/ConferenceDetails';
-import ErrorNotification from 'components/common/ErrorNotification';
+import Notification from 'components/common/Notification';
 import getConference from 'api/conferenceApi';
 
 class ConferenceDetailsContainer extends React.Component {
@@ -15,42 +16,80 @@ class ConferenceDetailsContainer extends React.Component {
     this.state = {
       loading: true,
       conference: {},
-      error: null,
+      notificationStatus: null,
+      notificationMessage: null,
     };
 
     this.theme = createMuiTheme();
     this.closeNotification = this.closeNotification.bind(this);
+    this.fetchData = this.fetchData.bind(this);
   }
 
   componentDidMount() {
-    const { t, id, onError } = this.props;
+    const { keycloakInitialized, keycloak } = this.props;
+    if (keycloakInitialized && keycloak.authenticated) {
+      this.fetchData();
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    const { keycloakInitialized, keycloak } = this.props;
+    if (!prevProps.keycloakInitialized && keycloakInitialized && keycloak.authenticated) {
+      this.fetchData();
+    }
+  }
+
+  fetchData() {
+    const { id, onError, keycloak, t } = this.props;
 
     if (id) {
-      getConference({ id })
-        .then(response => this.setState({ error: null, conference: response }))
+      getConference({ id }, keycloak.token)
+        .then(conference =>
+          this.setState({
+            notificationStatus: null,
+            notificationMessage: null,
+            conference,
+          })
+        )
         .catch(e => {
           onError(e);
-          this.setState({ error: t('common.couldNotFetchData') });
+          this.setState({
+            notificationStatus: 'error',
+            notificationMessage: t('common.couldNotFetchData'),
+          });
         })
         .finally(() => this.setState({ loading: false }));
     } else {
-      this.setState({ loading: false, error: t('common.missingId') });
+      this.setState({
+        loading: false,
+        notificationStatus: 'error',
+        notificationMessage: t('common.missingId'),
+      });
     }
   }
 
   closeNotification() {
-    this.setState({ error: null });
+    this.setState({
+      notificationStatus: null,
+      notificationMessage: null,
+    });
   }
 
   render() {
-    const { conference, error, loading } = this.state;
-    const { t } = this.props;
+    const { conference, notificationStatus, notificationMessage, loading } = this.state;
+    const { keycloak, t } = this.props;
+
+    const authenticated = (keycloak && keycloak.authenticated) || false;
 
     return (
       <ThemeProvider theme={this.theme}>
-        {loading && t('common.loading')}
+        {authenticated && loading && t('common.loading')}
         {!loading && <ConferenceDetails conference={conference} />}
-        <ErrorNotification message={error} onClose={this.closeNotification} />
+        <Notification
+          status={notificationStatus}
+          message={notificationMessage}
+          onClose={this.closeNotification}
+        />
       </ThemeProvider>
     );
   }
@@ -60,10 +99,15 @@ ConferenceDetailsContainer.propTypes = {
   id: PropTypes.string.isRequired,
   onError: PropTypes.func,
   t: PropTypes.func.isRequired,
+  keycloak: PropTypes.shape({
+    authenticated: PropTypes.bool,
+    token: PropTypes.string,
+  }).isRequired,
+  keycloakInitialized: PropTypes.bool.isRequired,
 };
 
 ConferenceDetailsContainer.defaultProps = {
   onError: () => {},
 };
 
-export default withTranslation()(ConferenceDetailsContainer);
+export default withKeycloak(withTranslation()(ConferenceDetailsContainer));

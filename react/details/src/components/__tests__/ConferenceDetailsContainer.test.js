@@ -9,6 +9,23 @@ import ConferenceDetailsContainer from 'components/ConferenceDetailsContainer';
 
 jest.mock('api/conferenceApi');
 
+jest.mock('react-keycloak', () => {
+  return {
+    withKeycloak: function(Component) {
+      return props => (
+        <Component
+          {...props}
+          keycloak={{
+            authenticated: true,
+            token: null,
+          }}
+          keycloakInitialized={true}
+        />
+      );
+    },
+  };
+});
+
 beforeEach(() => {
   getConference.mockClear();
 });
