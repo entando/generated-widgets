@@ -1,13 +1,16 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import ConferenceForm from 'components/ConferenceForm';
-import Notification from 'components/common/Notification';
 import { withTranslation } from 'react-i18next';
+
 import { apiConferencePost } from 'api/conferences';
+
+import Notification from 'components/common/Notification';
+import ConferenceForm from 'components/ConferenceForm';
 
 class ConferenceAddFormContainer extends PureComponent {
   state = {
     notificationMessage: null,
+    notificationStatus: Notification.INFO,
   };
 
   constructor(props) {
