@@ -1,13 +1,16 @@
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import ConferenceTable from 'components/ConferenceTable';
+import PropTypes from 'prop-types';
+import { withKeycloak } from 'react-keycloak';
 import { withTranslation } from 'react-i18next';
-import Notification from 'components/common/Notification';
-import { apiConferencesGet } from 'api/conferences';
-import { reducer, initialState } from 'state/conference.reducer';
 import { Fab } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
+
+import withAuth from 'auth/withAuth';
+import ConferenceTable from 'components/ConferenceTable';
+import Notification from 'components/common/Notification';
+import { apiConferencesGet } from 'api/conferences';
+import { reducer, initialState } from 'state/conference.reducer';
 import { ERROR_FETCH, CLEAR_ERRORS, READ_ALL } from 'state/conference.types';
 
 const styles = {
@@ -26,7 +29,17 @@ class ConferenceTableContainer extends Component {
   state = initialState;
 
   componentDidMount() {
-    this.fetchData();
+    const { keycloakInitialized, keycloak } = this.props;
+    if (keycloakInitialized && keycloak.authenticated) {
+      this.fetchData();
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    const { keycloakInitialized, keycloak } = this.props;
+    if (!prevProps.keycloakInitialized && keycloakInitialized && keycloak.authenticated) {
+      this.fetchData();
+    }
   }
 
   dispatch(action) {
@@ -53,14 +66,16 @@ class ConferenceTableContainer extends Component {
   }
 
   render() {
-    const { classes, onSelect, onAdd } = this.props;
     const { items, errorMessage } = this.state;
+    const { classes, onSelect, onAdd, keycloak } = this.props;
+
+    const authenticated = (keycloak && keycloak.authenticated) || false;
     return (
       <>
         <Fab color="primary" aria-label="add" className={classes.fab} onClick={onAdd}>
           <AddIcon />
         </Fab>
-        <ConferenceTable items={items} onSelect={onSelect} />
+        {authenticated && <ConferenceTable items={items} onSelect={onSelect} />}
         <Notification
           variant={Notification.ERROR}
           message={errorMessage}
@@ -79,6 +94,11 @@ ConferenceTableContainer.propTypes = {
   onError: PropTypes.func,
   onSelect: PropTypes.func,
   t: PropTypes.func.isRequired,
+  keycloak: PropTypes.shape({
+    authenticated: PropTypes.bool,
+    token: PropTypes.string,
+  }).isRequired,
+  keycloakInitialized: PropTypes.bool.isRequired,
 };
 
 ConferenceTableContainer.defaultProps = {
@@ -87,6 +107,8 @@ ConferenceTableContainer.defaultProps = {
   onSelect: () => {},
 };
 
-export default withStyles(styles)(
-  withTranslation(undefined, { withRef: true })(ConferenceTableContainer)
+export default withAuth(
+  withKeycloak(
+    withStyles(styles)(withTranslation(undefined, { withRef: true })(ConferenceTableContainer))
+  )
 );

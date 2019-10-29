@@ -8,6 +8,33 @@ import ConferenceTableContainer from 'components/ConferenceTableContainer';
 
 jest.mock('api/conferences');
 
+jest.mock('auth/withAuth', () => {
+  return Component => {
+    return props => (
+      <Component
+        {...props} // eslint-disable-line react/jsx-props-no-spreading
+      />
+    );
+  };
+});
+
+jest.mock('react-keycloak', () => {
+  return {
+    withKeycloak(Component) {
+      return props => (
+        <Component
+          {...props} // eslint-disable-line react/jsx-props-no-spreading
+          keycloak={{
+            authenticated: true,
+            token: null,
+          }}
+          keycloakInitialized
+        />
+      );
+    },
+  };
+});
+
 describe('ConferenceTableContainer', () => {
   const errorMessageKey = 'conference.error.dataLoading';
 

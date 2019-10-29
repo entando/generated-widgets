@@ -7,7 +7,7 @@ import { createMuiTheme } from '@material-ui/core';
 
 import ConferenceDetails from 'components/ConferenceDetails';
 import Notification from 'components/common/Notification';
-import getConference from 'api/conferenceApi';
+import getConference from 'api/conferences';
 
 class ConferenceDetailsContainer extends React.Component {
   constructor(props) {
@@ -16,7 +16,7 @@ class ConferenceDetailsContainer extends React.Component {
     this.state = {
       loading: true,
       conference: {},
-      notificationStatus: null,
+      notificationStatus: Notification.INFO,
       notificationMessage: null,
     };
 
@@ -54,7 +54,7 @@ class ConferenceDetailsContainer extends React.Component {
         .catch(e => {
           onError(e);
           this.setState({
-            notificationStatus: 'error',
+            notificationStatus: Notification.ERROR,
             notificationMessage: t('common.couldNotFetchData'),
           });
         })
@@ -62,7 +62,7 @@ class ConferenceDetailsContainer extends React.Component {
     } else {
       this.setState({
         loading: false,
-        notificationStatus: 'error',
+        notificationStatus: Notification.ERROR,
         notificationMessage: t('common.missingId'),
       });
     }
