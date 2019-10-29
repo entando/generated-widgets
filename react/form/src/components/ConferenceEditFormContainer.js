@@ -10,7 +10,7 @@ import ConferenceForm from 'components/ConferenceForm';
 class ConferenceEditFormContainer extends PureComponent {
   state = {
     notificationMessage: null,
-    notificationStatus: Notification.INFO,
+    notificationStatus: null,
   };
 
   constructor(props) {

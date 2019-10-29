@@ -1,3 +1,10 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import retargetEvents from 'react-shadow-dom-retarget-events';
+
+import { StylesProvider, jssPreset } from '@material-ui/core/styles';
+import { create } from 'jss';
+
 import setLocale from 'i18n/setLocale';
 import {
   createWidgetEventPublisher,
@@ -5,14 +12,8 @@ import {
   widgetEventToFSA,
 } from 'helpers/widgetEvents';
 
-import React from 'react';
-import ReactDOM from 'react-dom';
-import ConferenceTableContainer from 'components/ConferenceTableContainer';
 import { INPUT_EVENT_TYPES, OUTPUT_EVENT_TYPES } from 'custom-elements/widgetEventTypes';
-
-import { StylesProvider, jssPreset } from '@material-ui/core/styles';
-import { create } from 'jss';
-import retargetEvents from 'react-shadow-dom-retarget-events';
+import ConferenceTableContainer from 'components/ConferenceTableContainer';
 
 const ATTRIBUTES = {
   hidden: 'hidden',

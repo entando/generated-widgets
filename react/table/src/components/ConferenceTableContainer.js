@@ -1,14 +1,16 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import ConferenceTable from 'components/ConferenceTable';
 import { withTranslation } from 'react-i18next';
-import Notification from 'components/common/Notification';
-import { apiConferencesGet } from 'api/conferences';
-import { reducer, initialState } from 'state/conference.reducer';
+
 import { Fab } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
+
+import { apiConferencesGet } from 'api/conferences';
 import { ERROR_FETCH, CLEAR_ERRORS, READ_ALL } from 'state/conference.types';
+import { reducer, initialState } from 'state/conference.reducer';
+import Notification from 'components/common/Notification';
+import ConferenceTable from 'components/ConferenceTable';
 
 const styles = {
   fab: {

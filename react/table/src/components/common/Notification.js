@@ -45,7 +45,8 @@ const autoHideDurations = {
   info: 5000,
 };
 
-const Notification = ({ className, classes, variant, message, onClose }) => {
+const Notification = ({ className, classes, variant: nullableVariant, message, onClose }) => {
+  const variant = nullableVariant || Notification.INFO;
   const isOpen = !!message;
 
   const Icon = variantIcon[variant];
