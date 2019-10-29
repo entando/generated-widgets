@@ -11,9 +11,8 @@ import { compose } from 'recompose';
 import * as Yup from 'yup';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import Grid from '@material-ui/core/Grid';
-import MountPointContext from 'components/MountPointContext';
+import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 
 const styles = theme => ({
   root: {
@@ -25,12 +24,7 @@ const styles = theme => ({
 });
 
 class ConferenceForm extends PureComponent {
-  // eslint-disable-next-line react/static-property-placement
-  static contextType = MountPointContext;
-
   render() {
-    const mountPoint = this.context;
-
     const {
       classes,
       values,
@@ -98,7 +92,6 @@ class ConferenceForm extends PureComponent {
                 onChange={handleDateChange('start')}
                 value={values.start}
                 labelFunc={dateLabelFn}
-                DialogProps={{ container: mountPoint }}
                 name="start"
                 label={t('entities.conference.start')}
               />
@@ -112,7 +105,6 @@ class ConferenceForm extends PureComponent {
                 onChange={handleDateChange('end')}
                 value={values.end}
                 labelFunc={dateLabelFn}
-                DialogProps={{ container: mountPoint }}
                 name="end"
                 label={t('entities.conference.end')}
               />
