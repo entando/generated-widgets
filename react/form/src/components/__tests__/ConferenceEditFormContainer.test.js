@@ -8,6 +8,27 @@ import { mockConference } from 'components/__mocks__/conferenceMocks';
 
 jest.mock('api/conferences');
 
+jest.mock(
+  'auth/useAuthProvider',
+  // eslint-disable-next-line react/jsx-props-no-spreading
+  () => Component => props => <Component {...props} />
+);
+
+jest.mock('auth/withAuth', () => {
+  const withAuth = Component => {
+    return props => (
+      <Component
+        {...props} // eslint-disable-line react/jsx-props-no-spreading
+        authenticated
+        authInitialized
+        authProvider={{}}
+        authToken=""
+      />
+    );
+  };
+  return withAuth;
+});
+
 describe('ConferenceEditFormContainer', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -24,7 +45,7 @@ describe('ConferenceEditFormContainer', () => {
 
     await wait(() => {
       expect(apiConferenceGet).toHaveBeenCalledTimes(1);
-      expect(apiConferenceGet).toHaveBeenCalledWith('1');
+      expect(apiConferenceGet).toHaveBeenCalledWith('1', '');
       expect(queryByText(errorMessageKey)).not.toBeInTheDocument();
     });
   });
@@ -43,7 +64,7 @@ describe('ConferenceEditFormContainer', () => {
 
     await wait(() => {
       expect(apiConferencePut).toHaveBeenCalledTimes(1);
-      expect(apiConferencePut).toHaveBeenCalledWith(mockConference);
+      expect(apiConferencePut).toHaveBeenCalledWith(mockConference, '');
       expect(queryByText(successMessageKey)).toBeInTheDocument();
       expect(queryByText(errorMessageKey)).not.toBeInTheDocument();
     });
@@ -55,7 +76,7 @@ describe('ConferenceEditFormContainer', () => {
 
     await wait(() => {
       expect(apiConferenceGet).toHaveBeenCalledTimes(1);
-      expect(apiConferenceGet).toHaveBeenCalledWith('1');
+      expect(apiConferenceGet).toHaveBeenCalledWith('1', '');
       expect(queryByText(errorMessageKey)).toBeInTheDocument();
       expect(queryByText(successMessageKey)).not.toBeInTheDocument();
     });
@@ -72,10 +93,10 @@ describe('ConferenceEditFormContainer', () => {
 
     await wait(() => {
       expect(apiConferenceGet).toHaveBeenCalledTimes(1);
-      expect(apiConferenceGet).toHaveBeenCalledWith('1');
+      expect(apiConferenceGet).toHaveBeenCalledWith('1', '');
 
       expect(apiConferencePut).toHaveBeenCalledTimes(1);
-      expect(apiConferencePut).toHaveBeenCalledWith(mockConference);
+      expect(apiConferencePut).toHaveBeenCalledWith(mockConference, '');
 
       expect(getByText(errorMessageKey)).toBeInTheDocument();
     });

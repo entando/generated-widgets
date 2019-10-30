@@ -21,6 +21,22 @@ jest.mock('@material-ui/pickers', () => ({
   },
 }));
 
+jest.mock(
+  'auth/useAuthProvider',
+  // eslint-disable-next-line react/jsx-props-no-spreading
+  () => Component => props => <Component {...props} />
+);
+
+jest.mock('auth/withAuth', () => Component => props => (
+  <Component
+    {...props} // eslint-disable-line react/jsx-props-no-spreading
+    authenticated
+    authInitialized
+    authProvider={{}}
+    authToken=""
+  />
+));
+
 describe('ConferenceAddFormContainer', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -59,7 +75,7 @@ describe('ConferenceAddFormContainer', () => {
 
     await wait(() => {
       expect(apiConferencePost).toHaveBeenCalledTimes(1);
-      expect(apiConferencePost).toHaveBeenCalledWith(mockConferenceWithDateStrings);
+      expect(apiConferencePost).toHaveBeenCalledWith(mockConferenceWithDateStrings, '');
 
       expect(queryByText(successMessageKey)).toBeInTheDocument();
 
@@ -95,7 +111,7 @@ describe('ConferenceAddFormContainer', () => {
 
     await wait(() => {
       expect(apiConferencePost).toHaveBeenCalledTimes(1);
-      expect(apiConferencePost).toHaveBeenCalledWith(mockConferenceWithDateStrings);
+      expect(apiConferencePost).toHaveBeenCalledWith(mockConferenceWithDateStrings, '');
 
       expect(queryByText(successMessageKey)).not.toBeInTheDocument();
 

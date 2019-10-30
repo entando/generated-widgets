@@ -2,8 +2,9 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 
+import useAuthProvider from 'auth/useAuthProvider';
+import withAuth from 'auth/withAuth';
 import { apiConferenceGet, apiConferencePut } from 'api/conferences';
-
 import Notification from 'components/common/Notification';
 import ConferenceForm from 'components/ConferenceForm';
 
@@ -20,21 +21,31 @@ class ConferenceEditFormContainer extends PureComponent {
   }
 
   componentDidMount() {
-    this.fetchConference();
+    const { authInitialized, authenticated } = this.props;
+    const userAuthenticated = authInitialized && authenticated;
+
+    if (userAuthenticated) {
+      this.fetchConference();
+    }
   }
 
   componentDidUpdate(prevProps) {
-    const { id } = this.props;
-    if (id && id !== prevProps.id) {
+    const { authInitialized, authenticated, id } = this.props;
+
+    const userAuthenticated = authInitialized && authenticated;
+    const changedId = id && id !== prevProps.id;
+    const changedAuth = prevProps.authInitialized !== authInitialized;
+
+    if (userAuthenticated && (changedId || changedAuth)) {
       this.fetchConference();
     }
   }
 
   async fetchConference() {
-    const { id } = this.props;
-    if (!id) return;
+    const { id, authenticated, authToken } = this.props;
+    if (!id || !authenticated) return;
     try {
-      const conference = await apiConferenceGet(id);
+      const conference = await apiConferenceGet(id, authToken);
       this.setState(() => ({
         conference,
       }));
@@ -48,18 +59,20 @@ class ConferenceEditFormContainer extends PureComponent {
   }
 
   async handleSubmit(conference) {
-    const { t, onUpdate } = this.props;
-    try {
-      const updatedConference = await apiConferencePut(conference);
-      onUpdate(updatedConference);
+    const { t, onUpdate, authenticated, authToken } = this.props;
+    if (authenticated) {
+      try {
+        const updatedConference = await apiConferencePut(conference, authToken);
+        onUpdate(updatedConference);
 
-      this.setState({
-        conference: updatedConference,
-        notificationMessage: t('common.dataSaved'),
-        notificationStatus: Notification.SUCCESS,
-      });
-    } catch (err) {
-      this.handleError(err);
+        this.setState({
+          conference: updatedConference,
+          notificationMessage: t('common.dataSaved'),
+          notificationStatus: Notification.SUCCESS,
+        });
+      } catch (err) {
+        this.handleError(err);
+      }
     }
   }
 
@@ -73,10 +86,12 @@ class ConferenceEditFormContainer extends PureComponent {
   }
 
   render() {
+    const { authenticated } = this.props;
+
     const { notificationMessage, notificationStatus, conference } = this.state;
     return (
       <>
-        <ConferenceForm conference={conference} onSubmit={this.handleSubmit} />
+        {authenticated && <ConferenceForm conference={conference} onSubmit={this.handleSubmit} />}
         <Notification
           variant={notificationStatus}
           message={notificationMessage}
@@ -92,11 +107,16 @@ ConferenceEditFormContainer.propTypes = {
   onError: PropTypes.func,
   onUpdate: PropTypes.func,
   t: PropTypes.func.isRequired,
+  authenticated: PropTypes.bool,
+  authInitialized: PropTypes.bool.isRequired,
+  authToken: PropTypes.string,
 };
 
 ConferenceEditFormContainer.defaultProps = {
   onUpdate: () => {},
   onError: () => {},
+  authToken: null,
+  authenticated: false,
 };
 
-export default withTranslation()(ConferenceEditFormContainer);
+export default useAuthProvider(withAuth(withTranslation()(ConferenceEditFormContainer)));

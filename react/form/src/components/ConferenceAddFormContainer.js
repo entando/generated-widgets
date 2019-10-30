@@ -2,8 +2,9 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 
+import useAuthProvider from 'auth/useAuthProvider';
+import withAuth from 'auth/withAuth';
 import { apiConferencePost } from 'api/conferences';
-
 import Notification from 'components/common/Notification';
 import ConferenceForm from 'components/ConferenceForm';
 
@@ -24,16 +25,18 @@ class ConferenceAddFormContainer extends PureComponent {
   }
 
   async handleSubmit(conference) {
-    const { t, onCreate } = this.props;
-    try {
-      const createdConference = await apiConferencePost(conference);
-      onCreate(createdConference);
-      this.setState({
-        notificationMessage: t('common.dataSaved'),
-        notificationStatus: Notification.SUCCESS,
-      });
-    } catch (err) {
-      this.handleError(err);
+    const { t, onCreate, authenticated, authToken } = this.props;
+    if (authenticated) {
+      try {
+        const createdConference = await apiConferencePost(conference, authToken);
+        onCreate(createdConference);
+        this.setState({
+          notificationMessage: t('common.dataSaved'),
+          notificationStatus: Notification.SUCCESS,
+        });
+      } catch (err) {
+        this.handleError(err);
+      }
     }
   }
 
@@ -47,10 +50,11 @@ class ConferenceAddFormContainer extends PureComponent {
   }
 
   render() {
+    const { authenticated } = this.props;
     const { notificationMessage, notificationStatus } = this.state;
     return (
       <>
-        <ConferenceForm onSubmit={this.handleSubmit} />
+        {authenticated && <ConferenceForm onSubmit={this.handleSubmit} />}
         <Notification
           variant={notificationStatus}
           message={notificationMessage}
@@ -65,11 +69,15 @@ ConferenceAddFormContainer.propTypes = {
   onError: PropTypes.func,
   onCreate: PropTypes.func,
   t: PropTypes.func.isRequired,
+  authenticated: PropTypes.bool,
+  authToken: PropTypes.string,
 };
 
 ConferenceAddFormContainer.defaultProps = {
   onError: () => {},
   onCreate: () => {},
+  authenticated: false,
+  authToken: null,
 };
 
-export default withTranslation()(ConferenceAddFormContainer);
+export default useAuthProvider(withAuth(withTranslation()(ConferenceAddFormContainer)));

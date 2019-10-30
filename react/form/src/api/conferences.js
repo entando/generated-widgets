@@ -2,12 +2,12 @@ import { DOMAIN, JWT_TOKEN } from 'api/constants';
 
 const resource = 'conferences';
 
-const defaultOptions = {
+const getDefaultOptions = token => ({
   headers: new Headers({
-    Authorization: `Bearer ${JWT_TOKEN}`,
+    Authorization: `Bearer ${JWT_TOKEN || token}`, // TODO: defaults to JWT, should be token only
     'Content-Type': 'application/json',
   }),
-};
+});
 
 const request = async (url, options) => {
   const response = await fetch(url, options);
@@ -17,29 +17,31 @@ const request = async (url, options) => {
     : Promise.reject(new Error(response.statusText || response.status));
 };
 
-export const apiConferenceGet = async id => {
+export const apiConferenceGet = async (id, token) => {
   const url = `${DOMAIN}/${resource}/${id}`;
   const options = {
-    ...defaultOptions,
+    ...getDefaultOptions(token),
     method: 'GET',
   };
+
   return request(url, options);
 };
 
-export const apiConferencePost = async conference => {
+export const apiConferencePost = async (conference, token) => {
   const url = `${DOMAIN}/${resource}`;
   const options = {
-    ...defaultOptions,
+    ...getDefaultOptions(token),
     method: 'POST',
     body: conference ? JSON.stringify(conference) : null,
   };
+
   return request(url, options);
 };
 
-export const apiConferencePut = async conference => {
+export const apiConferencePut = async (conference, token) => {
   const url = `${DOMAIN}/${resource}`;
   const options = {
-    ...defaultOptions,
+    ...getDefaultOptions(token),
     method: 'PUT',
     body: conference ? JSON.stringify(conference) : null,
   };

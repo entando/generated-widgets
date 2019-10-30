@@ -3,13 +3,6 @@ import { DOMAIN, JWT_TOKEN } from 'api/constants';
 
 const resource = 'conferences';
 
-const defaultOptions = {
-  headers: new Headers({
-    Authorization: `Bearer ${JWT_TOKEN}`,
-    'Content-Type': 'application/json',
-  }),
-};
-
 const request = async (url, options) => {
   const response = await fetch(url, options);
 
@@ -18,8 +11,16 @@ const request = async (url, options) => {
     : Promise.reject(new Error(response.statusText || response.status));
 };
 
-export const apiConferencesGet = async () => {
+export const apiConferencesGet = async token => {
   const url = `${DOMAIN}/${resource}`;
+
+  const defaultOptions = {
+    headers: new Headers({
+      Authorization: `Bearer ${JWT_TOKEN || token}`, // TODO: defaults to JWT, should be token only
+      'Content-Type': 'application/json',
+    }),
+  };
+
   const options = {
     ...defaultOptions,
     method: 'GET',
