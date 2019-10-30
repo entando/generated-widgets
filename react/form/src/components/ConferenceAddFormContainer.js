@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 
-import useAuthProvider from 'auth/useAuthProvider';
 import withAuth from 'auth/withAuth';
 import { apiConferencePost } from 'api/conferences';
 import Notification from 'components/common/Notification';
@@ -80,4 +79,4 @@ ConferenceAddFormContainer.defaultProps = {
   authToken: null,
 };
 
-export default useAuthProvider(withAuth(withTranslation()(ConferenceAddFormContainer)));
+export default withAuth(withTranslation()(ConferenceAddFormContainer));

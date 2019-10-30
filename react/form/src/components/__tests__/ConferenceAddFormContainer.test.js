@@ -21,12 +21,6 @@ jest.mock('@material-ui/pickers', () => ({
   },
 }));
 
-jest.mock(
-  'auth/useAuthProvider',
-  // eslint-disable-next-line react/jsx-props-no-spreading
-  () => Component => props => <Component {...props} />
-);
-
 jest.mock('auth/withAuth', () => Component => props => (
   <Component
     {...props} // eslint-disable-line react/jsx-props-no-spreading

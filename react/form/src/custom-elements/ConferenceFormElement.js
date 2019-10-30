@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import retargetEvents from 'react-shadow-dom-retarget-events';
 
@@ -7,8 +7,9 @@ import { createMuiTheme } from '@material-ui/core';
 import { create } from 'jss';
 
 import setLocale from 'i18n/setLocale';
+import { getAuthMethod } from 'auth/utils';
+import WidgetKeycloakProvider from 'auth/keycloak/WidgetKeycloakProvider';
 import { createWidgetEventPublisher, subscribeToWidgetEvents } from 'helpers/widgetEvents';
-
 import { INPUT_EVENT_TYPES, OUTPUT_EVENT_TYPES } from 'custom-elements/widgetEventTypes';
 import ConferenceEditFormContainer from 'components/ConferenceEditFormContainer';
 import ConferenceAddFormContainer from 'components/ConferenceAddFormContainer';
@@ -123,6 +124,8 @@ class ConferenceFormElement extends HTMLElement {
 
     const id = this.getAttribute(ATTRIBUTES.id);
 
+    const AuthProvider = getAuthMethod() === 'KEYCLOAK' ? WidgetKeycloakProvider : Fragment;
+
     const FormContainer = id
       ? React.createElement(
           ConferenceEditFormContainer,
@@ -136,9 +139,11 @@ class ConferenceFormElement extends HTMLElement {
         );
 
     ReactDOM.render(
-      <StylesProvider jss={this.jss}>
-        <ThemeProvider theme={this.muiTheme}>{FormContainer}</ThemeProvider>
-      </StylesProvider>,
+      <AuthProvider>
+        <StylesProvider jss={this.jss}>
+          <ThemeProvider theme={this.muiTheme}>{FormContainer}</ThemeProvider>
+        </StylesProvider>
+      </AuthProvider>,
       this.mountPoint
     );
   }

@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 
-import useAuthProvider from 'auth/useAuthProvider';
 import withAuth from 'auth/withAuth';
 import { apiConferenceGet, apiConferencePut } from 'api/conferences';
 import Notification from 'components/common/Notification';
@@ -119,4 +118,4 @@ ConferenceEditFormContainer.defaultProps = {
   authenticated: false,
 };
 
-export default useAuthProvider(withAuth(withTranslation()(ConferenceEditFormContainer)));
+export default withAuth(withTranslation()(ConferenceEditFormContainer));
