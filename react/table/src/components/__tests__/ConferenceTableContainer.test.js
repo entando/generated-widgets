@@ -8,12 +8,6 @@ import ConferenceTableContainer from 'components/ConferenceTableContainer';
 
 jest.mock('api/conferences');
 
-jest.mock(
-  'auth/useAuthProvider',
-  // eslint-disable-next-line react/jsx-props-no-spreading
-  () => Component => props => <Component {...props} />
-);
-
 jest.mock('auth/withAuth', () => {
   const withAuth = Component => {
     return props => (

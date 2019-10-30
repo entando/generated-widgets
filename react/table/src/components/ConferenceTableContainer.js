@@ -5,7 +5,6 @@ import { Fab } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 
-import useAuthProvider from 'auth/useAuthProvider';
 import withAuth from 'auth/withAuth';
 import ConferenceTable from 'components/ConferenceTable';
 import Notification from 'components/common/Notification';
@@ -113,8 +112,5 @@ ConferenceTableContainer.defaultProps = {
   authenticated: false,
 };
 
-export default useAuthProvider(
-  withAuth(
-    withStyles(styles)(withTranslation(undefined, { withRef: true })(ConferenceTableContainer))
-  )
-);
+export default
+  withAuth(withStyles(styles)(withTranslation(undefined, { withRef: true })(ConferenceTableContainer)));

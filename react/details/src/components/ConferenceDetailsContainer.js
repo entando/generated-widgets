@@ -4,7 +4,6 @@ import { withTranslation } from 'react-i18next';
 import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core';
 
-import useAuthProvider from 'auth/useAuthProvider';
 import withAuth from 'auth/withAuth';
 import ConferenceDetails from 'components/ConferenceDetails';
 import Notification from 'components/common/Notification';
@@ -114,4 +113,4 @@ ConferenceDetailsContainer.defaultProps = {
   authenticated: false,
 };
 
-export default useAuthProvider(withAuth(withTranslation()(ConferenceDetailsContainer)));
+export default withAuth(withTranslation()(ConferenceDetailsContainer));

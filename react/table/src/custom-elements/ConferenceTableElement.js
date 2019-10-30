@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import retargetEvents from 'react-shadow-dom-retarget-events';
 
 import { StylesProvider, jssPreset } from '@material-ui/core/styles';
 import { create } from 'jss';
 
+import { getAuthMethod } from 'auth/utils';
+import WidgetKeycloakProvider from 'auth/keycloak/WidgetKeycloakProvider';
 import setLocale from 'i18n/setLocale';
 import {
   createWidgetEventPublisher,
@@ -99,15 +101,19 @@ class ConferenceTableElement extends HTMLElement {
       this.unsubscribeFromWidgetEvents();
     }
 
+    const AuthProvider = getAuthMethod() === 'KEYCLOAK' ? WidgetKeycloakProvider : Fragment;
+
     ReactDOM.render(
-      <StylesProvider jss={this.jss}>
-        <ConferenceTableContainer
-          ref={this.reactRootRef}
-          onAdd={this.onAdd}
-          onSelect={this.onSelect}
-          onError={this.onError}
-        />
-      </StylesProvider>,
+      <AuthProvider>
+        <StylesProvider jss={this.jss}>
+          <ConferenceTableContainer
+            ref={this.reactRootRef}
+            onAdd={this.onAdd}
+            onSelect={this.onSelect}
+            onError={this.onError}
+          />
+        </StylesProvider>
+      </AuthProvider>,
       this.mountPoint
     );
   }

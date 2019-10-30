@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withKeycloak } from 'react-keycloak';
 
-import useKeycloak from 'auth/keycloak/useKeycloak';
+import { getAuthMethod } from 'auth/utils';
+
+const keycloakAuthMethod = getAuthMethod() === 'KEYCLOAK';
 
 const withAuth = WrappedComponent => {
   const AuthenticatedComponent = props => {
@@ -11,17 +13,17 @@ const withAuth = WrappedComponent => {
     // if keycloak is not used, app is initialized and authenticated by default
     const authenticatedProps = {
       ...rest,
-      authInitialized: useKeycloak ? keycloakInitialized : true,
-      authProvider: useKeycloak ? keycloak : {},
-      authenticated: useKeycloak ? keycloak.authenticated : true,
-      authToken: useKeycloak ? keycloak.token : null,
+      authInitialized: keycloakAuthMethod ? keycloakInitialized : true,
+      authProvider: keycloakAuthMethod ? keycloak : {},
+      authenticated: keycloakAuthMethod ? keycloak.authenticated : true,
+      authToken: keycloakAuthMethod ? keycloak.token : null,
     };
 
     // eslint-disable-next-line react/jsx-props-no-spreading
     return <WrappedComponent {...authenticatedProps} />;
   };
 
-  if (useKeycloak) {
+  if (keycloakAuthMethod) {
     AuthenticatedComponent.propTypes = {
       keycloakInitialized: PropTypes.bool.isRequired,
       keycloak: PropTypes.shape({

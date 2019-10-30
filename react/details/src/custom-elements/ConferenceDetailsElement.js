@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import i18next from 'i18next';
+
+import { getAuthMethod } from 'auth/utils';
+import WidgetKeycloakProvider from 'auth/keycloak/WidgetKeycloakProvider';
 import ConferenceDetailsContainer from 'components/ConferenceDetailsContainer';
 
 class ConferenceDetailsElement extends HTMLElement {
@@ -24,11 +27,13 @@ class ConferenceDetailsElement extends HTMLElement {
 
     const id = this.getAttribute('id');
 
-    const reactComponent = React.createElement(ConferenceDetailsContainer, {
+    const AuthProvider = getAuthMethod() === 'KEYCLOAK' ? WidgetKeycloakProvider : Fragment;
+
+    const ReactComponent = React.createElement(ConferenceDetailsContainer, {
       id,
       onError,
     });
-    ReactDOM.render(reactComponent, mountPoint);
+    ReactDOM.render(<AuthProvider>{ReactComponent}</AuthProvider>, mountPoint);
   }
 }
 
