@@ -8,31 +8,25 @@ import ConferenceTableContainer from 'components/ConferenceTableContainer';
 
 jest.mock('api/conferences');
 
+jest.mock(
+  'auth/useAuthProvider',
+  // eslint-disable-next-line react/jsx-props-no-spreading
+  () => Component => props => <Component {...props} />
+);
+
 jest.mock('auth/withAuth', () => {
-  return Component => {
+  const withAuth = Component => {
     return props => (
       <Component
         {...props} // eslint-disable-line react/jsx-props-no-spreading
+        authenticated
+        authInitialized
+        authProvider={{}}
+        authToken=""
       />
     );
   };
-});
-
-jest.mock('react-keycloak', () => {
-  return {
-    withKeycloak(Component) {
-      return props => (
-        <Component
-          {...props} // eslint-disable-line react/jsx-props-no-spreading
-          keycloak={{
-            authenticated: true,
-            token: null,
-          }}
-          keycloakInitialized
-        />
-      );
-    },
-  };
+  return withAuth;
 });
 
 describe('ConferenceTableContainer', () => {
