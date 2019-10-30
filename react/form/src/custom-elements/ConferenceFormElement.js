@@ -1,16 +1,17 @@
-import setLocale from 'i18n/setLocale';
-import { createWidgetEventPublisher, subscribeToWidgetEvents } from 'helpers/widgetEvents';
-
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ConferenceEditFormContainer from 'components/ConferenceEditFormContainer';
-import ConferenceAddFormContainer from 'components/ConferenceAddFormContainer';
-import { INPUT_EVENT_TYPES, OUTPUT_EVENT_TYPES } from 'custom-elements/widgetEventTypes';
+import retargetEvents from 'react-shadow-dom-retarget-events';
 
 import { StylesProvider, ThemeProvider, jssPreset } from '@material-ui/core/styles';
 import { createMuiTheme } from '@material-ui/core';
 import { create } from 'jss';
-import retargetEvents from 'react-shadow-dom-retarget-events';
+
+import setLocale from 'i18n/setLocale';
+import { createWidgetEventPublisher, subscribeToWidgetEvents } from 'helpers/widgetEvents';
+
+import { INPUT_EVENT_TYPES, OUTPUT_EVENT_TYPES } from 'custom-elements/widgetEventTypes';
+import ConferenceEditFormContainer from 'components/ConferenceEditFormContainer';
+import ConferenceAddFormContainer from 'components/ConferenceAddFormContainer';
 
 const ATTRIBUTES = {
   id: 'id',
