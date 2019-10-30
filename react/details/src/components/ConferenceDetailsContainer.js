@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
-import { withKeycloak } from 'react-keycloak';
 import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core';
 
+import useAuthProvider from 'auth/useAuthProvider';
+import withAuth from 'auth/withAuth';
 import ConferenceDetails from 'components/ConferenceDetails';
 import Notification from 'components/common/Notification';
 import getConference from 'api/conferences';
@@ -26,27 +27,32 @@ class ConferenceDetailsContainer extends React.Component {
   }
 
   componentDidMount() {
-    const { keycloakInitialized, keycloak } = this.props;
-    if (keycloakInitialized && keycloak.authenticated) {
+    const { authInitialized, authenticated } = this.props;
+    const userAuthenticated = authInitialized && authenticated;
+    if (userAuthenticated) {
       this.fetchData();
     }
   }
 
   componentDidUpdate(prevProps) {
-    const { keycloakInitialized, keycloak } = this.props;
-    if (!prevProps.keycloakInitialized && keycloakInitialized && keycloak.authenticated) {
+    const { authInitialized, authenticated } = this.props;
+
+    const userAuthenticated = authInitialized && authenticated;
+    const changedAuth = prevProps.authInitialized !== authInitialized;
+
+    if (userAuthenticated && changedAuth) {
       this.fetchData();
     }
   }
 
   fetchData() {
-    const { id, onError, keycloak, t } = this.props;
+    const { id, onError, t, authenticated, authToken } = this.props;
 
-    if (id) {
-      getConference({ id }, keycloak.token)
+    if (id && authenticated) {
+      getConference({ id }, authToken)
         .then(conference =>
           this.setState({
-            notificationStatus: null,
+            notificationStatus: Notification.INFO,
             notificationMessage: null,
             conference,
           })
@@ -70,16 +76,14 @@ class ConferenceDetailsContainer extends React.Component {
 
   closeNotification() {
     this.setState({
-      notificationStatus: null,
+      notificationStatus: Notification.INFO,
       notificationMessage: null,
     });
   }
 
   render() {
     const { conference, notificationStatus, notificationMessage, loading } = this.state;
-    const { keycloak, t } = this.props;
-
-    const authenticated = (keycloak && keycloak.authenticated) || false;
+    const { authenticated, t } = this.props;
 
     return (
       <ThemeProvider theme={this.theme}>
@@ -99,15 +103,15 @@ ConferenceDetailsContainer.propTypes = {
   id: PropTypes.string.isRequired,
   onError: PropTypes.func,
   t: PropTypes.func.isRequired,
-  keycloak: PropTypes.shape({
-    authenticated: PropTypes.bool,
-    token: PropTypes.string,
-  }).isRequired,
-  keycloakInitialized: PropTypes.bool.isRequired,
+  authenticated: PropTypes.bool,
+  authInitialized: PropTypes.bool.isRequired,
+  authToken: PropTypes.string,
 };
 
 ConferenceDetailsContainer.defaultProps = {
   onError: () => {},
+  authToken: null,
+  authenticated: false,
 };
 
-export default withKeycloak(withTranslation()(ConferenceDetailsContainer));
+export default useAuthProvider(withAuth(withTranslation()(ConferenceDetailsContainer)));

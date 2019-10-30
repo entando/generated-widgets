@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import i18next from 'i18next';
-import ConferenceDetailsWidget from 'components/ConferenceDetailsWidget';
+import ConferenceDetailsContainer from 'components/ConferenceDetailsContainer';
 
 class ConferenceDetailsElement extends HTMLElement {
   connectedCallback() {
@@ -24,7 +24,7 @@ class ConferenceDetailsElement extends HTMLElement {
 
     const id = this.getAttribute('id');
 
-    const reactComponent = React.createElement(ConferenceDetailsWidget, {
+    const reactComponent = React.createElement(ConferenceDetailsContainer, {
       id,
       onError,
     });

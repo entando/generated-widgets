@@ -47,7 +47,7 @@ const autoHideDurations = {
 
 const Notification = ({ className, classes, status, message, onClose }) => {
   const isOpen = !!message;
-
+  
   const Icon = statusIcon[status];
   const autoHideDuration = autoHideDurations[status];
 
