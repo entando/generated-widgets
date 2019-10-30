@@ -1,0 +1,11 @@
+{
+  "name": "entando-microfrontend-wrapper",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "serve -l 5000"
+  },
+  "devDependencies": {
+    "serve": "^11.2.0"
+  }
+}

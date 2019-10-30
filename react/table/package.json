@@ -1,18 +1,19 @@
 {
-  "name": "event-table-widget",
+  "name": "conference-table-widget",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@material-ui/core": "^4.4.3",
-    "@material-ui/icons": "^4.4.3",
-    "@material-ui/styles": "^4.4.3",
+    "@material-ui/core": "^4.5.1",
+    "@material-ui/icons": "^4.5.1",
     "clsx": "^1.0.4",
     "i18next": "^17.0.16",
+    "jss": "^10.0.0",
     "prop-types": "^15.7.2",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-i18next": "^10.12.5",
-    "react-scripts": "3.1.1"
+    "react-scripts": "3.1.1",
+    "react-shadow-dom-retarget-events": "^1.0.10"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -92,12 +93,12 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.14.3",
-    "eslint-plugin-react-hooks": "^1.7.0",
     "husky": "^3.0.5",
     "i18next-scanner": "^2.10.2",
     "lint-staged": "^9.2.5",
     "prettier": "^1.18.2",
-    "pretty-quick": "^1.11.1"
+    "pretty-quick": "^1.11.1",
+    "serve": "^11.2.0"
   },
   "jest": {
     "collectCoverageFrom": [

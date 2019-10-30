@@ -1,18 +1,16 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import ConferenceForm from 'components/ConferenceForm';
-import Notification from 'components/common/Notification';
-import { ThemeProvider } from '@material-ui/styles';
-import { createMuiTheme } from '@material-ui/core';
 import { withTranslation } from 'react-i18next';
+
 import { apiConferenceGet, apiConferencePut } from 'api/conferences';
 
-class ConferenceEditFormContainer extends PureComponent {
-  theme = createMuiTheme();
+import Notification from 'components/common/Notification';
+import ConferenceForm from 'components/ConferenceForm';
 
+class ConferenceEditFormContainer extends PureComponent {
   state = {
-    conference: null,
     notificationMessage: null,
+    notificationStatus: null,
   };
 
   constructor(props) {
@@ -21,34 +19,44 @@ class ConferenceEditFormContainer extends PureComponent {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  async componentDidMount() {
+  componentDidMount() {
+    this.fetchConference();
+  }
+
+  componentDidUpdate(prevProps) {
+    const { id } = this.props;
+    if (id && id !== prevProps.id) {
+      this.fetchConference();
+    }
+  }
+
+  async fetchConference() {
     const { id } = this.props;
     if (!id) return;
     try {
       const conference = await apiConferenceGet(id);
-      this.setState({
+      this.setState(() => ({
         conference,
-      });
+      }));
     } catch (err) {
       this.handleError(err);
     }
   }
 
   closeNotification() {
-    this.setState({ notificationMessage: null, notificationStatus: null });
+    this.setState(() => ({ notificationMessage: null }));
   }
 
   async handleSubmit(conference) {
-    const { t } = this.props;
+    const { t, onUpdate } = this.props;
     try {
       const updatedConference = await apiConferencePut(conference);
-      const { onUpdate } = this.props;
       onUpdate(updatedConference);
 
       this.setState({
         conference: updatedConference,
         notificationMessage: t('common.dataSaved'),
-        notificationStatus: 'success',
+        notificationStatus: Notification.SUCCESS,
       });
     } catch (err) {
       this.handleError(err);
@@ -58,23 +66,23 @@ class ConferenceEditFormContainer extends PureComponent {
   handleError(err) {
     const { t, onError } = this.props;
     onError(err);
-    this.setState({
+    this.setState(() => ({
       notificationMessage: t('errors.dataLoading'),
-      notificationStatus: 'error',
-    });
+      notificationStatus: Notification.ERROR,
+    }));
   }
 
   render() {
     const { notificationMessage, notificationStatus, conference } = this.state;
     return (
-      <ThemeProvider theme={this.theme}>
+      <>
         <ConferenceForm conference={conference} onSubmit={this.handleSubmit} />
         <Notification
           variant={notificationStatus}
           message={notificationMessage}
           onClose={this.closeNotification}
         />
-      </ThemeProvider>
+      </>
     );
   }
 }
@@ -87,8 +95,8 @@ ConferenceEditFormContainer.propTypes = {
 };
 
 ConferenceEditFormContainer.defaultProps = {
-  onError: () => {},
   onUpdate: () => {},
+  onError: () => {},
 };
 
 export default withTranslation()(ConferenceEditFormContainer);

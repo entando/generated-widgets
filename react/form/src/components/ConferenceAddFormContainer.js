@@ -1,17 +1,16 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import ConferenceForm from 'components/ConferenceForm';
-import Notification from 'components/common/Notification';
-import { ThemeProvider } from '@material-ui/styles';
-import { createMuiTheme } from '@material-ui/core';
 import { withTranslation } from 'react-i18next';
+
 import { apiConferencePost } from 'api/conferences';
 
-class ConferenceAddFormContainer extends PureComponent {
-  theme = createMuiTheme();
+import Notification from 'components/common/Notification';
+import ConferenceForm from 'components/ConferenceForm';
 
+class ConferenceAddFormContainer extends PureComponent {
   state = {
     notificationMessage: null,
+    notificationStatus: null,
   };
 
   constructor(props) {
@@ -21,19 +20,17 @@ class ConferenceAddFormContainer extends PureComponent {
   }
 
   closeNotification() {
-    this.setState({ notificationMessage: null, notificationStatus: null });
+    this.setState({ notificationMessage: null });
   }
 
   async handleSubmit(conference) {
-    const { t } = this.props;
+    const { t, onCreate } = this.props;
     try {
       const createdConference = await apiConferencePost(conference);
-      const { onCreate } = this.props;
       onCreate(createdConference);
-
       this.setState({
         notificationMessage: t('common.dataSaved'),
-        notificationStatus: 'success',
+        notificationStatus: Notification.SUCCESS,
       });
     } catch (err) {
       this.handleError(err);
@@ -45,21 +42,21 @@ class ConferenceAddFormContainer extends PureComponent {
     onError(err);
     this.setState({
       notificationMessage: t('errors.dataLoading'),
-      notificationStatus: 'error',
+      notificationStatus: Notification.ERROR,
     });
   }
 
   render() {
     const { notificationMessage, notificationStatus } = this.state;
     return (
-      <ThemeProvider theme={this.theme}>
+      <>
         <ConferenceForm onSubmit={this.handleSubmit} />
         <Notification
           variant={notificationStatus}
           message={notificationMessage}
           onClose={this.closeNotification}
         />
-      </ThemeProvider>
+      </>
     );
   }
 }

@@ -6,7 +6,7 @@
 
 - **locale** (default: `en`)
 
-### Events
+### Custom Events
 
 - **_[entityName]_.table.error** (fired when an error occurs)
 - **_[entityName]_.table.select** (fired when a table row is selected)

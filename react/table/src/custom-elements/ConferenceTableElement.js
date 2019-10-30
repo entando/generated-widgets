@@ -2,40 +2,38 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import retargetEvents from 'react-shadow-dom-retarget-events';
 
-import { StylesProvider, ThemeProvider, jssPreset } from '@material-ui/core/styles';
-import { createMuiTheme } from '@material-ui/core';
+import { StylesProvider, jssPreset } from '@material-ui/core/styles';
 import { create } from 'jss';
 
 import setLocale from 'i18n/setLocale';
-import { createWidgetEventPublisher, subscribeToWidgetEvents } from 'helpers/widgetEvents';
+import {
+  createWidgetEventPublisher,
+  subscribeToWidgetEvents,
+  widgetEventToFSA,
+} from 'helpers/widgetEvents';
 
 import { INPUT_EVENT_TYPES, OUTPUT_EVENT_TYPES } from 'custom-elements/widgetEventTypes';
-import ConferenceEditFormContainer from 'components/ConferenceEditFormContainer';
-import ConferenceAddFormContainer from 'components/ConferenceAddFormContainer';
+import ConferenceTableContainer from 'components/ConferenceTableContainer';
 
 const ATTRIBUTES = {
-  id: 'id',
   hidden: 'hidden',
   locale: 'locale',
   disableDefaultEventHandler: 'disable-default-event-handler', // custom element attribute names MUST be written in kebab-case
 };
-
-class ConferenceFormElement extends HTMLElement {
+class ConferenceTableElement extends HTMLElement {
   jss;
 
   mountPoint;
 
   unsubscribeFromWidgetEvents;
 
-  onCreate = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.create);
+  onAdd = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.add);
 
-  onUpdate = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.update);
+  onError = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.error);
 
-  onErrorCreate = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.errorCreate);
+  onSelect = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.select);
 
-  onErrorUpdate = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.errorUpdate);
-
-  muiTheme;
+  reactRootRef = React.createRef();
 
   static get observedAttributes() {
     return Object.values(ATTRIBUTES);
@@ -62,13 +60,6 @@ class ConferenceFormElement extends HTMLElement {
       insertionPoint: this.mountPoint,
     });
 
-    this.muiTheme = createMuiTheme({
-      props: {
-        MuiDialog: {
-          container: this.mountPoint,
-        },
-      },
-    });
     this.render();
 
     retargetEvents(shadowRoot);
@@ -82,27 +73,14 @@ class ConferenceFormElement extends HTMLElement {
 
   defaultWidgetEventHandler() {
     return evt => {
-      const { tableAdd, tableSelect } = INPUT_EVENT_TYPES;
-      const { id } = ATTRIBUTES;
-      switch (evt.type) {
-        case tableAdd: {
-          this.setAttribute(id, '');
-          break;
-        }
-        case tableSelect: {
-          this.setAttribute(id, evt.detail.payload.id);
-          break;
-        }
-        default:
-          throw new Error(`Unsupported event: ${evt.type}`);
-      }
+      const action = widgetEventToFSA(evt);
+      this.reactRootRef.current.dispatch(action);
     };
   }
 
   render() {
     const hidden = this.getAttribute(ATTRIBUTES.hidden) === 'true';
     if (hidden) {
-      ReactDOM.render(<></>);
       return;
     }
 
@@ -121,27 +99,18 @@ class ConferenceFormElement extends HTMLElement {
       this.unsubscribeFromWidgetEvents();
     }
 
-    const id = this.getAttribute(ATTRIBUTES.id);
-
-    const FormContainer = id
-      ? React.createElement(
-          ConferenceEditFormContainer,
-          { id, onUpdate: this.onUpdate, onError: this.onErrorUpdate },
-          null
-        )
-      : React.createElement(
-          ConferenceAddFormContainer,
-          { onCreate: this.onCreate, onError: this.onErrorCreate },
-          null
-        );
-
     ReactDOM.render(
       <StylesProvider jss={this.jss}>
-        <ThemeProvider theme={this.muiTheme}>{FormContainer}</ThemeProvider>
+        <ConferenceTableContainer
+          ref={this.reactRootRef}
+          onAdd={this.onAdd}
+          onSelect={this.onSelect}
+          onError={this.onError}
+        />
       </StylesProvider>,
       this.mountPoint
     );
   }
 }
 
-customElements.define('conference-form', ConferenceFormElement);
+customElements.define('conference-table', ConferenceTableElement);
