@@ -6,7 +6,7 @@ export default (params = {}, token) => {
   const url = `${DOMAIN}${DOMAIN.endsWith('/') ? '' : '/'}conferences/${id}`;
   const defaultOptions = {
     headers: new Headers({
-      Authorization: `Bearer ${JWT_TOKEN || token}`, // TODO: defaults to JWT, should be token only
+      Authorization: `Bearer ${JWT_TOKEN || token}`,
       'Content-Type': 'application/json',
     }),
   };
