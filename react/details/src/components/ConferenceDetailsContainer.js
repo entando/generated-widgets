@@ -98,12 +98,12 @@ class ConferenceDetailsContainer extends React.Component {
         <AuthenticatedView keycloak={keycloak}>
           {loading && t('common.loading')}
           {!loading && <ConferenceDetails conference={conference} />}
-          <Notification
-            status={notificationStatus}
-            message={notificationMessage}
-            onClose={this.closeNotification}
-          />
         </AuthenticatedView>
+        <Notification
+          status={notificationStatus}
+          message={notificationMessage}
+          onClose={this.closeNotification}
+        />
       </ThemeProvider>
     );
   }

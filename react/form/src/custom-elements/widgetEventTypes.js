@@ -9,3 +9,5 @@ export const OUTPUT_EVENT_TYPES = {
   errorCreate: 'conference.form.errorCreate',
   errorUpdate: 'conference.form.errorUpdate',
 };
+
+export const KEYCLOAK_EVENT_TYPE = 'keycloak';

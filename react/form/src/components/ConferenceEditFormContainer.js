@@ -2,7 +2,9 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 
-import withAuth from 'auth/withAuth';
+import keycloakType from 'components/__types__/keycloak';
+import { withKeycloak } from 'auth/KeycloakContext';
+import { AuthenticatedView, UnauthenticatedView } from 'auth/KeycloakViews';
 import { apiConferenceGet, apiConferencePut } from 'api/conferences';
 import Notification from 'components/common/Notification';
 import ConferenceForm from 'components/ConferenceForm';
@@ -20,36 +22,39 @@ class ConferenceEditFormContainer extends PureComponent {
   }
 
   componentDidMount() {
-    const { authInitialized, authenticated } = this.props;
-    const userAuthenticated = authInitialized && authenticated;
+    const { keycloak } = this.props;
+    const authenticated = keycloak.initialized && keycloak.authenticated;
 
-    if (userAuthenticated) {
-      this.fetchConference();
+    if (authenticated) {
+      this.fetchData();
     }
   }
 
   componentDidUpdate(prevProps) {
-    const { authInitialized, authenticated, id } = this.props;
+    const { keycloak, id } = this.props;
+    const authenticated = keycloak.initialized && keycloak.authenticated;
 
-    const userAuthenticated = authInitialized && authenticated;
+    const changedAuth = prevProps.keycloak.authenticated !== authenticated;
     const changedId = id && id !== prevProps.id;
-    const changedAuth = prevProps.authInitialized !== authInitialized;
 
-    if (userAuthenticated && (changedId || changedAuth)) {
-      this.fetchConference();
+    if (authenticated && (changedId || changedAuth)) {
+      this.fetchData();
     }
   }
 
-  async fetchConference() {
-    const { id, authenticated, authToken } = this.props;
-    if (!id || !authenticated) return;
-    try {
-      const conference = await apiConferenceGet(id, authToken);
-      this.setState(() => ({
-        conference,
-      }));
-    } catch (err) {
-      this.handleError(err);
+  async fetchData() {
+    const { keycloak, id } = this.props;
+    const authenticated = keycloak.initialized && keycloak.authenticated;
+
+    if (authenticated && id) {
+      try {
+        const conference = await apiConferenceGet(id);
+        this.setState(() => ({
+          conference,
+        }));
+      } catch (err) {
+        this.handleError(err);
+      }
     }
   }
 
@@ -58,10 +63,12 @@ class ConferenceEditFormContainer extends PureComponent {
   }
 
   async handleSubmit(conference) {
-    const { t, onUpdate, authenticated, authToken } = this.props;
+    const { t, onUpdate, keycloak } = this.props;
+    const authenticated = keycloak.initialized && keycloak.authenticated;
+
     if (authenticated) {
       try {
-        const updatedConference = await apiConferencePut(conference, authToken);
+        const updatedConference = await apiConferencePut(conference);
         onUpdate(updatedConference);
 
         this.setState({
@@ -85,14 +92,19 @@ class ConferenceEditFormContainer extends PureComponent {
   }
 
   render() {
-    const { authenticated } = this.props;
-
+    const { keycloak, t } = this.props;
     const { notificationMessage, notificationStatus, conference } = this.state;
+
     return (
       <>
-        {authenticated && <ConferenceForm conference={conference} onSubmit={this.handleSubmit} />}
+        <UnauthenticatedView keycloak={keycloak}>
+          {t('common.notAuthenticated')}
+        </UnauthenticatedView>
+        <AuthenticatedView keycloak={keycloak}>
+          <ConferenceForm conference={conference} onSubmit={this.handleSubmit} />
+        </AuthenticatedView>
         <Notification
-          variant={notificationStatus}
+          status={notificationStatus}
           message={notificationMessage}
           onClose={this.closeNotification}
         />
@@ -106,16 +118,12 @@ ConferenceEditFormContainer.propTypes = {
   onError: PropTypes.func,
   onUpdate: PropTypes.func,
   t: PropTypes.func.isRequired,
-  authenticated: PropTypes.bool,
-  authInitialized: PropTypes.bool.isRequired,
-  authToken: PropTypes.string,
+  keycloak: keycloakType.isRequired,
 };
 
 ConferenceEditFormContainer.defaultProps = {
   onUpdate: () => {},
   onError: () => {},
-  authToken: null,
-  authenticated: false,
 };
 
-export default withAuth(withTranslation()(ConferenceEditFormContainer));
+export default withKeycloak(withTranslation()(ConferenceEditFormContainer));

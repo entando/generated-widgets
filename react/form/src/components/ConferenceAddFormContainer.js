@@ -2,32 +2,37 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 
-import withAuth from 'auth/withAuth';
+import keycloakType from 'components/__types__/keycloak';
+import { withKeycloak } from 'auth/KeycloakContext';
+import { AuthenticatedView, UnauthenticatedView } from 'auth/KeycloakViews';
 import { apiConferencePost } from 'api/conferences';
 import Notification from 'components/common/Notification';
 import ConferenceForm from 'components/ConferenceForm';
 
 class ConferenceAddFormContainer extends PureComponent {
-  state = {
-    notificationMessage: null,
-    notificationStatus: null,
-  };
-
   constructor(props) {
     super(props);
+
+    this.state = {
+      notificationMessage: null,
+      notificationStatus: null,
+    };
+
     this.closeNotification = this.closeNotification.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   closeNotification() {
-    this.setState({ notificationMessage: null });
+    this.setState({ notificationMessage: null, notificationStatus: null });
   }
 
   async handleSubmit(conference) {
-    const { t, onCreate, authenticated, authToken } = this.props;
+    const { t, onCreate, keycloak } = this.props;
+    const authenticated = keycloak.initialized && keycloak.authenticated;
+
     if (authenticated) {
       try {
-        const createdConference = await apiConferencePost(conference, authToken);
+        const createdConference = await apiConferencePost(conference);
         onCreate(createdConference);
         this.setState({
           notificationMessage: t('common.dataSaved'),
@@ -49,13 +54,19 @@ class ConferenceAddFormContainer extends PureComponent {
   }
 
   render() {
-    const { authenticated } = this.props;
+    const { keycloak, t } = this.props;
     const { notificationMessage, notificationStatus } = this.state;
+
     return (
       <>
-        {authenticated && <ConferenceForm onSubmit={this.handleSubmit} />}
+        <UnauthenticatedView keycloak={keycloak}>
+          {t('common.notAuthenticated')}
+        </UnauthenticatedView>
+        <AuthenticatedView keycloak={keycloak}>
+          <ConferenceForm onSubmit={this.handleSubmit} />
+        </AuthenticatedView>
         <Notification
-          variant={notificationStatus}
+          status={notificationStatus}
           message={notificationMessage}
           onClose={this.closeNotification}
         />
@@ -68,15 +79,12 @@ ConferenceAddFormContainer.propTypes = {
   onError: PropTypes.func,
   onCreate: PropTypes.func,
   t: PropTypes.func.isRequired,
-  authenticated: PropTypes.bool,
-  authToken: PropTypes.string,
+  keycloak: keycloakType.isRequired,
 };
 
 ConferenceAddFormContainer.defaultProps = {
   onError: () => {},
   onCreate: () => {},
-  authenticated: false,
-  authToken: null,
 };
 
-export default withAuth(withTranslation()(ConferenceAddFormContainer));
+export default withKeycloak(withTranslation()(ConferenceAddFormContainer));

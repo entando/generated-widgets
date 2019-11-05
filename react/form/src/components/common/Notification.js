@@ -1,12 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-
 import { Snackbar, SnackbarContent } from '@material-ui/core';
 import { green } from '@material-ui/core/colors';
 import { withStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
-
 import ErrorIcon from '@material-ui/icons/Error';
 import InfoIcon from '@material-ui/icons/Info';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
@@ -20,7 +18,7 @@ const styles = theme => ({
   icon: {
     fontSize: 20,
   },
-  iconVariant: {
+  iconStatus: {
     opacity: 0.9,
     marginRight: theme.spacing(1),
   },
@@ -35,7 +33,7 @@ const styles = theme => ({
   },
 });
 
-const variantIcon = {
+const statusIcon = {
   success: CheckCircleIcon,
   error: ErrorIcon,
   info: InfoIcon,
@@ -47,16 +45,16 @@ const autoHideDurations = {
   info: 5000,
 };
 
-const Notification = ({ className, classes, variant: nullableVariant, message, onClose }) => {
-  const variant = nullableVariant || Notification.INFO;
+const Notification = ({ className, classes, status: passedStatus, message, onClose }) => {
   const isOpen = !!message;
 
-  const Icon = variantIcon[variant];
-  const autoHideDuration = autoHideDurations[variant];
+  const status = passedStatus || Notification.INFO;
+  const Icon = statusIcon[status];
+  const autoHideDuration = autoHideDurations[status];
 
   const messageTemplate = (
     <span className={classes.message}>
-      <Icon className={clsx(classes.icon, classes.iconVariant)} />
+      <Icon className={clsx(classes.icon, classes.iconStatus)} />
       {message}
     </span>
   );
@@ -64,7 +62,7 @@ const Notification = ({ className, classes, variant: nullableVariant, message, o
   return (
     <Snackbar open={isOpen} onClose={onClose} autoHideDuration={autoHideDuration}>
       <SnackbarContent
-        className={clsx(classes[variant], className)}
+        className={clsx(classes[status], className)}
         message={messageTemplate}
         action={[
           <IconButton key="close" aria-label="close" color="inherit" onClick={onClose}>
@@ -84,11 +82,11 @@ Notification.propTypes = {
   classes: PropTypes.shape({
     message: PropTypes.string.isRequired,
     icon: PropTypes.string.isRequired,
-    iconVariant: PropTypes.string.isRequired,
+    iconStatus: PropTypes.string.isRequired,
     error: PropTypes.string.isRequired,
   }).isRequired,
   className: PropTypes.string,
-  variant: PropTypes.oneOf([Notification.SUCCESS, Notification.ERROR, Notification.INFO]),
+  status: PropTypes.oneOf([Notification.SUCCESS, Notification.ERROR, Notification.INFO]),
   message: PropTypes.string,
   onClose: PropTypes.func,
 };
@@ -96,7 +94,7 @@ Notification.propTypes = {
 Notification.defaultProps = {
   message: null,
   className: '',
-  variant: Notification.INFO,
+  status: Notification.INFO,
   onClose: () => {},
 };
 

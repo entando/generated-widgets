@@ -1,13 +1,26 @@
 import { DOMAIN, JWT_TOKEN } from 'api/constants';
 
-const resource = 'conferences';
+const getKeycloakToken = () => {
+  if (
+    window &&
+    window.entando &&
+    window.entando.keycloak &&
+    window.entando.keycloak.initialized &&
+    window.entando.keycloak.authenticated
+  ) {
+    return window.entando.keycloak.token;
+  }
+  return '';
+};
 
-const getDefaultOptions = token => ({
+const getDefaultOptions = () => ({
   headers: new Headers({
-    Authorization: `Bearer ${JWT_TOKEN || token}`,
+    Authorization: `Bearer ${JWT_TOKEN || getKeycloakToken()}`,
     'Content-Type': 'application/json',
   }),
 });
+
+const resource = 'conferences';
 
 const request = async (url, options) => {
   const response = await fetch(url, options);
@@ -17,20 +30,20 @@ const request = async (url, options) => {
     : Promise.reject(new Error(response.statusText || response.status));
 };
 
-export const apiConferenceGet = async (id, token) => {
+export const apiConferenceGet = async id => {
   const url = `${DOMAIN}/${resource}/${id}`;
   const options = {
-    ...getDefaultOptions(token),
+    ...getDefaultOptions(),
     method: 'GET',
   };
 
   return request(url, options);
 };
 
-export const apiConferencePost = async (conference, token) => {
+export const apiConferencePost = async conference => {
   const url = `${DOMAIN}/${resource}`;
   const options = {
-    ...getDefaultOptions(token),
+    ...getDefaultOptions(),
     method: 'POST',
     body: conference ? JSON.stringify(conference) : null,
   };
@@ -38,10 +51,10 @@ export const apiConferencePost = async (conference, token) => {
   return request(url, options);
 };
 
-export const apiConferencePut = async (conference, token) => {
+export const apiConferencePut = async conference => {
   const url = `${DOMAIN}/${resource}`;
   const options = {
-    ...getDefaultOptions(token),
+    ...getDefaultOptions(),
     method: 'PUT',
     body: conference ? JSON.stringify(conference) : null,
   };

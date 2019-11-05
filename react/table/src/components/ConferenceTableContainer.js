@@ -23,11 +23,12 @@ const styles = {
 class ConferenceTableContainer extends Component {
   constructor(props) {
     super(props);
+
+    this.state = initialState;
+
     this.handleError = this.handleError.bind(this);
     this.closeNotification = this.closeNotification.bind(this);
   }
-
-  state = initialState;
 
   componentDidMount() {
     const { keycloak } = this.props;
@@ -90,7 +91,7 @@ class ConferenceTableContainer extends Component {
     return (
       <>
         <UnauthenticatedView keycloak={keycloak}>
-          {t('conference.notAuthenticated')}
+          {t('common.notAuthenticated')}
         </UnauthenticatedView>
         <AuthenticatedView keycloak={keycloak}>
           <Fab color="primary" aria-label="add" className={classes.fab} onClick={onAdd}>
