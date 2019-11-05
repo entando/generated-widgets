@@ -5,7 +5,9 @@ import { Fab } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 
-import withAuth from 'auth/withAuth';
+import keycloakType from 'components/__types__/keycloak';
+import { withKeycloak } from 'auth/KeycloakContext';
+import { AuthenticatedView, UnauthenticatedView } from 'auth/KeycloakViews';
 import ConferenceTable from 'components/ConferenceTable';
 import Notification from 'components/common/Notification';
 import { apiConferencesGet } from 'api/conferences';
@@ -28,19 +30,21 @@ class ConferenceTableContainer extends Component {
   state = initialState;
 
   componentDidMount() {
-    const { authInitialized, authenticated } = this.props;
-    if (authInitialized && authenticated) {
+    const { keycloak } = this.props;
+    const authenticated = keycloak.initialized && keycloak.authenticated;
+
+    if (authenticated) {
       this.fetchData();
     }
   }
 
   componentDidUpdate(prevProps) {
-    const { authInitialized, authenticated } = this.props;
+    const { keycloak } = this.props;
+    const authenticated = keycloak.initialized && keycloak.authenticated;
 
-    const userAuthenticated = authInitialized && authenticated;
-    const changedAuth = prevProps.authInitialized !== authInitialized;
+    const changedAuth = prevProps.keycloak.authenticated !== authenticated;
 
-    if (userAuthenticated && changedAuth) {
+    if (authenticated && changedAuth) {
       this.fetchData();
     }
   }
@@ -50,10 +54,12 @@ class ConferenceTableContainer extends Component {
   }
 
   async fetchData() {
-    const { authToken, authenticated } = this.props;
+    const { keycloak } = this.props;
+    const authenticated = keycloak.initialized && keycloak.authenticated;
+
     if (authenticated) {
       try {
-        const conferences = await apiConferencesGet(authToken);
+        const conferences = await apiConferencesGet();
         this.dispatch({ type: READ_ALL, payload: conferences });
       } catch (err) {
         this.handleError(err);
@@ -68,21 +74,32 @@ class ConferenceTableContainer extends Component {
   handleError(err) {
     const { onError, t } = this.props;
     onError(err);
-    this.dispatch({ type: ERROR_FETCH, payload: t('conference.error.dataLoading') });
+    this.dispatch({
+      type: ERROR_FETCH,
+      payload: {
+        message: t('conference.error.dataLoading'),
+        status: Notification.ERROR,
+      },
+    });
   }
 
   render() {
-    const { items, errorMessage } = this.state;
-    const { classes, onSelect, onAdd, authenticated } = this.props;
+    const { items, errorMessage, errorStatus } = this.state;
+    const { classes, onSelect, onAdd, t, keycloak } = this.props;
 
     return (
       <>
-        <Fab color="primary" aria-label="add" className={classes.fab} onClick={onAdd}>
-          <AddIcon />
-        </Fab>
-        {authenticated && <ConferenceTable items={items} onSelect={onSelect} />}
+        <UnauthenticatedView keycloak={keycloak}>
+          {t('conference.notAuthenticated')}
+        </UnauthenticatedView>
+        <AuthenticatedView keycloak={keycloak}>
+          <Fab color="primary" aria-label="add" className={classes.fab} onClick={onAdd}>
+            <AddIcon />
+          </Fab>
+          <ConferenceTable items={items} onSelect={onSelect} />
+        </AuthenticatedView>
         <Notification
-          variant={Notification.ERROR}
+          status={errorStatus}
           message={errorMessage}
           onClose={this.closeNotification}
         />
@@ -99,18 +116,15 @@ ConferenceTableContainer.propTypes = {
   onError: PropTypes.func,
   onSelect: PropTypes.func,
   t: PropTypes.func.isRequired,
-  authenticated: PropTypes.bool,
-  authInitialized: PropTypes.bool.isRequired,
-  authToken: PropTypes.string,
+  keycloak: keycloakType.isRequired,
 };
 
 ConferenceTableContainer.defaultProps = {
   onAdd: () => {},
   onError: () => {},
   onSelect: () => {},
-  authToken: null,
-  authenticated: false,
 };
 
-export default
-  withAuth(withStyles(styles)(withTranslation(undefined, { withRef: true })(ConferenceTableContainer)));
+export default withKeycloak(
+  withStyles(styles)(withTranslation(undefined, { withRef: true })(ConferenceTableContainer))
+);

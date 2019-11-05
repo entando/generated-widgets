@@ -9,3 +9,5 @@ export const OUTPUT_EVENT_TYPES = {
   add: 'conference.table.add',
   error: 'conference.table.error',
 };
+
+export const KEYCLOAK_EVENT_TYPE = 'keycloak';

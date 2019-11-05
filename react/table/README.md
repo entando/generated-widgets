@@ -11,11 +11,7 @@
 There are several environment variables used in the widget that provide initial configuration of the widget. To set that up, create `.env` file in the root folder following constants:
 
 - REACT_APP_DOMAIN - API endpoint for data (e.g., http://localhost:8081/services/jhipster/api)
-- REACT_APP_JWT_TOKEN - JWT secret token, mainly used for local development 
-- REACT_APP_AUTH_TYPE=KEYCLOAK - authentication type, currently only Keyclock is supported
-- REACT_APP_KEYCLOAK_URL - Keycloak authentication server endpoint (e.g., http://localhost:8080/auth)
-- REACT_APP_KEYCLOAK_REALM - Keycloak authentication server realm (e.g., appRealm)
-- REACT_APP_KEYCLOAK_CLIENT_ID - Keycloak authentication server client ID (e.g., jhipster-entando-react-client)
+- REACT_APP_JWT_TOKEN - JWT secret token, mainly used for local development
 
 ### Custom Events
 

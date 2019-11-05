@@ -1,7 +1,18 @@
 /* eslint-disable import/prefer-default-export */
 import { DOMAIN, JWT_TOKEN } from 'api/constants';
 
-const resource = 'conferences';
+const getKeycloakToken = () => {
+  if (
+    window &&
+    window.entando &&
+    window.entando.keycloak &&
+    window.entando.keycloak.initialized &&
+    window.entando.keycloak.authenticated
+  ) {
+    return window.entando.keycloak.token;
+  }
+  return '';
+};
 
 const request = async (url, options) => {
   const response = await fetch(url, options);
@@ -11,8 +22,10 @@ const request = async (url, options) => {
     : Promise.reject(new Error(response.statusText || response.status));
 };
 
-export const apiConferencesGet = async token => {
-  const url = `${DOMAIN}/${resource}`;
+export const apiConferencesGet = async () => {
+  const url = `${DOMAIN}/conferences`;
+
+  const token = getKeycloakToken();
 
   const defaultOptions = {
     headers: new Headers({
