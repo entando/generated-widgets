@@ -5,26 +5,16 @@
     "name": "Name",
     "value": "Value",
     "loading": "Loading...",
-    "missingId": "Please provide allTypedBlobEntity ID",
+    "missingId": "Please provide conference ID",
     "notAuthenticated": "User is not authenticated."
   },
   "entities": {
-    "allTypedBlobEntity": {
+    "conference": {
       "id": "ID",
-      "stringField": "entities.allTypedBlobEntity.stringField",
-      "integerField": "entities.allTypedBlobEntity.integerField",
-      "longField": "entities.allTypedBlobEntity.longField",
-      "floatField": "entities.allTypedBlobEntity.floatField",
-      "doubleField": "entities.allTypedBlobEntity.doubleField",
-      "bigDecimalField": "entities.allTypedBlobEntity.bigDecimalField",
-      "localDateField": "entities.allTypedBlobEntity.localDateField",
-      "instantField": "entities.allTypedBlobEntity.instantField",
-      "zonedDateTimeField": "entities.allTypedBlobEntity.zonedDateTimeField",
-      "booleanField": "entities.allTypedBlobEntity.booleanField",
-      "enumField": "entities.allTypedBlobEntity.enumField",
-      "imageBlobField": "entities.allTypedBlobEntity.imageBlobField",
-      "binaryFileBlobField": "entities.allTypedBlobEntity.binaryFileBlobField",
-      "clobBlobField": "entities.allTypedBlobEntity.clobBlobField"
+      "name": "Title",
+      "summary": "Summary",
+      "start": "Start date",
+      "end": "End date"
     }
   }
 }
