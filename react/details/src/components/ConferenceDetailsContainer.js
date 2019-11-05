@@ -4,7 +4,9 @@ import { withTranslation } from 'react-i18next';
 import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core';
 
-import { withKeycloak, AuthenticatedView, UnauthenticatedView } from 'auth/KeycloakContext';
+import keycloakType from 'components/__types__/keycloak';
+import { withKeycloak } from 'auth/KeycloakContext';
+import { AuthenticatedView, UnauthenticatedView } from 'auth/KeycloakViews';
 import ConferenceDetails from 'components/ConferenceDetails';
 import Notification from 'components/common/Notification';
 import getConference from 'api/conferences';
@@ -111,6 +113,7 @@ ConferenceDetailsContainer.propTypes = {
   id: PropTypes.string.isRequired,
   onError: PropTypes.func,
   t: PropTypes.func.isRequired,
+  keycloak: keycloakType.isRequired,
 };
 
 ConferenceDetailsContainer.defaultProps = {

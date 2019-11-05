@@ -18,7 +18,7 @@ export const subscribeToWidgetEvent = (eventType, eventHandler) => {
   };
 };
 
-export const subscribeToWidgetsEvents = (widgetEvents, eventHandler) => {
+export const subscribeToWidgetEvents = (widgetEvents, eventHandler) => {
   widgetEvents.forEach(eventType => window.addEventListener(eventType, eventHandler));
 
   return () => {

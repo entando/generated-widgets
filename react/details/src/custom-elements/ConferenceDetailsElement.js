@@ -2,17 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import i18next from 'i18next';
 
-import {
-  subscribeToWidgetEvent,
-} from 'helpers/widgetEvents';
-import { KEYCLOAK_EVENT_TYPE } from 'custom-elements/widgetEventTypes';
-import ConferenceDetailsContainer from 'components/ConferenceDetailsContainer';
 import { KeycloakContext } from 'auth/KeycloakContext';
+import ConferenceDetailsContainer from 'components/ConferenceDetailsContainer';
+import { subscribeToWidgetEvent } from 'helpers/widgetEvents';
+import { KEYCLOAK_EVENT_TYPE } from 'custom-elements/widgetEventTypes';
 
-const getKeycloakInstance =
-  () =>
-    (window && window.entando && window.entando.keycloak && { ...window.entando.keycloak, initialized: true }) ||
-    { initialized: false };
+const getKeycloakInstance = () =>
+  (window &&
+    window.entando &&
+    window.entando.keycloak && { ...window.entando.keycloak, initialized: true }) || {
+    initialized: false,
+  };
 
 class ConferenceDetailsElement extends HTMLElement {
   constructor(...args) {
@@ -32,13 +32,10 @@ class ConferenceDetailsElement extends HTMLElement {
 
     this.keycloak = { ...getKeycloakInstance(), initialized: true };
 
-    this.unsubscribeFromKeycloakEvent = subscribeToWidgetEvent(
-      KEYCLOAK_EVENT_TYPE,
-      () => {
-        this.keycloak = { ...getKeycloakInstance(), initialized: true };
-        this.render();
-      }
-    );
+    this.unsubscribeFromKeycloakEvent = subscribeToWidgetEvent(KEYCLOAK_EVENT_TYPE, () => {
+      this.keycloak = { ...getKeycloakInstance(), initialized: true };
+      this.render();
+    });
 
     this.render();
   }
@@ -62,9 +59,7 @@ class ConferenceDetailsElement extends HTMLElement {
       onError,
     });
     ReactDOM.render(
-      <KeycloakContext.Provider value={ this.keycloak }>
-        {ReactComponent}
-      </KeycloakContext.Provider>,
+      <KeycloakContext.Provider value={this.keycloak}>{ReactComponent}</KeycloakContext.Provider>,
       this.mountPoint
     );
   }

@@ -9,19 +9,20 @@ import ConferenceDetailsContainer from 'components/ConferenceDetailsContainer';
 
 jest.mock('api/conferences');
 
-jest.mock('auth/withAuth', () => {
-  const withAuth = Component => {
+jest.mock('auth/KeycloakContext', () => {
+  const withKeycloak = Component => {
     return props => (
       <Component
         {...props} // eslint-disable-line react/jsx-props-no-spreading
-        authenticated
-        authInitialized
-        authProvider={{}}
-        authToken=""
+        keycloak={{
+          initialized: true,
+          authenticated: true,
+        }}
       />
     );
   };
-  return withAuth;
+
+  return { withKeycloak };
 });
 
 beforeEach(() => {
