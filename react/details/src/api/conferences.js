@@ -1,7 +1,21 @@
 import { DOMAIN, JWT_TOKEN } from 'api/constants';
 
+const getKeycloakToken =
+  () => {
+    if (
+      window && window.entando && window.entando.keycloak &&
+      window.entando.keycloak.initialized && window.entando.keycloak.authenticated
+    ) {
+      return window.entando.keycloak.token;
+    } else {
+      return '';
+    }
+  }
+
 export default (params = {}, token) => {
   const { id, options } = params;
+
+  const token = getKeycloakToken();
 
   const url = `${DOMAIN}${DOMAIN.endsWith('/') ? '' : '/'}conferences/${id}`;
   const defaultOptions = {

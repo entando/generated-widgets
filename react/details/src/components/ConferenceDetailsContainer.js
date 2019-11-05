@@ -51,7 +51,7 @@ class ConferenceDetailsContainer extends React.Component {
 
     if (authenticated) {
       if (id) {
-        getConference({ id }, keycloak.token)
+        getConference({ id })
           .then(conference =>
             this.setState({
               notificationStatus: null,
