@@ -2,10 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import i18next from 'i18next';
 
+import {
+  subscribeToWidgetEvent,
+} from 'helpers/widgetEvents';
+import { KEYCLOAK_EVENT_TYPE } from 'custom-elements/widgetEventTypes';
 import ConferenceDetailsContainer from 'components/ConferenceDetailsContainer';
 import { KeycloakContext } from 'auth/KeycloakContext';
-
-const KEYCLOAK_EVENT = 'keycloak';
 
 const getKeycloakInstance =
   () =>
@@ -17,6 +19,7 @@ class ConferenceDetailsElement extends HTMLElement {
     super(...args);
 
     this.mountPoint = null;
+    this.unsubscribeFromKeycloakEvent = null;
     this.keycloak = getKeycloakInstance();
   }
 
@@ -27,10 +30,15 @@ class ConferenceDetailsElement extends HTMLElement {
     const locale = this.getAttribute('locale') || 'en';
     i18next.changeLanguage(locale);
 
-    window.addEventListener(KEYCLOAK_EVENT, ({ detail: { eventType } }) => {
-      this.keycloak = { ...getKeycloakInstance(), initialized: true };
-      this.render();
-    });
+    this.keycloak = { ...getKeycloakInstance(), initialized: true };
+
+    this.unsubscribeFromKeycloakEvent = subscribeToWidgetEvent(
+      KEYCLOAK_EVENT_TYPE,
+      () => {
+        this.keycloak = { ...getKeycloakInstance(), initialized: true };
+        this.render();
+      }
+    );
 
     this.render();
   }
@@ -62,7 +70,9 @@ class ConferenceDetailsElement extends HTMLElement {
   }
 
   disconnectedCallback() {
-    window.removeEventListener(KEYCLOAK_EVENT);
+    if (this.unsubscribeFromKeycloakEvent) {
+      this.unsubscribeFromKeycloakEvent();
+    }
   }
 }
 

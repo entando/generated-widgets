@@ -12,7 +12,7 @@ const getKeycloakToken =
     }
   }
 
-export default (params = {}, token) => {
+export default (params = {}) => {
   const { id, options } = params;
 
   const token = getKeycloakToken();
