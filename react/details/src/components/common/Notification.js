@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { Snackbar, SnackbarContent } from '@material-ui/core';
-import { withStyles } from '@material-ui/styles';
+import { green } from '@material-ui/core/colors';
+import { withStyles } from '@material-ui/core/styles';
+import IconButton from '@material-ui/core/IconButton';
 import ErrorIcon from '@material-ui/icons/Error';
 import InfoIcon from '@material-ui/icons/Info';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CloseIcon from '@material-ui/icons/Close';
-import IconButton from '@material-ui/core/IconButton';
-import { green } from '@material-ui/core/colors';
 
 const styles = theme => ({
   message: {
@@ -45,14 +45,15 @@ const autoHideDurations = {
   info: 5000,
 };
 
-const Notification = ({ className, classes, status, message, onClose }) => {
+const Notification = ({ className, classes, status: passedStatus, message, onClose }) => {
   const isOpen = !!message;
-  
+
+  const status = passedStatus || Notification.INFO;
   const Icon = statusIcon[status];
   const autoHideDuration = autoHideDurations[status];
 
   const messageTemplate = (
-    <span>
+    <span className={classes.message}>
       <Icon className={clsx(classes.icon, classes.iconStatus)} />
       {message}
     </span>

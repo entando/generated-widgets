@@ -5,7 +5,8 @@
     "name": "Name",
     "value": "Value",
     "loading": "Loading...",
-    "missingId": "Please provide allTypedBlobEntity ID"
+    "missingId": "Please provide allTypedBlobEntity ID",
+    "notAuthenticated": "User is not authenticated."
   },
   "entities": {
     "allTypedBlobEntity": {
