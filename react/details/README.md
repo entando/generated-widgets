@@ -7,6 +7,13 @@
 - **locale** (default: `en`)
 - **id**
 
+### Environment variables
+
+There are several environment variables used in the widget that provide initial configuration of the widget. To set that up, create `.env` file in the root folder following constants:
+
+- REACT_APP_DOMAIN - API endpoint for data (e.g., http://localhost:8081/services/jhipster/api)
+- REACT_APP_JWT_TOKEN - JWT secret token, mainly used for local development
+
 ## i18n
 
 To add a new locale:

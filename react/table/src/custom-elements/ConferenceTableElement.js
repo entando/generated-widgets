@@ -5,27 +5,43 @@ import retargetEvents from 'react-shadow-dom-retarget-events';
 import { StylesProvider, jssPreset } from '@material-ui/core/styles';
 import { create } from 'jss';
 
+import { KeycloakContext } from 'auth/KeycloakContext';
+import ConferenceTableContainer from 'components/ConferenceTableContainer';
 import setLocale from 'i18n/setLocale';
 import {
   createWidgetEventPublisher,
   subscribeToWidgetEvents,
+  subscribeToWidgetEvent,
   widgetEventToFSA,
 } from 'helpers/widgetEvents';
+import {
+  INPUT_EVENT_TYPES,
+  OUTPUT_EVENT_TYPES,
+  KEYCLOAK_EVENT_TYPE,
+} from 'custom-elements/widgetEventTypes';
 
-import { INPUT_EVENT_TYPES, OUTPUT_EVENT_TYPES } from 'custom-elements/widgetEventTypes';
-import ConferenceTableContainer from 'components/ConferenceTableContainer';
+const getKeycloakInstance = () =>
+  (window &&
+    window.entando &&
+    window.entando.keycloak && { ...window.entando.keycloak, initialized: true }) || {
+    initialized: false,
+  };
 
 const ATTRIBUTES = {
   hidden: 'hidden',
   locale: 'locale',
   disableDefaultEventHandler: 'disable-default-event-handler', // custom element attribute names MUST be written in kebab-case
 };
+
 class ConferenceTableElement extends HTMLElement {
   jss;
 
   mountPoint;
 
   unsubscribeFromWidgetEvents;
+  unsubscribeFromKeycloakEvent;
+
+  keycloak = getKeycloakInstance();
 
   onAdd = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.add);
 
@@ -60,6 +76,13 @@ class ConferenceTableElement extends HTMLElement {
       insertionPoint: this.mountPoint,
     });
 
+    this.keycloak = { ...getKeycloakInstance(), initialized: true };
+
+    this.unsubscribeFromKeycloakEvent = subscribeToWidgetEvent(KEYCLOAK_EVENT_TYPE, () => {
+      this.keycloak = { ...getKeycloakInstance(), initialized: true };
+      this.render();
+    });
+
     this.render();
 
     retargetEvents(shadowRoot);
@@ -68,6 +91,9 @@ class ConferenceTableElement extends HTMLElement {
   disconnectedCallback() {
     if (this.unsubscribeFromWidgetEvents) {
       this.unsubscribeFromWidgetEvents();
+    }
+    if (this.unsubscribeFromKeycloakEvent) {
+      this.unsubscribeFromKeycloakEvent();
     }
   }
 
@@ -95,19 +121,26 @@ class ConferenceTableElement extends HTMLElement {
         Object.values(INPUT_EVENT_TYPES),
         defaultWidgetEventHandler
       );
-    } else if (this.unsubscribeFromWidgetEvents) {
-      this.unsubscribeFromWidgetEvents();
+    } else {
+      if (this.unsubscribeFromWidgetEvents) {
+        this.unsubscribeFromWidgetEvents();
+      }
+      if (this.unsubscribeFromKeycloakEvent) {
+        this.unsubscribeFromKeycloakEvent();
+      }
     }
 
     ReactDOM.render(
-      <StylesProvider jss={this.jss}>
-        <ConferenceTableContainer
-          ref={this.reactRootRef}
-          onAdd={this.onAdd}
-          onSelect={this.onSelect}
-          onError={this.onError}
-        />
-      </StylesProvider>,
+      <KeycloakContext.Provider value={this.keycloak}>
+        <StylesProvider jss={this.jss}>
+          <ConferenceTableContainer
+            ref={this.reactRootRef}
+            onAdd={this.onAdd}
+            onSelect={this.onSelect}
+            onError={this.onError}
+          />
+        </StylesProvider>
+      </KeycloakContext.Provider>,
       this.mountPoint
     );
   }

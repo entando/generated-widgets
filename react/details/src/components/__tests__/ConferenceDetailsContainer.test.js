@@ -3,11 +3,27 @@ import { render, wait } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
 import 'components/__mocks__/i18n';
-import getConference from 'api/conferenceApi';
+import getConference from 'api/conferences';
 import conferenceApiGetResponseMock from 'components/__mocks__/conferenceMocks';
 import ConferenceDetailsContainer from 'components/ConferenceDetailsContainer';
 
-jest.mock('api/conferenceApi');
+jest.mock('api/conferences');
+
+jest.mock('auth/KeycloakContext', () => {
+  const withKeycloak = Component => {
+    return props => (
+      <Component
+        {...props} // eslint-disable-line react/jsx-props-no-spreading
+        keycloak={{
+          initialized: true,
+          authenticated: true,
+        }}
+      />
+    );
+  };
+
+  return { withKeycloak };
+});
 
 beforeEach(() => {
   getConference.mockClear();

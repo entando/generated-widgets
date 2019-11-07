@@ -9,5 +9,6 @@ i18n.use(initReactI18next).init({
 });
 
 i18n.t = jest.fn(key => key);
+i18n.language = 'en';
 
 export default i18n;

@@ -8,6 +8,22 @@ import { mockConference } from 'components/__mocks__/conferenceMocks';
 
 jest.mock('api/conferences');
 
+jest.mock('auth/KeycloakContext', () => {
+  const withKeycloak = Component => {
+    return props => (
+      <Component
+        {...props} // eslint-disable-line react/jsx-props-no-spreading
+        keycloak={{
+          initialized: true,
+          authenticated: true,
+        }}
+      />
+    );
+  };
+
+  return { withKeycloak };
+});
+
 describe('ConferenceEditFormContainer', () => {
   beforeEach(() => {
     jest.clearAllMocks();

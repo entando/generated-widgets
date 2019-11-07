@@ -21,6 +21,22 @@ jest.mock('@material-ui/pickers', () => ({
   },
 }));
 
+jest.mock('auth/KeycloakContext', () => {
+  const withKeycloak = Component => {
+    return props => (
+      <Component
+        {...props} // eslint-disable-line react/jsx-props-no-spreading
+        keycloak={{
+          initialized: true,
+          authenticated: true,
+        }}
+      />
+    );
+  };
+
+  return { withKeycloak };
+});
+
 describe('ConferenceAddFormContainer', () => {
   beforeEach(() => {
     jest.clearAllMocks();

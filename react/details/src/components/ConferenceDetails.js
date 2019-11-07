@@ -11,7 +11,7 @@ const ConferenceDetails = ({ t, conference }) => {
     <Box>
       <h3>
         {t('common.widgetName', {
-          widgetNamePlaceholder: t('entities.conference._type'),
+          widgetNamePlaceholder: 'Conference Entity',
         })}
       </h3>
       <ConferenceFieldTable conference={conference} />

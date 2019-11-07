@@ -10,5 +10,8 @@
     "error": {
       "dataLoading": "Error during server connection"
     }
+  },
+  "common": {
+    "notAuthenticated": "User is not authenticated."
   }
 }

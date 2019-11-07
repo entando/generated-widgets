@@ -6,12 +6,27 @@ import { StylesProvider, ThemeProvider, jssPreset } from '@material-ui/core/styl
 import { createMuiTheme } from '@material-ui/core';
 import { create } from 'jss';
 
+import { KeycloakContext } from 'auth/KeycloakContext';
 import setLocale from 'i18n/setLocale';
-import { createWidgetEventPublisher, subscribeToWidgetEvents } from 'helpers/widgetEvents';
-
-import { INPUT_EVENT_TYPES, OUTPUT_EVENT_TYPES } from 'custom-elements/widgetEventTypes';
+import {
+  createWidgetEventPublisher,
+  subscribeToWidgetEvent,
+  subscribeToWidgetEvents,
+} from 'helpers/widgetEvents';
+import {
+  INPUT_EVENT_TYPES,
+  OUTPUT_EVENT_TYPES,
+  KEYCLOAK_EVENT_TYPE,
+} from 'custom-elements/widgetEventTypes';
 import ConferenceEditFormContainer from 'components/ConferenceEditFormContainer';
 import ConferenceAddFormContainer from 'components/ConferenceAddFormContainer';
+
+const getKeycloakInstance = () =>
+  (window &&
+    window.entando &&
+    window.entando.keycloak && { ...window.entando.keycloak, initialized: true }) || {
+    initialized: false,
+  };
 
 const ATTRIBUTES = {
   id: 'id',
@@ -25,7 +40,11 @@ class ConferenceFormElement extends HTMLElement {
 
   mountPoint;
 
+  keycloak = getKeycloakInstance();
+
   unsubscribeFromWidgetEvents;
+
+  unsubscribeFromKeycloakEvent;
 
   onCreate = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.create);
 
@@ -69,6 +88,14 @@ class ConferenceFormElement extends HTMLElement {
         },
       },
     });
+
+    this.keycloak = { ...getKeycloakInstance(), initialized: true };
+
+    this.unsubscribeFromKeycloakEvent = subscribeToWidgetEvent(KEYCLOAK_EVENT_TYPE, () => {
+      this.keycloak = { ...getKeycloakInstance(), initialized: true };
+      this.render();
+    });
+
     this.render();
 
     retargetEvents(shadowRoot);
@@ -77,6 +104,9 @@ class ConferenceFormElement extends HTMLElement {
   disconnectedCallback() {
     if (this.unsubscribeFromWidgetEvents) {
       this.unsubscribeFromWidgetEvents();
+    }
+    if (this.unsubscribeFromKeycloakEvent) {
+      this.unsubscribeFromKeycloakEvent();
     }
   }
 
@@ -117,8 +147,13 @@ class ConferenceFormElement extends HTMLElement {
         Object.values(INPUT_EVENT_TYPES),
         defaultWidgetEventHandler
       );
-    } else if (this.unsubscribeFromWidgetEvents) {
-      this.unsubscribeFromWidgetEvents();
+    } else {
+      if (this.unsubscribeFromWidgetEvents) {
+        this.unsubscribeFromWidgetEvents();
+      }
+      if (this.unsubscribeFromKeycloakEvent) {
+        this.unsubscribeFromKeycloakEvent();
+      }
     }
 
     const id = this.getAttribute(ATTRIBUTES.id);
@@ -136,9 +171,11 @@ class ConferenceFormElement extends HTMLElement {
         );
 
     ReactDOM.render(
-      <StylesProvider jss={this.jss}>
-        <ThemeProvider theme={this.muiTheme}>{FormContainer}</ThemeProvider>
-      </StylesProvider>,
+      <KeycloakContext.Provider value={this.keycloak}>
+        <StylesProvider jss={this.jss}>
+          <ThemeProvider theme={this.muiTheme}>{FormContainer}</ThemeProvider>
+        </StylesProvider>
+      </KeycloakContext.Provider>,
       this.mountPoint
     );
   }

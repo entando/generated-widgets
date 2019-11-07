@@ -11,6 +11,7 @@ import {
 export const initialState = {
   items: [],
   errorMessage: null,
+  errorStatus: null,
   loading: false,
 };
 
@@ -19,9 +20,9 @@ export const reducer = (state, action) => {
     case READ_ALL:
       return { ...state, items: action.payload };
     case ERROR_FETCH:
-      return { ...state, errorMessage: action.payload };
+      return { ...state, errorMessage: action.payload.message, errorStatus: action.payload.status };
     case CLEAR_ERRORS:
-      return { ...state, errorMessage: null };
+      return { ...state, errorMessage: null, errorStatus: null };
     case CREATE:
     case INPUT_EVENT_TYPES.formCreate:
       return { ...state, items: [...state.items, action.payload] };

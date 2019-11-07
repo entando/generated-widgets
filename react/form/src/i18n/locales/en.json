@@ -12,7 +12,8 @@
   },
   "common": {
     "save": "Save",
-    "dataSaved": "Data successfully saved"
+    "dataSaved": "Data successfully saved",
+    "notAuthenticated": "User is not authenticated."
   },
   "validation": {
     "required": "{{field}} is required"

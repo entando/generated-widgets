@@ -1,5 +1,5 @@
 function createData(id, name, summary, start, end) {
-  return { id, name, summary, start, end };
+  return { id, name, summary, start: start.toLocaleString(), end: end.toLocaleString() };
 }
 
 export const conferencesWithDateObjects = [

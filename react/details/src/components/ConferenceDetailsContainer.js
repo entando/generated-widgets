@@ -4,9 +4,12 @@ import { withTranslation } from 'react-i18next';
 import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core';
 
+import keycloakType from 'components/__types__/keycloak';
+import { withKeycloak } from 'auth/KeycloakContext';
+import { AuthenticatedView, UnauthenticatedView } from 'auth/KeycloakViews';
 import ConferenceDetails from 'components/ConferenceDetails';
-import ErrorNotification from 'components/common/ErrorNotification';
-import getConference from 'api/conferenceApi';
+import Notification from 'components/common/Notification';
+import getConference from 'api/conferences';
 
 class ConferenceDetailsContainer extends React.Component {
   constructor(props) {
@@ -15,42 +18,92 @@ class ConferenceDetailsContainer extends React.Component {
     this.state = {
       loading: true,
       conference: {},
-      error: null,
+      notificationStatus: null,
+      notificationMessage: null,
     };
 
     this.theme = createMuiTheme();
     this.closeNotification = this.closeNotification.bind(this);
+    this.fetchData = this.fetchData.bind(this);
   }
 
   componentDidMount() {
-    const { t, id, onError } = this.props;
+    const { keycloak } = this.props;
+    const authenticated = keycloak.initialized && keycloak.authenticated;
 
-    if (id) {
-      getConference({ id })
-        .then(response => this.setState({ error: null, conference: response }))
-        .catch(e => {
-          onError(e);
-          this.setState({ error: t('common.couldNotFetchData') });
-        })
-        .finally(() => this.setState({ loading: false }));
-    } else {
-      this.setState({ loading: false, error: t('common.missingId') });
+    if (authenticated) {
+      this.fetchData();
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    const { keycloak } = this.props;
+    const authenticated = keycloak.initialized && keycloak.authenticated;
+
+    const changedAuth = prevProps.keycloak.authenticated !== authenticated;
+
+    if (authenticated && changedAuth) {
+      this.fetchData();
+    }
+  }
+
+  fetchData() {
+    const { id, onError, t, keycloak } = this.props;
+    const authenticated = keycloak.initialized && keycloak.authenticated;
+
+    if (authenticated) {
+      if (id) {
+        getConference({ id })
+          .then(conference =>
+            this.setState({
+              notificationStatus: null,
+              notificationMessage: null,
+              conference,
+            })
+          )
+          .catch(e => {
+            onError(e);
+            this.setState({
+              notificationStatus: Notification.ERROR,
+              notificationMessage: t('common.couldNotFetchData'),
+            });
+          })
+          .finally(() => this.setState({ loading: false }));
+      } else {
+        this.setState({
+          loading: false,
+          notificationStatus: Notification.ERROR,
+          notificationMessage: t('common.missingId'),
+        });
+      }
     }
   }
 
   closeNotification() {
-    this.setState({ error: null });
+    this.setState({
+      notificationStatus: null,
+      notificationMessage: null,
+    });
   }
 
   render() {
-    const { conference, error, loading } = this.state;
-    const { t } = this.props;
+    const { conference, notificationStatus, notificationMessage, loading } = this.state;
+    const { t, keycloak } = this.props;
 
     return (
       <ThemeProvider theme={this.theme}>
-        {loading && t('common.loading')}
-        {!loading && <ConferenceDetails conference={conference} />}
-        <ErrorNotification message={error} onClose={this.closeNotification} />
+        <UnauthenticatedView keycloak={keycloak}>
+          {t('common.notAuthenticated')}
+        </UnauthenticatedView>
+        <AuthenticatedView keycloak={keycloak}>
+          {loading && t('common.loading')}
+          {!loading && <ConferenceDetails conference={conference} />}
+        </AuthenticatedView>
+        <Notification
+          status={notificationStatus}
+          message={notificationMessage}
+          onClose={this.closeNotification}
+        />
       </ThemeProvider>
     );
   }
@@ -60,10 +113,11 @@ ConferenceDetailsContainer.propTypes = {
   id: PropTypes.string.isRequired,
   onError: PropTypes.func,
   t: PropTypes.func.isRequired,
+  keycloak: keycloakType.isRequired,
 };
 
 ConferenceDetailsContainer.defaultProps = {
   onError: () => {},
 };
 
-export default withTranslation()(ConferenceDetailsContainer);
+export default withKeycloak(withTranslation()(ConferenceDetailsContainer));
