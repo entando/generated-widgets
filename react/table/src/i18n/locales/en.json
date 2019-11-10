@@ -1,17 +1,33 @@
 {
-  "conference": {
-    "noItems": "No conferences available",
-    "tableHeader": {
-      "name": "Name",
-      "summary": "Summary",
-      "start": "Start",
-      "end": "End"
-    },
-    "error": {
-      "dataLoading": "Error during server connection"
-    }
-  },
   "common": {
+    "couldNotFetchData": "Unfortunately we could not fetch entity data",
     "notAuthenticated": "User is not authenticated."
+  },
+  "entities": {
+    "conference": {
+      "noItems": "No conferences available",
+      "id": "ID",
+      "name": "entities.conference.name",
+      "summary": "entities.conference.summary",
+      "start": "entities.conference.start",
+      "end": "entities.conference.end",
+      "conferencePrice": "entities.conference.conferencePrice",
+      "conferenceId": "entities.conference.conferenceId",
+      "registration": "entities.conference.registration",
+      "attendeeCount": "entities.conference.attendeeCount",
+      "venueName": "entities.conference.venueName",
+      "venueLat": "entities.conference.venueLat",
+      "venueLong": "entities.conference.venueLong",
+      "venueId": "entities.conference.venueId",
+      "saleStartDate": "entities.conference.saleStartDate",
+      "earlyBirdActive": "entities.conference.earlyBirdActive",
+      "region": "entities.conference.region",
+      "logo": "entities.conference.logo",
+      "content": "entities.conference.content",
+      "signature": "entities.conference.signature",
+      "error": {
+        "dataLoading": "Error during server connection"
+      }
+    }
   }
 }

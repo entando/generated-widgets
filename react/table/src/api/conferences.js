@@ -1,12 +1,11 @@
 /* eslint-disable import/prefer-default-export */
-import { DOMAIN, JWT_TOKEN } from 'api/constants';
+import { DOMAIN } from 'api/constants';
 
 const getKeycloakToken = () => {
   if (
     window &&
     window.entando &&
     window.entando.keycloak &&
-    window.entando.keycloak.initialized &&
     window.entando.keycloak.authenticated
   ) {
     return window.entando.keycloak.token;
@@ -29,7 +28,7 @@ export const apiConferencesGet = async () => {
 
   const defaultOptions = {
     headers: new Headers({
-      Authorization: `Bearer ${JWT_TOKEN || token}`,
+      Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
     }),
   };
