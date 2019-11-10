@@ -9,8 +9,9 @@ import TableRow from '@material-ui/core/TableRow';
 
 import conferenceType from 'components/__types__/conference';
 
-const ConferenceFieldTable = ({ t, conference }) => {
+const ConferenceFieldTable = ({ t, i18n: { language }, conference }) => {
   const translationKeyPrefix = `entities.conference.`;
+
   return (
     <Table>
       <TableHead>
@@ -49,7 +50,7 @@ const ConferenceFieldTable = ({ t, conference }) => {
             <span>{t(`${translationKeyPrefix}start`)}</span>
           </TableCell>
           <TableCell>
-            <span>{conference.start}</span>
+            <span>{conference.start && new Date(conference.start).toLocaleDateString(language)}</span>
           </TableCell>
         </TableRow>
         <TableRow>
@@ -57,7 +58,119 @@ const ConferenceFieldTable = ({ t, conference }) => {
             <span>{t(`${translationKeyPrefix}end`)}</span>
           </TableCell>
           <TableCell>
-            <span>{conference.end}</span>
+            <span>{conference.end && new Date(conference.end).toLocaleDateString(language)}</span>
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>
+            <span>{t(`${translationKeyPrefix}conferencePrice`)}</span>
+          </TableCell>
+          <TableCell>
+            <span>{conference.conferencePrice}</span>
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>
+            <span>{t(`${translationKeyPrefix}conferenceId`)}</span>
+          </TableCell>
+          <TableCell>
+            <span>{conference.conferenceId}</span>
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>
+            <span>{t(`${translationKeyPrefix}registration`)}</span>
+          </TableCell>
+          <TableCell>
+            <span>{conference.registration && new Date(conference.registration).toLocaleString(language)}</span>
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>
+            <span>{t(`${translationKeyPrefix}attendeeCount`)}</span>
+          </TableCell>
+          <TableCell>
+            <span>{conference.attendeeCount}</span>
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>
+            <span>{t(`${translationKeyPrefix}venueName`)}</span>
+          </TableCell>
+          <TableCell>
+            <span>{conference.venueName}</span>
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>
+            <span>{t(`${translationKeyPrefix}venueLat`)}</span>
+          </TableCell>
+          <TableCell>
+            <span>{conference.venueLat}</span>
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>
+            <span>{t(`${translationKeyPrefix}venueLong`)}</span>
+          </TableCell>
+          <TableCell>
+            <span>{conference.venueLong}</span>
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>
+            <span>{t(`${translationKeyPrefix}venueId`)}</span>
+          </TableCell>
+          <TableCell>
+            <span>{conference.venueId}</span>
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>
+            <span>{t(`${translationKeyPrefix}saleStartDate`)}</span>
+          </TableCell>
+          <TableCell>
+            <span>{conference.saleStartDate && new Date(conference.saleStartDate).toLocaleString(language)}</span>
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>
+            <span>{t(`${translationKeyPrefix}earlyBirdActive`)}</span>
+          </TableCell>
+          <TableCell>
+            <span>{typeof conference.earlyBirdActive !== 'undefined' ? conference.earlyBirdActive.toString() : ''}</span>
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>
+            <span>{t(`${translationKeyPrefix}region`)}</span>
+          </TableCell>
+          <TableCell>
+            <span>{conference.region}</span>
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>
+            <span>{t(`${translationKeyPrefix}logo`)}</span>
+          </TableCell>
+          <TableCell>
+            <span><img src={ `data:${conference.logoContentType};base64, ${conference.logo}`} alt="" /></span>
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>
+            <span>{t(`${translationKeyPrefix}content`)}</span>
+          </TableCell>
+          <TableCell>
+            <span><a download="filename" href={ `data:${conference.contentContentType};base64, ${conference.content}`} >{t('common.download')}</a></span>
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>
+            <span>{t(`${translationKeyPrefix}signature`)}</span>
+          </TableCell>
+          <TableCell>
+            <span>{conference.signature}</span>
           </TableCell>
         </TableRow>
       </TableBody>
@@ -68,6 +181,9 @@ const ConferenceFieldTable = ({ t, conference }) => {
 ConferenceFieldTable.propTypes = {
   conference: conferenceType,
   t: PropTypes.func.isRequired,
+  i18n: PropTypes.shape({
+    language: PropTypes.string,
+  }).isRequired,
 };
 
 ConferenceFieldTable.defaultProps = {

@@ -9,7 +9,7 @@ import { withKeycloak } from 'auth/KeycloakContext';
 import { AuthenticatedView, UnauthenticatedView } from 'auth/KeycloakViews';
 import ConferenceDetails from 'components/ConferenceDetails';
 import Notification from 'components/common/Notification';
-import getConference from 'api/conferences';
+import getConference from 'api/conference';
 
 class ConferenceDetailsContainer extends React.Component {
   constructor(props) {
@@ -54,11 +54,11 @@ class ConferenceDetailsContainer extends React.Component {
     if (authenticated) {
       if (id) {
         getConference({ id })
-          .then(conference =>
+          .then(response =>
             this.setState({
               notificationStatus: null,
               notificationMessage: null,
-              conference,
+              conference: response,
             })
           )
           .catch(e => {
