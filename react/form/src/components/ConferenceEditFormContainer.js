@@ -10,13 +10,14 @@ import Notification from 'components/common/Notification';
 import ConferenceForm from 'components/ConferenceForm';
 
 class ConferenceEditFormContainer extends PureComponent {
-  state = {
-    notificationMessage: null,
-    notificationStatus: null,
-  };
-
   constructor(props) {
     super(props);
+
+    this.state = {
+      notificationMessage: null,
+      notificationStatus: null,
+    };
+
     this.closeNotification = this.closeNotification.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }

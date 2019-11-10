@@ -2,14 +2,6 @@
   "errors": {
     "dataLoading": "Error during server connection"
   },
-  "entities": {
-    "conference": {
-      "name": "Name",
-      "summary": "Summary",
-      "start": "Start",
-      "end": "End"
-    }
-  },
   "common": {
     "save": "Save",
     "dataSaved": "Data successfully saved",
@@ -17,5 +9,28 @@
   },
   "validation": {
     "required": "{{field}} is required"
+  },
+  "entities": {
+    "conference": {
+      "id": "ID",
+      "name": "entities.conference.name",
+      "summary": "entities.conference.summary",
+      "start": "entities.conference.start",
+      "end": "entities.conference.end",
+      "conferencePrice": "entities.conference.conferencePrice",
+      "conferenceId": "entities.conference.conferenceId",
+      "registration": "entities.conference.registration",
+      "attendeeCount": "entities.conference.attendeeCount",
+      "venueName": "entities.conference.venueName",
+      "venueLat": "entities.conference.venueLat",
+      "venueLong": "entities.conference.venueLong",
+      "venueId": "entities.conference.venueId",
+      "saleStartDate": "entities.conference.saleStartDate",
+      "earlyBirdActive": "entities.conference.earlyBirdActive",
+      "region": "entities.conference.region",
+      "logo": "entities.conference.logo",
+      "content": "entities.conference.content",
+      "signature": "entities.conference.signature"
+    }
   }
 }
