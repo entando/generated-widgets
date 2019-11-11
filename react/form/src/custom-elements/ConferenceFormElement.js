@@ -86,6 +86,9 @@ class ConferenceFormElement extends HTMLElement {
         MuiDialog: {
           container: this.mountPoint,
         },
+        MuiPopover: {
+          container: this.mountPoint,
+        },
       },
     });
 

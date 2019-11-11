@@ -1,20 +1,24 @@
 const conferenceMock = {
-  name: 'Quo recusandae unde nemo itaque ut. Molestias facere minima enim cum enim tempora. Error enim quia recusandae cumque. Repellat provident quidem neque quia a distinctio quia facere. Dignissimos eius eius.',
-  summary: 'Eos perspiciatis suscipit similique. Est laborum ab exercitationem aut ratione repudiandae voluptatem at. Beatae inventore soluta eligendi quia eveniet. Alias impedit fugiat ex sint excepturi ullam iure. Perferendis sapiente non nisi.',
-  start: '1998-03-04',
-  end: '1976-01-30',
-  conferencePrice: -114,
-  conferenceId: -37,
-  registration: '1971-08-03T02:21:33+03:00',
-  attendeeCount: -14,
-  venueName: 'Ipsa dignissimos sint asperiores. Iste qui eveniet dolores laboriosam cupiditate quo atque ipsum. Nihil cum sed culpa neque ratione quo in. Aperiam incidunt hic laborum sapiente autem occaecati. Itaque vitae quo omnis ea quidem aut repudiandae reprehenderit.',
-  venueLat: 0.04447123967111111,
-  venueLong: 0.9300325801596045,
-  venueId: -399.64105375111103,
-  saleStartDate: '1987-12-26T02:58:40+03:00',
+  name:
+    'Vel reprehenderit eos facilis illum ut accusantium. In non laboriosam explicabo suscipit culpa deleniti rerum. Aspernatur eveniet vero occaecati rerum atque autem. Sapiente voluptatem corporis in beatae modi ullam magnam. Veniam sit maiores.',
+  summary:
+    'Neque tempore quia fugiat. In doloremque nobis maxime qui in nam dolorem numquam. Aperiam consequuntur sed nihil quisquam facilis delectus adipisci. Vel cumque sit ab nemo dicta eum molestiae dolor.',
+  start: '1992-01-31',
+  end: '1991-06-02',
+  conferencePrice: 849,
+  conferenceId: 702,
+  registration: '1985-06-28T05:09:34+04:00',
+  attendeeCount: 159,
+  venueName:
+    'Accusamus sequi libero commodi ullam reiciendis aliquid et. Ducimus sit quo reprehenderit molestiae cum error illo. Dolore unde ut fuga deserunt magnam excepturi est odio tempora. Aut ipsa nobis velit non qui sed nihil qui. Asperiores velit error voluptate debitis id est illum. Quibusdam corrupti aliquam placeat nemo consequatur dolorem ea dolorem qui.',
+  venueLat: 0.07639952399767935,
+  venueLong: 0.16162852616980672,
+  venueId: 10.10042242705822,
+  saleStartDate: '2000-08-20T14:49:40+02:00',
   earlyBirdActive: false,
-  region: 'NA',
-  signature: 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=',
+  region: 'SA',
+  signature:
+    'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=',
 };
 
 export default conferenceMock;

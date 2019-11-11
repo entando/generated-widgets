@@ -16,7 +16,6 @@ import dateFnsLocales from 'i18n/dateFnsLocales';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 
 const styles = theme => ({
@@ -233,6 +232,7 @@ class ConferenceForm extends PureComponent {
             <Grid item xs={12} sm={6}>
               <FormControlLabel
                 control={
+                  // eslint-disable-next-line react/jsx-wrap-multilines
                   <Checkbox
                     id="conference-earlyBirdActive"
                     name="earlyBirdActive"
@@ -246,23 +246,21 @@ class ConferenceForm extends PureComponent {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <InputLabel htmlFor="conference-region">
-                {t('entities.conference.region')}
-              </InputLabel>
+              <InputLabel htmlFor="conference-region">{t('entities.conference.region')}</InputLabel>
               <Select
+                native
                 id="conference-region"
                 error={errors.region && touched.region}
                 className={classes.textField}
-                onBlur={handleBlur}
                 value={values.region}
                 name="region"
                 onChange={handleChange}
               >
-                <MenuItem value="NA">NA</MenuItem>
-                <MenuItem value="SA">SA</MenuItem>
-                <MenuItem value="ASIA">ASIA</MenuItem>
-                <MenuItem value="EUROPE">EUROPE</MenuItem>
-                <MenuItem value="OCEANIA">OCEANIA</MenuItem>
+                <option value="NA">NA</option>
+                <option value="SA">SA</option>
+                <option value="ASIA">ASIA</option>
+                <option value="EUROPE">EUROPE</option>
+                <option value="OCEANIA">OCEANIA</option>
               </Select>
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -335,17 +333,23 @@ const emptyConference = {
 const validationSchema = Yup.object().shape({
   name: Yup.string().required(),
   summary: Yup.string(),
-  start: Yup.date().nullable().required(),
+  start: Yup.date()
+    .nullable()
+    .required(),
   end: Yup.date().nullable(),
   conferencePrice: Yup.number(),
   conferenceId: Yup.number().required(),
-  registration: Yup.date().nullable().required(),
+  registration: Yup.date()
+    .nullable()
+    .required(),
   attendeeCount: Yup.number().required(),
   venueName: Yup.string().required(),
   venueLat: Yup.number().required(),
   venueLong: Yup.number().required(),
   venueId: Yup.number().required(),
-  saleStartDate: Yup.date().nullable().required(),
+  saleStartDate: Yup.date()
+    .nullable()
+    .required(),
   earlyBirdActive: Yup.boolean().required(),
   region: Yup.string().required(),
   signature: Yup.string(),
