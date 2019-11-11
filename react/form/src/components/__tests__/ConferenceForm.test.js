@@ -2,10 +2,10 @@ import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { fireEvent, render, wait } from '@testing-library/react';
 import 'i18n/__mocks__/i18nMock';
-import { mockConferenceWithDateStrings as mockConference } from 'components/__mocks__/conferenceMocks';
+import conferenceMock from 'components/__mocks__/conferenceMocks';
 import ConferenceForm from 'components/ConferenceForm';
 import { createMuiTheme } from '@material-ui/core';
-import { ThemeProvider } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/styles';
 
 const theme = createMuiTheme();
 
@@ -13,21 +13,19 @@ describe('Conference Form', () => {
   it('shows form', () => {
     const { getByLabelText } = render(
       <ThemeProvider theme={theme}>
-        <ConferenceForm conference={mockConference} />
+        <ConferenceForm conference={conferenceMock} />
       </ThemeProvider>
     );
-
-    expect(getByLabelText('entities.conference.name').value).toBe(mockConference.name);
-    expect(getByLabelText('entities.conference.summary').value).toBe(mockConference.summary);
-    expect(getByLabelText('entities.conference.start').value).toBe(mockConference.start);
-    expect(getByLabelText('entities.conference.end').value).toBe(mockConference.end);
+    expect(getByLabelText('entities.conference.name').value).toBe(
+      'Vel reprehenderit eos facilis illum ut accusantium. In non laboriosam explicabo suscipit culpa deleniti rerum. Aspernatur eveniet vero occaecati rerum atque autem. Sapiente voluptatem corporis in beatae modi ullam magnam. Veniam sit maiores.'
+    );
   });
 
   it('submits form', async () => {
     const handleSubmit = jest.fn();
     const { getByTestId } = render(
       <ThemeProvider theme={theme}>
-        <ConferenceForm conference={mockConference} onSubmit={handleSubmit} />
+        <ConferenceForm conference={conferenceMock} onSubmit={handleSubmit} />
       </ThemeProvider>
     );
 
