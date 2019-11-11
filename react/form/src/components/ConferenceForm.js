@@ -256,6 +256,8 @@ class ConferenceForm extends PureComponent {
                 name="region"
                 onChange={handleChange}
               >
+                {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+                <option value="" />
                 <option value="NA">NA</option>
                 <option value="SA">SA</option>
                 <option value="ASIA">ASIA</option>
