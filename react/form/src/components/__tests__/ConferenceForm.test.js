@@ -1,7 +1,7 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import { render } from '@testing-library/react';
-import 'components/__mocks__/i18nMock';
+import { fireEvent, render, wait } from '@testing-library/react';
+import 'i18n/__mocks__/i18nMock';
 import conferenceMock from 'components/__mocks__/conferenceMocks';
 import ConferenceForm from 'components/ConferenceForm';
 import { createMuiTheme } from '@material-ui/core';
@@ -17,7 +17,7 @@ describe('Conference Form', () => {
       </ThemeProvider>
     );
     expect(getByLabelText('entities.conference.name').value).toBe(
-      'Quia qui quas placeat velit doloribus numquam. Tempore beatae recusandae vitae facilis sunt sed facere. Sit eligendi ut distinctio tempore debitis et illum saepe.'
+      'Quo recusandae unde nemo itaque ut. Molestias facere minima enim cum enim tempora. Error enim quia recusandae cumque. Repellat provident quidem neque quia a distinctio quia facere. Dignissimos eius eius.'
     );
   });
 

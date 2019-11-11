@@ -28,8 +28,6 @@
       "saleStartDate": "entities.conference.saleStartDate",
       "earlyBirdActive": "entities.conference.earlyBirdActive",
       "region": "entities.conference.region",
-      "logo": "entities.conference.logo",
-      "content": "entities.conference.content",
       "signature": "entities.conference.signature"
     }
   }

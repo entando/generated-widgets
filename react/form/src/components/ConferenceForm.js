@@ -267,32 +267,6 @@ class ConferenceForm extends PureComponent {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                id="conference-logo"
-                error={errors.logo && touched.logo}
-                helperText={getHelperText('logo')}
-                className={classes.textField}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.logo}
-                name="logo"
-                label={t('entities.conference.logo')}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                id="conference-content"
-                error={errors.content && touched.content}
-                helperText={getHelperText('content')}
-                className={classes.textField}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.content}
-                name="content"
-                label={t('entities.conference.content')}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
                 id="conference-signature"
                 error={errors.signature && touched.signature}
                 helperText={getHelperText('signature')}
@@ -355,30 +329,26 @@ const emptyConference = {
   saleStartDate: null,
   earlyBirdActive: false,
   region: '',
-  logo: '',
-  content: '',
   signature: '',
 };
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required(),
   summary: Yup.string(),
-  start: Yup.date().required(),
-  end: Yup.date().required(),
+  start: Yup.date().nullable().required(),
+  end: Yup.date().nullable(),
   conferencePrice: Yup.number(),
   conferenceId: Yup.number().required(),
-  registration: Yup.date().required(),
+  registration: Yup.date().nullable().required(),
   attendeeCount: Yup.number().required(),
   venueName: Yup.string().required(),
   venueLat: Yup.number().required(),
   venueLong: Yup.number().required(),
   venueId: Yup.number().required(),
-  saleStartDate: Yup.date().required(),
+  saleStartDate: Yup.date().nullable().required(),
   earlyBirdActive: Yup.boolean().required(),
   region: Yup.string().required(),
-  logo: Yup.string().required(),
-  content: Yup.string().required(),
-  signature: Yup.string().required(),
+  signature: Yup.string(),
 });
 
 const formikBag = {

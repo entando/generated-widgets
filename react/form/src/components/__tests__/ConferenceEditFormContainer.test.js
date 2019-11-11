@@ -3,7 +3,7 @@ import { fireEvent, render, wait } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import { apiConferenceGet, apiConferencePut } from 'api/conferences';
 import ConferenceEditFormContainer from 'components/ConferenceEditFormContainer';
-import 'components/__mocks__/i18nMock';
+import 'i18n/__mocks__/i18nMock';
 import conferenceMock from 'components/__mocks__/conferenceMocks';
 
 jest.mock('api/conferences');

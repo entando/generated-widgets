@@ -6,7 +6,7 @@ export default PropTypes.shape({
   name: PropTypes.string.isRequired,
   summary: PropTypes.string,
   start: PropTypes.string.isRequired,
-  end: PropTypes.string.isRequired,
+  end: PropTypes.string,
   conferencePrice: PropTypes.string,
   conferenceId: PropTypes.string.isRequired,
   registration: PropTypes.string.isRequired,
@@ -18,9 +18,7 @@ export default PropTypes.shape({
   saleStartDate: PropTypes.string.isRequired,
   earlyBirdActive: PropTypes.bool.isRequired,
   region: PropTypes.string.isRequired,
-  logo: PropTypes.string.isRequired,
-  content: PropTypes.string.isRequired,
-  signature: PropTypes.string.isRequired,
+  signature: PropTypes.string,
 });
 
 export const formValues = PropTypes.shape({
@@ -28,19 +26,17 @@ export const formValues = PropTypes.shape({
   summary: PropTypes.string,
   start: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
   end: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
-  conferencePrice: PropTypes.string,
-  conferenceId: PropTypes.string,
+  conferencePrice: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  conferenceId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   registration: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
-  attendeeCount: PropTypes.string,
+  attendeeCount: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   venueName: PropTypes.string,
-  venueLat: PropTypes.string,
-  venueLong: PropTypes.string,
-  venueId: PropTypes.string,
+  venueLat: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  venueLong: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  venueId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   saleStartDate: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
   earlyBirdActive: PropTypes.bool,
   region: PropTypes.string,
-  logo: PropTypes.string,
-  content: PropTypes.string,
   signature: PropTypes.string,
 });
 
@@ -60,8 +56,6 @@ export const formTouched = PropTypes.shape({
   saleStartDate: PropTypes.oneOfType([PropTypes.bool, PropTypes.shape()]),
   earlyBirdActive: PropTypes.oneOfType([PropTypes.bool, PropTypes.shape()]),
   region: PropTypes.oneOfType([PropTypes.bool, PropTypes.shape()]),
-  logo: PropTypes.oneOfType([PropTypes.bool, PropTypes.shape()]),
-  content: PropTypes.oneOfType([PropTypes.bool, PropTypes.shape()]),
   signature: PropTypes.oneOfType([PropTypes.bool, PropTypes.shape()]),
 });
 
@@ -81,7 +75,5 @@ export const formErrors = PropTypes.shape({
   saleStartDate: PropTypes.oneOfType([PropTypes.string, PropTypes.shape()]),
   earlyBirdActive: PropTypes.oneOfType([PropTypes.string, PropTypes.shape()]),
   region: PropTypes.oneOfType([PropTypes.string, PropTypes.shape()]),
-  logo: PropTypes.oneOfType([PropTypes.string, PropTypes.shape()]),
-  content: PropTypes.oneOfType([PropTypes.string, PropTypes.shape()]),
   signature: PropTypes.oneOfType([PropTypes.string, PropTypes.shape()]),
 });

@@ -100,12 +100,6 @@ describe('ConferenceAddFormContainer', () => {
     const regionField = await findByLabelText('entities.conference.region');
     fireEvent.change(regionField, { target: { value: conferenceMock.region } });
     
-    const logoField = await findByLabelText('entities.conference.logo');
-    fireEvent.change(logoField, { target: { value: conferenceMock.logo } });
-    
-    const contentField = await findByLabelText('entities.conference.content');
-    fireEvent.change(contentField, { target: { value: conferenceMock.content } });
-    
     const signatureField = await findByLabelText('entities.conference.signature');
     fireEvent.change(signatureField, { target: { value: conferenceMock.signature } });
     
@@ -178,12 +172,6 @@ describe('ConferenceAddFormContainer', () => {
     
     const regionField = await findByLabelText('entities.conference.region');
     fireEvent.change(regionField, { target: { value: conferenceMock.region } });
-    
-    const logoField = await findByLabelText('entities.conference.logo');
-    fireEvent.change(logoField, { target: { value: conferenceMock.logo } });
-    
-    const contentField = await findByLabelText('entities.conference.content');
-    fireEvent.change(contentField, { target: { value: conferenceMock.content } });
     
     const signatureField = await findByLabelText('entities.conference.signature');
     fireEvent.change(signatureField, { target: { value: conferenceMock.signature } });
