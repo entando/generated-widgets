@@ -1,5 +1,9 @@
 import { INPUT_EVENT_TYPES } from 'custom-elements/widgetEventTypes';
 import {
+  ADD_FILTER,
+  UPDATE_FILTER,
+  DELETE_FILTER,
+  CLEAR_FILTERS,
   READ_ALL,
   ERROR_FETCH,
   CLEAR_ERRORS,
@@ -9,6 +13,7 @@ import {
 } from 'state/conference.types';
 
 export const initialState = {
+  filters: [{ field: '', operator: '', value: '' }],
   items: [],
   errorMessage: null,
   errorStatus: null,
@@ -17,6 +22,28 @@ export const initialState = {
 
 export const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case ADD_FILTER:
+      return {
+        ...state,
+        filters: [...state.filters, { field: '', operator: '', value: '' }],
+      };
+    case UPDATE_FILTER:
+      return {
+        ...state,
+        filters: state.filters.map((filter, index) =>
+          index === action.payload.filterId ? { ...filter, ...action.payload.values } : filter
+        ),
+      };
+    case DELETE_FILTER:
+      return {
+        ...state,
+        filters:
+          state.filters.length === 1
+            ? state.filters.filter((filter, index) => index !== action.payload.filterId)
+            : initialState.filters,
+      };
+    case CLEAR_FILTERS:
+      return { ...state, filters: initialState.filters };
     case READ_ALL:
       return { ...state, items: action.payload };
     case ERROR_FETCH:

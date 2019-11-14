@@ -64,7 +64,9 @@
             ".jsx"
           ]
         }
-      ]
+      ],
+      "jsx-a11y/control-has-associated-label": 0,
+      "import/prefer-default-export": 0
     }
   },
   "eslintIgnore": [

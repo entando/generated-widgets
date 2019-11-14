@@ -8,11 +8,20 @@ import AddIcon from '@material-ui/icons/Add';
 import keycloakType from 'components/__types__/keycloak';
 import { withKeycloak } from 'auth/KeycloakContext';
 import { AuthenticatedView, UnauthenticatedView } from 'auth/KeycloakViews';
+import FiltersContainer from 'components/filters/FiltersContainer';
 import ConferenceTable from 'components/ConferenceTable';
 import Notification from 'components/common/Notification';
 import { apiConferencesGet } from 'api/conferences';
 import { reducer, initialState } from 'state/conference.reducer';
-import { ERROR_FETCH, CLEAR_ERRORS, READ_ALL } from 'state/conference.types';
+import {
+  ERROR_FETCH,
+  CLEAR_ERRORS,
+  READ_ALL,
+  ADD_FILTER,
+  UPDATE_FILTER,
+  DELETE_FILTER,
+  CLEAR_FILTERS,
+} from 'state/conference.types';
 
 const styles = {
   fab: {
@@ -28,6 +37,11 @@ class ConferenceTableContainer extends Component {
 
     this.handleError = this.handleError.bind(this);
     this.closeNotification = this.closeNotification.bind(this);
+    this.fetchData = this.fetchData.bind(this);
+    this.updateFilter = this.updateFilter.bind(this);
+    this.addFilter = this.addFilter.bind(this);
+    this.removeFilter = this.removeFilter.bind(this);
+    this.clearFilters = this.clearFilters.bind(this);
   }
 
   componentDidMount() {
@@ -55,17 +69,35 @@ class ConferenceTableContainer extends Component {
   }
 
   async fetchData() {
+    const { filters } = this.state;
     const { keycloak } = this.props;
     const authenticated = keycloak.initialized && keycloak.authenticated;
 
     if (authenticated) {
       try {
-        const conferences = await apiConferencesGet();
+        const conferences = await apiConferencesGet({ filters });
+
         this.dispatch({ type: READ_ALL, payload: conferences });
       } catch (err) {
         this.handleError(err);
       }
     }
+  }
+
+  updateFilter(filterId, values) {
+    this.dispatch({ type: UPDATE_FILTER, payload: { values, filterId } });
+  }
+
+  addFilter() {
+    this.dispatch({ type: ADD_FILTER });
+  }
+
+  removeFilter(filterId) {
+    this.dispatch({ type: DELETE_FILTER, payload: { filterId } });
+  }
+
+  clearFilters() {
+    this.dispatch({ type: CLEAR_FILTERS });
   }
 
   closeNotification() {
@@ -85,7 +117,7 @@ class ConferenceTableContainer extends Component {
   }
 
   render() {
-    const { items, errorMessage, errorStatus } = this.state;
+    const { items, errorMessage, errorStatus, filters } = this.state;
     const { classes, onSelect, onAdd, t, keycloak } = this.props;
 
     return (
@@ -97,6 +129,14 @@ class ConferenceTableContainer extends Component {
           <Fab color="primary" aria-label="add" className={classes.fab} onClick={onAdd}>
             <AddIcon />
           </Fab>
+          <FiltersContainer
+            applyFilter={this.fetchData}
+            add={this.addFilter}
+            update={this.updateFilter}
+            remove={this.removeFilter}
+            clear={this.clearFilters}
+            filters={filters}
+          />
           <ConferenceTable items={items} onSelect={onSelect} />
         </AuthenticatedView>
         <Notification

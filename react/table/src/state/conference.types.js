@@ -1,3 +1,7 @@
+export const ADD_FILTER = 'addFilter';
+export const UPDATE_FILTER = 'updateFilter';
+export const DELETE_FILTER = 'deleteFilter';
+export const CLEAR_FILTERS = 'clearFilters';
 export const READ_ALL = 'readAll';
 export const ERROR_FETCH = 'error';
 export const CLEAR_ERRORS = 'clearErrors';

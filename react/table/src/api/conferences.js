@@ -1,5 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 import { DOMAIN } from 'api/constants';
+import { getFilterQuery } from 'components/filters/utils';
 
 const getKeycloakToken = () => {
   if (
@@ -21,8 +22,10 @@ const request = async (url, options) => {
     : Promise.reject(new Error(response.statusText || response.status));
 };
 
-export const apiConferencesGet = async () => {
-  const url = `${DOMAIN}/conferences`;
+export const apiConferencesGet = async ({ filters = [] }) => {
+  const query = getFilterQuery(filters);
+
+  const url = `${DOMAIN}/conferences${query ? `?${query}` : ''}`;
 
   const token = getKeycloakToken();
 
