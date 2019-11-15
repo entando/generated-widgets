@@ -61,8 +61,7 @@
             ".jsx"
           ]
         }
-      ],
-      "react/state-in-constructor": 0
+      ]
     }
   },
   "browserslist": {

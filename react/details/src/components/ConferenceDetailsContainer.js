@@ -9,7 +9,7 @@ import { withKeycloak } from 'auth/KeycloakContext';
 import { AuthenticatedView, UnauthenticatedView } from 'auth/KeycloakViews';
 import ConferenceDetails from 'components/ConferenceDetails';
 import Notification from 'components/common/Notification';
-import getConference from 'api/conferences';
+import getConference from 'api/conference';
 
 class ConferenceDetailsContainer extends React.Component {
   constructor(props) {
