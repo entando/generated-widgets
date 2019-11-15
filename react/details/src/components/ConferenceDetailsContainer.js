@@ -54,11 +54,11 @@ class ConferenceDetailsContainer extends React.Component {
     if (authenticated) {
       if (id) {
         getConference({ id })
-          .then(response =>
+          .then(conference =>
             this.setState({
               notificationStatus: null,
               notificationMessage: null,
-              conference: response,
+              conference,
             })
           )
           .catch(e => {
