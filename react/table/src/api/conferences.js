@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import { DOMAIN } from 'api/constants';
 import { getFilterQuery } from 'components/filters/utils';
 
@@ -22,6 +21,7 @@ const request = async (url, options) => {
     : Promise.reject(new Error(response.statusText || response.status));
 };
 
+/* eslint-disable-next-line import/prefer-default-export */
 export const apiConferencesGet = async ({ filters = [] }) => {
   const query = getFilterQuery(filters);
 
