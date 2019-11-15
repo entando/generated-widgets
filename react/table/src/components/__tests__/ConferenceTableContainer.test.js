@@ -26,31 +26,31 @@ jest.mock('auth/KeycloakContext', () => {
 });
 
 describe('ConferenceTableContainer', () => {
-    const errorMessageKey = 'conference.error.dataLoading';
+  const errorMessageKey = 'conference.error.dataLoading';
 
-    afterEach(() => {
-        jest.clearAllMocks();
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('calls API', async () => {
+    apiConferencesGet.mockImplementation(() => Promise.resolve(conferenceMocks));
+    const { queryByText } = render(<ConferenceTableContainer />);
+
+    await wait(() => {
+      expect(apiConferencesGet).toHaveBeenCalledTimes(1);
+      expect(queryByText(errorMessageKey)).not.toBeInTheDocument();
     });
+  });
 
-    it('calls API', async () => {
-        apiConferencesGet.mockImplementation(() => Promise.resolve(conferenceMocks));
-        const { queryByText } = render(<ConferenceTableContainer />);
-
-        await wait(() => {
-            expect(apiConferencesGet).toHaveBeenCalledTimes(1);
-            expect(queryByText(errorMessageKey)).not.toBeInTheDocument();
-        });
+  it('shows an error if the API call is not successful', async () => {
+    apiConferencesGet.mockImplementation(() => {
+      throw new Error();
     });
+    const { getByText } = render(<ConferenceTableContainer />);
 
-    it('shows an error if the API call is not successful', async () => {
-        apiConferencesGet.mockImplementation(() => {
-            throw new Error();
-        });
-        const { getByText } = render(<ConferenceTableContainer />);
-
-        wait(() => {
-            expect(apiConferencesGet).toHaveBeenCalledTimes(1);
-            expect(getByText(errorMessageKey)).toBeInTheDocument();
-        });
+    wait(() => {
+      expect(apiConferencesGet).toHaveBeenCalledTimes(1);
+      expect(getByText(errorMessageKey)).toBeInTheDocument();
     });
+  });
 });

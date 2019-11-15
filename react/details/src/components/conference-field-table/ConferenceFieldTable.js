@@ -50,7 +50,9 @@ const ConferenceFieldTable = ({ t, i18n: { language }, conference }) => {
             <span>{t(`${translationKeyPrefix}start`)}</span>
           </TableCell>
           <TableCell>
-            <span>{conference.start && new Date(conference.start).toLocaleDateString(language)}</span>
+            <span>
+              {conference.start && new Date(conference.start).toLocaleDateString(language)}
+            </span>
           </TableCell>
         </TableRow>
         <TableRow>
@@ -82,7 +84,10 @@ const ConferenceFieldTable = ({ t, i18n: { language }, conference }) => {
             <span>{t(`${translationKeyPrefix}registration`)}</span>
           </TableCell>
           <TableCell>
-            <span>{conference.registration && new Date(conference.registration).toLocaleString(language)}</span>
+            <span>
+              {conference.registration &&
+                new Date(conference.registration).toLocaleString(language)}
+            </span>
           </TableCell>
         </TableRow>
         <TableRow>
@@ -130,7 +135,10 @@ const ConferenceFieldTable = ({ t, i18n: { language }, conference }) => {
             <span>{t(`${translationKeyPrefix}saleStartDate`)}</span>
           </TableCell>
           <TableCell>
-            <span>{conference.saleStartDate && new Date(conference.saleStartDate).toLocaleString(language)}</span>
+            <span>
+              {conference.saleStartDate &&
+                new Date(conference.saleStartDate).toLocaleString(language)}
+            </span>
           </TableCell>
         </TableRow>
         <TableRow>
@@ -138,7 +146,11 @@ const ConferenceFieldTable = ({ t, i18n: { language }, conference }) => {
             <span>{t(`${translationKeyPrefix}earlyBirdActive`)}</span>
           </TableCell>
           <TableCell>
-            <span>{typeof conference.earlyBirdActive !== 'undefined' ? conference.earlyBirdActive.toString() : ''}</span>
+            <span>
+              {typeof conference.earlyBirdActive !== 'undefined'
+                ? conference.earlyBirdActive.toString()
+                : ''}
+            </span>
           </TableCell>
         </TableRow>
         <TableRow>
@@ -154,7 +166,9 @@ const ConferenceFieldTable = ({ t, i18n: { language }, conference }) => {
             <span>{t(`${translationKeyPrefix}logo`)}</span>
           </TableCell>
           <TableCell>
-            <span><img src={ `data:${conference.logoContentType};base64, ${conference.logo}`} alt="" /></span>
+            <span>
+              <img src={`data:${conference.logoContentType};base64, ${conference.logo}`} alt="" />
+            </span>
           </TableCell>
         </TableRow>
         <TableRow>
@@ -162,7 +176,14 @@ const ConferenceFieldTable = ({ t, i18n: { language }, conference }) => {
             <span>{t(`${translationKeyPrefix}content`)}</span>
           </TableCell>
           <TableCell>
-            <span><a download="filename" href={ `data:${conference.contentContentType};base64, ${conference.content}`} >{t('common.download')}</a></span>
+            <span>
+              <a
+                download="filename"
+                href={`data:${conference.contentContentType};base64, ${conference.content}`}
+              >
+                {t('common.download')}
+              </a>
+            </span>
           </TableCell>
         </TableRow>
         <TableRow>

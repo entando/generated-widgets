@@ -42,9 +42,7 @@
             keycloak,
           };
 
-          window.entando.keycloak
-            .init({ onLoad: 'check-sso' })
-            .success(onInit);
+          window.entando.keycloak.init({ onLoad: 'check-sso' }).success(onInit);
         }
         return initKeycloak;
       })();

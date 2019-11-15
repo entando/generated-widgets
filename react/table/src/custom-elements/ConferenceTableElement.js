@@ -39,6 +39,7 @@ class ConferenceTableElement extends HTMLElement {
   mountPoint;
 
   unsubscribeFromWidgetEvents;
+
   unsubscribeFromKeycloakEvent;
 
   keycloak = getKeycloakInstance();

@@ -8,14 +8,30 @@ import ConferenceTable from 'components/ConferenceTable';
 describe('ConferenceTable', () => {
   it('shows conferences', () => {
     const { getByText } = render(<ConferenceTable items={conferenceMocks} />);
-    expect(getByText('Numquam quo illo aut quia labore hic. Pariatur hic et sint beatae sapiente. Non aut sequi modi. Eum ea pariatur ut ut aspernatur.')).toBeInTheDocument();
-    expect(getByText('Quia natus rerum eveniet accusantium nobis velit ut. Et iure veritatis corporis est sed ut odit ipsum. Fuga qui officia beatae voluptatum vitae aut assumenda. Eum dolores voluptatem eaque. Rerum sed voluptatum similique eos et facilis voluptatem ullam. Voluptate sint adipisci in consectetur occaecati earum eligendi in.')).toBeInTheDocument();
+    expect(
+      getByText(
+        'Delectus maxime excepturi et quia quasi quos et iure. Quos et eum est illo illum. A nostrum quasi ex voluptatibus accusantium non. Unde omnis quo ut quaerat nobis quaerat molestiae. Veritatis dolores et.'
+      )
+    ).toBeInTheDocument();
+    expect(
+      getByText(
+        'Quibusdam qui sint ut beatae cupiditate aliquam officiis autem. Aperiam unde non soluta tempore eius sit maxime. Ducimus ut consequatur quam vel aperiam a sit facere. Aut atque dolor.'
+      )
+    ).toBeInTheDocument();
   });
 
   it('shows no conferences message', () => {
     const { queryByText } = render(<ConferenceTable items={[]} />);
-    expect(queryByText('Numquam quo illo aut quia labore hic. Pariatur hic et sint beatae sapiente. Non aut sequi modi. Eum ea pariatur ut ut aspernatur.')).not.toBeInTheDocument();
-    expect(queryByText('Quia natus rerum eveniet accusantium nobis velit ut. Et iure veritatis corporis est sed ut odit ipsum. Fuga qui officia beatae voluptatum vitae aut assumenda. Eum dolores voluptatem eaque. Rerum sed voluptatum similique eos et facilis voluptatem ullam. Voluptate sint adipisci in consectetur occaecati earum eligendi in.')).not.toBeInTheDocument();
+    expect(
+      queryByText(
+        'Delectus maxime excepturi et quia quasi quos et iure. Quos et eum est illo illum. A nostrum quasi ex voluptatibus accusantium non. Unde omnis quo ut quaerat nobis quaerat molestiae. Veritatis dolores et.'
+      )
+    ).not.toBeInTheDocument();
+    expect(
+      queryByText(
+        'Quibusdam qui sint ut beatae cupiditate aliquam officiis autem. Aperiam unde non soluta tempore eius sit maxime. Ducimus ut consequatur quam vel aperiam a sit facere. Aut atque dolor.'
+      )
+    ).not.toBeInTheDocument();
 
     expect(queryByText('entities.conference.noItems')).toBeInTheDocument();
   });
@@ -25,7 +41,11 @@ describe('ConferenceTable', () => {
     const { getByText } = render(
       <ConferenceTable items={conferenceMocks} onSelect={onSelectMock} />
     );
-    fireEvent.click(getByText('Numquam quo illo aut quia labore hic. Pariatur hic et sint beatae sapiente. Non aut sequi modi. Eum ea pariatur ut ut aspernatur.'));
+    fireEvent.click(
+      getByText(
+        'Delectus maxime excepturi et quia quasi quos et iure. Quos et eum est illo illum. A nostrum quasi ex voluptatibus accusantium non. Unde omnis quo ut quaerat nobis quaerat molestiae. Veritatis dolores et.'
+      )
+    );
     expect(onSelectMock).toHaveBeenCalledTimes(1);
   });
 });

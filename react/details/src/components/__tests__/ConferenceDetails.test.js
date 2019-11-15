@@ -9,7 +9,7 @@ import conferenceMock from 'components/__mocks__/conferenceMocks';
 describe('ConferenceDetails component', () => {
   test('renders data in details widget', () => {
     const { getByText } = render(<ConferenceDetails conference={conferenceMock} />);
-    
+
     expect(getByText('entities.conference.name')).toBeInTheDocument();
   });
 });
