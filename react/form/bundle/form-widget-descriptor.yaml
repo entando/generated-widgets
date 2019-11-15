@@ -1,0 +1,7 @@
+version: 0.0.1
+code: conference-form-widget
+titles:
+  en: Conference Table Widget
+  it: Conference Table Widget
+group: free
+customUiPath: conference-form-widget.ftl

@@ -14,7 +14,7 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>Conference details</title>
-    <script src="http://localhost:8080/auth/js/keycloak.js"></script>
+    <script src="http://localhost:9080/auth/js/keycloak.js"></script>
     <script>
       const onLoad = (function() {
         function createKcDispatcher(payload) {
@@ -23,8 +23,8 @@
 
         function initKeycloak() {
           const keycloak = Keycloak({
-            url: 'http://localhost:8080/auth',
-            realm: 'local',
+            url: 'http://localhost:9080/auth',
+            realm: 'jhipster',
             clientId: 'jhipster-entando-react-client',
           });
 
@@ -42,9 +42,7 @@
             keycloak,
           };
 
-          window.entando.keycloak
-            .init({ onLoad: 'check-sso' })
-            .success(onInit);
+          window.entando.keycloak.init({ onLoad: 'check-sso' }).success(onInit);
         }
         return initKeycloak;
       })();

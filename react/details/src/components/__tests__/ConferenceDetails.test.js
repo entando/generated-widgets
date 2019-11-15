@@ -10,6 +10,6 @@ describe('ConferenceDetails component', () => {
   test('renders data in details widget', () => {
     const { getByText } = render(<ConferenceDetails conference={conferenceMock} />);
 
-    expect(getByText('JSConf 2019')).toBeInTheDocument();
+    expect(getByText('entities.conference.name')).toBeInTheDocument();
   });
 });

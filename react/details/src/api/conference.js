@@ -1,11 +1,10 @@
-import { DOMAIN, JWT_TOKEN } from 'api/constants';
+import { DOMAIN } from 'api/constants';
 
 const getKeycloakToken = () => {
   if (
     window &&
     window.entando &&
     window.entando.keycloak &&
-    window.entando.keycloak.initialized &&
     window.entando.keycloak.authenticated
   ) {
     return window.entando.keycloak.token;
@@ -21,7 +20,7 @@ export default (params = {}) => {
   const url = `${DOMAIN}${DOMAIN.endsWith('/') ? '' : '/'}conferences/${id}`;
   const defaultOptions = {
     headers: new Headers({
-      Authorization: `Bearer ${JWT_TOKEN || token}`,
+      Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
     }),
   };

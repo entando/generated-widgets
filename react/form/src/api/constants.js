@@ -1,3 +1,1 @@
-export const DOMAIN = process.env.REACT_APP_DOMAIN;
-
-export const JWT_TOKEN = process.env.REACT_APP_JWT_TOKEN;
+export const DOMAIN = process.env.REACT_APP_DOMAIN; // eslint-disable-line import/prefer-default-export

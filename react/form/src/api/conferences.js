@@ -1,11 +1,10 @@
-import { DOMAIN, JWT_TOKEN } from 'api/constants';
+import { DOMAIN } from 'api/constants';
 
 const getKeycloakToken = () => {
   if (
     window &&
     window.entando &&
     window.entando.keycloak &&
-    window.entando.keycloak.initialized &&
     window.entando.keycloak.authenticated
   ) {
     return window.entando.keycloak.token;
@@ -15,7 +14,7 @@ const getKeycloakToken = () => {
 
 const getDefaultOptions = () => ({
   headers: new Headers({
-    Authorization: `Bearer ${JWT_TOKEN || getKeycloakToken()}`,
+    Authorization: `Bearer ${getKeycloakToken()}`,
     'Content-Type': 'application/json',
   }),
 });
@@ -36,7 +35,6 @@ export const apiConferenceGet = async id => {
     ...getDefaultOptions(),
     method: 'GET',
   };
-
   return request(url, options);
 };
 
@@ -47,7 +45,6 @@ export const apiConferencePost = async conference => {
     method: 'POST',
     body: conference ? JSON.stringify(conference) : null,
   };
-
   return request(url, options);
 };
 

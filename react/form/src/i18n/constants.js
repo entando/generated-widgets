@@ -1,2 +1,1 @@
-/* eslint-disable import/prefer-default-export */
-export const DEFAULT_LOCALE = 'en';
+export const DEFAULT_LOCALE = 'en'; // eslint-disable-line import/prefer-default-export
