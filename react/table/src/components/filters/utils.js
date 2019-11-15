@@ -1,16 +1,14 @@
 const DEFAULT_FILTER_TYPES = ['equals', 'in', 'specified', 'unspecified'];
-
-const STRING_FIELDS = ['name', 'summary', 'venueName'];
 const STRING_FILTER_TYPES = ['contains'];
-
-const DATE_FIELDS = ['start', 'end', 'registration', 'saleStartDate'];
-const DATE_FILTER_TYPES = [
-  { value: 'dateGreaterThan', title: '>' },
-  { value: 'dateLessThan', title: '<' },
-  { value: 'dateGreaterOrEqualThan', title: '>=' },
-  { value: 'dateLessOrEqualThan', title: '<=' },
+const DATE_NUMBER_FILTER_TYPES = [
+  { value: 'greaterThan', title: '>' },
+  { value: 'lessThan', title: '<' },
+  { value: 'greaterOrEqualThan', title: '>=' },
+  { value: 'lessOrEqualThan', title: '<=' },
 ];
 
+const STRING_FIELDS = ['name', 'summary', 'venueName'];
+const DATE_FIELDS = ['start', 'end', 'registration', 'saleStartDate'];
 const NUMBER_FIELDS = [
   'conferencePrice',
   'conferenceId',
@@ -19,19 +17,13 @@ const NUMBER_FIELDS = [
   'venueLong',
   'venueId',
 ];
-const NUMBER_FILTER_TYPES = [
-  { value: 'greaterThan', title: '>' },
-  { value: 'lessThan', title: '<' },
-  { value: 'greaterOrEqualThan', title: '>=' },
-  { value: 'lessOrEqualThan', title: '<=' },
-];
 
 export const getFieldFilterTypes = field => {
   return [
     ...DEFAULT_FILTER_TYPES,
     ...(STRING_FIELDS.includes(field) ? STRING_FILTER_TYPES : []),
-    ...(DATE_FIELDS.includes(field) ? DATE_FILTER_TYPES : []),
-    ...(NUMBER_FIELDS.includes(field) ? NUMBER_FILTER_TYPES : []),
+    ...(DATE_FIELDS.includes(field) ? DATE_NUMBER_FILTER_TYPES : []),
+    ...(NUMBER_FIELDS.includes(field) ? DATE_NUMBER_FILTER_TYPES : []),
   ];
 };
 
