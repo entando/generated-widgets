@@ -1,42 +1,46 @@
-function createData(id, name, summary, start, end) {
-  return { id, name, summary, start: start.toLocaleString(), end: end.toLocaleString() };
-}
-
-export const conferencesWithDateObjects = [
-  createData(
-    0,
-    'Conference name 1',
-    'Conference summary 1',
-    new Date(2019, 3, 5, 19),
-    new Date(2019, 3, 5, 23)
-  ),
-  createData(
-    1,
-    'Conference name 2',
-    'Conference summary 2',
-    new Date(2019, 6, 10, 19),
-    new Date(2019, 6, 10, 23)
-  ),
-  createData(
-    2,
-    'Conference name 3',
-    'Conference summary 3',
-    new Date(2019, 9, 10, 19),
-    new Date(2019, 9, 10, 23)
-  ),
-  createData(
-    3,
-    'Conference name 4',
-    'Conference summary 4',
-    new Date(2019, 11, 15, 19),
-    new Date(2019, 11, 12, 23)
-  ),
+const conferenceMocks = [
+  {
+    id: 0,
+    name: 'Numquam quo illo aut quia labore hic. Pariatur hic et sint beatae sapiente. Non aut sequi modi. Eum ea pariatur ut ut aspernatur.',
+    summary: 'Qui facere sit culpa quisquam libero et consequatur iste. Est dolor soluta molestiae et. Nostrum quia velit quaerat deserunt perferendis atque minus. Fugit sit voluptatibus minus architecto quasi id.',
+    start: '1987-03-06',
+    end: '1981-08-08',
+    conferencePrice: -745,
+    conferenceId: 30,
+    registration: '2006-09-06T06:01:44+03:00',
+    attendeeCount: 625,
+    venueName: 'Cupiditate sit iste voluptatem. Repudiandae id vel fugiat laborum. Enim iure architecto molestiae quisquam velit eligendi possimus consectetur. Et doloribus mollitia modi. Officiis nulla eius qui explicabo aperiam deleniti voluptatem ex.',
+    venueLat: 0.5842915892135352,
+    venueLong: 0.52915431978181,
+    venueId: -262.65564700588584,
+    saleStartDate: '2014-09-15T13:38:30+03:00',
+    earlyBirdActive: false,
+    region: 'EUROPE',
+    logo: 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=',
+    content: 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=',
+    signature: 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=',
+  },
+  {
+    id: 1,
+    name: 'Quia natus rerum eveniet accusantium nobis velit ut. Et iure veritatis corporis est sed ut odit ipsum. Fuga qui officia beatae voluptatum vitae aut assumenda. Eum dolores voluptatem eaque. Rerum sed voluptatum similique eos et facilis voluptatem ullam. Voluptate sint adipisci in consectetur occaecati earum eligendi in.',
+    summary: 'Tempora ipsam nemo ut iure. Sit cumque ut consequatur dolores. Doloremque ad pariatur explicabo ipsa eligendi beatae odio. Hic magnam facere dolore veritatis.',
+    start: '1975-09-04',
+    end: '2004-04-02',
+    conferencePrice: 976,
+    conferenceId: 599,
+    registration: '1991-04-08T17:32:13+03:00',
+    attendeeCount: -11,
+    venueName: 'Repellendus et earum fuga sint. Maiores dolore incidunt non velit dolor et. Voluptas dolor voluptas. Dicta voluptatem facere laudantium. Qui ea ipsa quasi deleniti sit.',
+    venueLat: 0.5850417199544609,
+    venueLong: 0.11364953592419624,
+    venueId: -747.2784793935716,
+    saleStartDate: '1973-09-19T04:53:01+03:00',
+    earlyBirdActive: false,
+    region: 'SA',
+    logo: 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=',
+    content: 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=',
+    signature: 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=',
+  },
 ];
 
-export const conferencesWithDateStrings = conferencesWithDateObjects.map(item => ({
-  ...item,
-  start: new Date(item.start).toLocaleString(),
-  end: new Date(item.end).toLocaleString(),
-}));
-
-export const conferenceWithDateString = conferencesWithDateStrings[0];
+export default conferenceMocks;

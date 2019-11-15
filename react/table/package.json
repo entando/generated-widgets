@@ -64,8 +64,7 @@
             ".jsx"
           ]
         }
-      ],
-      "react/state-in-constructor": 0
+      ]
     }
   },
   "eslintIgnore": [

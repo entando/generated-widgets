@@ -5,6 +5,9 @@ i18n.use(initReactI18next).init({
   fallbackLng: 'en',
   lng: 'en',
   ns: ['translation'],
+  interpolation: {
+    escapeValue: false,
+  },
   react: { useSuspense: false },
 });
 

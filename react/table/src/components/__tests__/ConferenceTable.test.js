@@ -2,52 +2,30 @@ import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { fireEvent, render } from '@testing-library/react';
 import 'i18n/__mocks__/i18nMock';
-import {
-  conferenceWithDateString as conference,
-  conferencesWithDateStrings as conferences,
-} from 'components/__mocks__/conferenceMocks';
+import conferenceMocks from 'components/__mocks__/conferenceMocks';
 import ConferenceTable from 'components/ConferenceTable';
 
 describe('ConferenceTable', () => {
-  afterEach(() => {
-    jest.clearAllMocks();
+  it('shows conferences', () => {
+    const { getByText } = render(<ConferenceTable items={conferenceMocks} />);
+    expect(getByText('Numquam quo illo aut quia labore hic. Pariatur hic et sint beatae sapiente. Non aut sequi modi. Eum ea pariatur ut ut aspernatur.')).toBeInTheDocument();
+    expect(getByText('Quia natus rerum eveniet accusantium nobis velit ut. Et iure veritatis corporis est sed ut odit ipsum. Fuga qui officia beatae voluptatum vitae aut assumenda. Eum dolores voluptatem eaque. Rerum sed voluptatum similique eos et facilis voluptatem ullam. Voluptate sint adipisci in consectetur occaecati earum eligendi in.')).toBeInTheDocument();
   });
 
-  it('shows items', () => {
-    const { getByText } = render(<ConferenceTable items={conferences} />);
-
-    expect(getByText('Conference name 1')).toBeInTheDocument();
-    expect(getByText('Conference summary 1')).toBeInTheDocument();
-    expect(getByText('Conference name 2')).toBeInTheDocument();
-    expect(getByText('Conference summary 2')).toBeInTheDocument();
-    expect(getByText('Conference name 3')).toBeInTheDocument();
-    expect(getByText('Conference summary 3')).toBeInTheDocument();
-    expect(getByText('Conference name 4')).toBeInTheDocument();
-    expect(getByText('Conference summary 4')).toBeInTheDocument();
-  });
-
-  it('shows no items message', () => {
+  it('shows no conferences message', () => {
     const { queryByText } = render(<ConferenceTable items={[]} />);
+    expect(queryByText('Numquam quo illo aut quia labore hic. Pariatur hic et sint beatae sapiente. Non aut sequi modi. Eum ea pariatur ut ut aspernatur.')).not.toBeInTheDocument();
+    expect(queryByText('Quia natus rerum eveniet accusantium nobis velit ut. Et iure veritatis corporis est sed ut odit ipsum. Fuga qui officia beatae voluptatum vitae aut assumenda. Eum dolores voluptatem eaque. Rerum sed voluptatum similique eos et facilis voluptatem ullam. Voluptate sint adipisci in consectetur occaecati earum eligendi in.')).not.toBeInTheDocument();
 
-    expect(queryByText('Conference name 1')).not.toBeInTheDocument();
-    expect(queryByText('Conference summary 1')).not.toBeInTheDocument();
-    expect(queryByText('Conference name 2')).not.toBeInTheDocument();
-    expect(queryByText('Conference summary 2')).not.toBeInTheDocument();
-    expect(queryByText('Conference name 3')).not.toBeInTheDocument();
-    expect(queryByText('Conference summary 3')).not.toBeInTheDocument();
-    expect(queryByText('Conference name 4')).not.toBeInTheDocument();
-    expect(queryByText('Conference summary 4')).not.toBeInTheDocument();
-
-    expect(queryByText('conference.noItems')).toBeInTheDocument();
+    expect(queryByText('entities.conference.noItems')).toBeInTheDocument();
   });
 
   it('calls onSelect when the user clicks a table row', () => {
     const onSelectMock = jest.fn();
-    const { getByText } = render(<ConferenceTable items={conferences} onSelect={onSelectMock} />);
-
-    fireEvent.click(getByText('Conference name 1'));
-
+    const { getByText } = render(
+      <ConferenceTable items={conferenceMocks} onSelect={onSelectMock} />
+    );
+    fireEvent.click(getByText('Numquam quo illo aut quia labore hic. Pariatur hic et sint beatae sapiente. Non aut sequi modi. Eum ea pariatur ut ut aspernatur.'));
     expect(onSelectMock).toHaveBeenCalledTimes(1);
-    expect(onSelectMock).toHaveBeenCalledWith(conference);
   });
 });
