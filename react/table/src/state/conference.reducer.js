@@ -13,7 +13,7 @@ import {
 } from 'state/conference.types';
 
 export const initialState = {
-  filters: [{ field: '', operator: '', value: '' }],
+  filters: [],
   items: [],
   errorMessage: null,
   errorStatus: null,
@@ -37,10 +37,7 @@ export const reducer = (state = initialState, action) => {
     case DELETE_FILTER:
       return {
         ...state,
-        filters:
-          state.filters.length === 1
-            ? state.filters.filter((filter, index) => index !== action.payload.filterId)
-            : initialState.filters,
+        filters: state.filters.filter((f, index) => index !== action.payload.filterId),
       };
     case CLEAR_FILTERS:
       return { ...state, filters: initialState.filters };

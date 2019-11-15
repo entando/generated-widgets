@@ -7,6 +7,8 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteForever from '@material-ui/icons/DeleteForever';
 
 import filterType from 'components/__types__/filter';
 import { getFieldFilterTypes } from 'components/filters/utils';
@@ -16,13 +18,20 @@ const styles = () => ({
     minWidth: 120,
     width: '90%',
   },
+  icon: {
+    color: 'rgba(0, 0, 0, 0.54)',
+  },
 });
 
-const Filter = ({ filter, t, update, filterId, classes }) => {
+const Filter = ({ filter, t, update, remove, filterId, classes }) => {
   const filterOperators = getFieldFilterTypes(filter.field);
 
   const handleChange = event => {
     update(filterId, { [event.target.name]: event.target.value });
+  };
+
+  const handleRemoveClick = () => {
+    remove(filterId);
   };
 
   return (
@@ -89,7 +98,7 @@ const Filter = ({ filter, t, update, filterId, classes }) => {
           </FormControl>
         )}
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={3}>
         {!!filter.operator && !['specified', 'unspecified'].includes(filter.operator) && (
           <FormControl className={classes.formControl}>
             <TextField
@@ -103,6 +112,11 @@ const Filter = ({ filter, t, update, filterId, classes }) => {
           </FormControl>
         )}
       </Grid>
+      <Grid item xs={1}>
+        <IconButton aria-label="Remove filter" className={classes.icon} onClick={handleRemoveClick}>
+          <DeleteForever />
+        </IconButton>
+      </Grid>
     </Grid>
   );
 };
@@ -110,9 +124,11 @@ const Filter = ({ filter, t, update, filterId, classes }) => {
 Filter.propTypes = {
   classes: PropTypes.shape({
     formControl: PropTypes.string,
+    icon: PropTypes.string,
   }).isRequired,
   t: PropTypes.func.isRequired,
   update: PropTypes.func.isRequired,
+  remove: PropTypes.func.isRequired,
   filter: filterType.isRequired,
   filterId: PropTypes.number.isRequired,
 };

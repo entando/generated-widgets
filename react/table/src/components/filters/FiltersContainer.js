@@ -32,14 +32,18 @@ const styles = {
 const FiltersContainer = props => {
   const { classes, filters, applyFilter, update, remove, clear, add, t } = props;
 
+  const hasFilters = filters.length > 0;
+
   return (
     <Paper className={classes.root}>
       <Button variant="contained" className={classes.button} onClick={add}>
         {t('filters.addFilter')}
       </Button>
-      <Button className={classes.button} onClick={clear}>
-        {t('filters.clearFilters')}
-      </Button>
+      {hasFilters && (
+        <Button className={classes.button} onClick={clear}>
+          {t('filters.clearFilters')}
+        </Button>
+      )}
       {filters.map((filter, index) => {
         const filterKey = `${filter.field}${filter.operator}${index}`;
         return (
@@ -52,9 +56,16 @@ const FiltersContainer = props => {
           />
         );
       })}
-      <Button variant="contained" color="primary" className={classes.button} onClick={applyFilter}>
-        {t('filters.filter')}
-      </Button>
+      {hasFilters && (
+        <Button
+          variant="contained"
+          color="primary"
+          className={classes.button}
+          onClick={applyFilter}
+        >
+          {t('filters.filter')}
+        </Button>
+      )}
     </Paper>
   );
 };
