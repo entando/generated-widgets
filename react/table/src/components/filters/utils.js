@@ -32,15 +32,17 @@ export const getFilterQuery = (filters = []) => {
     return filters
       .filter(f => f.field && f.operator)
       .reduce((acc, f) => {
-        const key = encodeURIComponent(`${f.field}.${f.operator}`);
         switch (f.operator) {
           case 'specified':
-            return [...acc, `${key}=true`];
+            return [...acc, `${encodeURIComponent(`${f.field}.specified`)}=true`];
           case 'unspecified':
-            return [...acc, `${key}=false`];
+            return [...acc, `${encodeURIComponent(`${f.field}.specified`)}=false`];
           default:
         }
-        return [...acc, `${key}=${encodeURIComponent(f.value)}`];
+        return [
+          ...acc,
+          `${encodeURIComponent(`${f.field}.${f.operator}`)}=${encodeURIComponent(f.value)}`,
+        ];
       }, [])
       .join('&');
   }
