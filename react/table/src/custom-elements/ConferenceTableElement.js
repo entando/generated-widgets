@@ -30,6 +30,7 @@ const getKeycloakInstance = () =>
 const ATTRIBUTES = {
   hidden: 'hidden',
   locale: 'locale',
+  paginationMode: 'pagination-mode',
   disableDefaultEventHandler: 'disable-default-event-handler', // custom element attribute names MUST be written in kebab-case
 };
 
@@ -114,6 +115,8 @@ class ConferenceTableElement extends HTMLElement {
     const locale = this.getAttribute(ATTRIBUTES.locale);
     setLocale(locale);
 
+    const paginationMode = this.getAttribute(ATTRIBUTES.paginationMode) || '';
+
     const disableEventHandler = this.getAttribute(ATTRIBUTES.disableDefaultEventHandler) === 'true';
     if (!disableEventHandler) {
       const defaultWidgetEventHandler = this.defaultWidgetEventHandler();
@@ -139,6 +142,7 @@ class ConferenceTableElement extends HTMLElement {
             onAdd={this.onAdd}
             onSelect={this.onSelect}
             onError={this.onError}
+            paginationMode={paginationMode}
           />
         </StylesProvider>
       </KeycloakContext.Provider>,

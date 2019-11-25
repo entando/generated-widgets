@@ -16,17 +16,36 @@ const getKeycloakToken = () => {
 const request = async (url, options) => {
   const response = await fetch(url, options);
 
+  const headers = {
+    ...(response.headers.has('X-Total-Count')
+      ? { 'X-Total-Count': parseInt(response.headers.get('X-Total-Count'), 10) }
+      : {}),
+  };
+
   return response.status >= 200 && response.status < 300
-    ? response.json()
+    ? { conferences: await response.json(), headers }
     : Promise.reject(new Error(response.statusText || response.status));
 };
 
+const getUrl = (url, filters = '', pagination = '') => {
+  const hasQuery = !!(filters || pagination);
+  const parameters = `${filters}${filters ? '&' : ''}${pagination}`;
+  return `${url}${hasQuery ? `?${parameters}` : ''}`;
+};
+
 /* eslint-disable-next-line import/prefer-default-export */
-export const apiConferencesGet = async ({ filters = [] }) => {
-  const query = getFilterQuery(filters);
+export const apiConferencesGet = async ({ filters = [], pagination, mode }) => {
+  const filterQuery = getFilterQuery(filters);
 
-  const url = `${DOMAIN}/conferences${query ? `?${query}` : ''}`;
+  const paginationQuery = pagination
+    ? `page=${pagination.page}&size=${pagination.rowsPerPage}`
+    : '';
 
+  const url = getUrl(
+    `${DOMAIN}/conferences${mode === 'count' ? '/count' : ''}`,
+    filterQuery,
+    paginationQuery
+  );
   const token = getKeycloakToken();
 
   const defaultOptions = {
