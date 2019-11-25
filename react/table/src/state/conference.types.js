@@ -1,6 +1,6 @@
-export const READ_ALL = 'table/readAll';
-export const ERROR_FETCH = 'table/error';
-export const CLEAR_ERRORS = 'table/clearErrors';
-export const CREATE = 'table/create';
-export const UPDATE = 'table/update';
-export const DELETE = 'table/delete';
+export const READ_ALL = 'conference-table/readAll';
+export const ERROR_FETCH = 'conference-table/error';
+export const CLEAR_ERRORS = 'conference-table/clearErrors';
+export const CREATE = 'conference-table/create';
+export const UPDATE = 'conference-table/update';
+export const DELETE = 'conference-table/delete';
