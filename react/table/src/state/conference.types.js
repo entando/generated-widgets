@@ -1,6 +1,6 @@
-export const READ_ALL = 'readAll';
-export const ERROR_FETCH = 'error';
-export const CLEAR_ERRORS = 'clearErrors';
-export const CREATE = 'create';
-export const UPDATE = 'update';
-export const DELETE = 'delete';
+export const READ_ALL = 'table/readAll';
+export const ERROR_FETCH = 'table/error';
+export const CLEAR_ERRORS = 'table/clearErrors';
+export const CREATE = 'table/create';
+export const UPDATE = 'table/update';
+export const DELETE = 'table/delete';

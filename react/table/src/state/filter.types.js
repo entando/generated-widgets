@@ -1,4 +1,4 @@
-export const ADD_FILTER = 'addFilter';
-export const UPDATE_FILTER = 'updateFilter';
-export const DELETE_FILTER = 'deleteFilter';
-export const CLEAR_FILTERS = 'clearFilters';
+export const ADD_FILTER = 'filter/addFilter';
+export const UPDATE_FILTER = 'filter/updateFilter';
+export const DELETE_FILTER = 'filter/deleteFilter';
+export const CLEAR_FILTERS = 'filter/clearFilters';
