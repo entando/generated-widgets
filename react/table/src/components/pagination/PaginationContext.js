@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export const possibleItemsPerPage = [5, 10, 25];
+export const itemsPerPageOptions = [5, 10, 25];
 
 const initialState = {
   currentPage: 0,
   totalItemCount: 0,
-  itemsPerPage: possibleItemsPerPage[possibleItemsPerPage.length - 1],
+  itemsPerPage: itemsPerPageOptions[itemsPerPageOptions.length - 1],
 };
 
 export const PaginationContext = React.createContext({ pagination: initialState });
@@ -17,8 +17,8 @@ export class PaginationProvider extends React.Component {
 
     const initialItemsPerPage =
       props.paginationMode === 'pagination'
-        ? possibleItemsPerPage[0]
-        : possibleItemsPerPage[possibleItemsPerPage.length - 1];
+        ? itemsPerPageOptions[0]
+        : itemsPerPageOptions[itemsPerPageOptions.length - 1];
 
     this.state = {
       pagination: {

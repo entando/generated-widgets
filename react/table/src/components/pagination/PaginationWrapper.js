@@ -6,7 +6,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 
 import {
   withPaginationContext,
-  possibleItemsPerPage,
+  itemsPerPageOptions,
 } from 'components/pagination/PaginationContext';
 import TablePaginationActions from 'components/pagination/TablePaginationActions';
 
@@ -31,7 +31,7 @@ const PaginationWrapper = ({ children, pagination, paginationMode, items, itemCo
         {children}
         <TablePagination
           component="div"
-          rowsPerPageOptions={possibleItemsPerPage}
+          rowsPerPageOptions={itemsPerPageOptions}
           count={itemCount}
           rowsPerPage={pagination.itemsPerPage}
           page={pagination.currentPage}
