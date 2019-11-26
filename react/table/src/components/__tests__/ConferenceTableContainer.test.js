@@ -33,7 +33,9 @@ describe('ConferenceTableContainer', () => {
   });
 
   it('calls API', async () => {
-    apiConferencesGet.mockImplementation(() => Promise.resolve(conferenceMocks));
+    apiConferencesGet.mockImplementation(() =>
+      Promise.resolve({ conferences: conferenceMocks, count: 2 })
+    );
     const { queryByText } = render(<ConferenceTableContainer />);
 
     await wait(() => {

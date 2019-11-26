@@ -8,20 +8,15 @@ import AddIcon from '@material-ui/icons/Add';
 import keycloakType from 'components/__types__/keycloak';
 import { withKeycloak } from 'auth/KeycloakContext';
 import { AuthenticatedView, UnauthenticatedView } from 'auth/KeycloakViews';
+import PaginationWrapper from 'components/pagination/PaginationWrapper';
+import { withPaginationContext } from 'components/pagination/PaginationContext';
 import FiltersContainer from 'components/filters/FiltersContainer';
 import ConferenceTable from 'components/ConferenceTable';
 import Notification from 'components/common/Notification';
 import { apiConferencesGet } from 'api/conferences';
 import { reducer, initialState } from 'state/conference.reducer';
-import {
-  ERROR_FETCH,
-  CLEAR_ERRORS,
-  READ_ALL,
-  ADD_FILTER,
-  UPDATE_FILTER,
-  DELETE_FILTER,
-  CLEAR_FILTERS,
-} from 'state/conference.types';
+import { ADD_FILTER, UPDATE_FILTER, DELETE_FILTER, CLEAR_FILTERS } from 'state/filter.types';
+import { ERROR_FETCH, CLEAR_ERRORS, READ_ALL } from 'state/conference.types';
 
 const styles = {
   fab: {
@@ -54,30 +49,53 @@ class ConferenceTableContainer extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { keycloak } = this.props;
+    const { keycloak, paginationMode, pagination } = this.props;
     const authenticated = keycloak.initialized && keycloak.authenticated;
 
     const changedAuth = prevProps.keycloak.authenticated !== authenticated;
+    const changedPagination =
+      ['pagination', 'infinite-scroll'].includes(paginationMode) &&
+      (prevProps.pagination.currentPage !== pagination.currentPage ||
+        prevProps.pagination.itemsPerPage !== pagination.itemsPerPage);
 
-    if (authenticated && changedAuth) {
+    if (authenticated && (changedAuth || changedPagination)) {
       this.fetchData();
     }
   }
 
-  dispatch(action) {
-    this.setState(prevState => reducer(prevState, action));
+  dispatch(action, afterSetState = () => {}) {
+    this.setState(prevState => reducer(prevState, action), afterSetState);
   }
 
   async fetchData() {
-    const { filters } = this.state;
-    const { keycloak } = this.props;
+    const { filters, items } = this.state;
+    const { keycloak, paginationMode, pagination } = this.props;
     const authenticated = keycloak.initialized && keycloak.authenticated;
 
     if (authenticated) {
       try {
-        const conferences = await apiConferencesGet({ filters });
+        const requestParameters = {
+          filters,
+          ...(paginationMode === ''
+            ? {}
+            : {
+                pagination: {
+                  page: pagination.currentPage,
+                  rowsPerPage: pagination.itemsPerPage,
+                },
+              }),
+        };
 
-        this.dispatch({ type: READ_ALL, payload: conferences });
+        const { conferences, headers } = await apiConferencesGet(requestParameters);
+        const conferenceCount = (headers && headers['X-Total-Count']) || null;
+
+        this.dispatch({
+          type: READ_ALL,
+          payload: {
+            items: paginationMode === 'infinite-scroll' ? [...items, ...conferences] : conferences,
+            count: conferenceCount,
+          },
+        });
       } catch (err) {
         this.handleError(err);
       }
@@ -93,11 +111,11 @@ class ConferenceTableContainer extends Component {
   }
 
   removeFilter(filterId) {
-    this.dispatch({ type: DELETE_FILTER, payload: { filterId } });
+    this.dispatch({ type: DELETE_FILTER, payload: { filterId } }, this.fetchData);
   }
 
   clearFilters() {
-    this.dispatch({ type: CLEAR_FILTERS });
+    this.dispatch({ type: CLEAR_FILTERS }, this.fetchData);
   }
 
   closeNotification() {
@@ -117,8 +135,8 @@ class ConferenceTableContainer extends Component {
   }
 
   render() {
-    const { items, errorMessage, errorStatus, filters } = this.state;
-    const { classes, onSelect, onAdd, t, keycloak } = this.props;
+    const { items, itemCount, errorMessage, errorStatus, filters } = this.state;
+    const { classes, onSelect, onAdd, t, keycloak, paginationMode = '' } = this.props;
 
     return (
       <>
@@ -137,7 +155,9 @@ class ConferenceTableContainer extends Component {
             clear={this.clearFilters}
             filters={filters}
           />
-          <ConferenceTable items={items} onSelect={onSelect} />
+          <PaginationWrapper items={items} paginationMode={paginationMode} itemCount={itemCount}>
+            <ConferenceTable items={items} onSelect={onSelect} />
+          </PaginationWrapper>
         </AuthenticatedView>
         <Notification
           status={errorStatus}
@@ -158,14 +178,23 @@ ConferenceTableContainer.propTypes = {
   onSelect: PropTypes.func,
   t: PropTypes.func.isRequired,
   keycloak: keycloakType.isRequired,
+  paginationMode: PropTypes.string,
+  pagination: PropTypes.shape({
+    currentPage: PropTypes.number,
+    itemsPerPage: PropTypes.number,
+  }),
 };
 
 ConferenceTableContainer.defaultProps = {
   onAdd: () => {},
   onError: () => {},
   onSelect: () => {},
+  paginationMode: '',
+  pagination: null,
 };
 
 export default withKeycloak(
-  withStyles(styles)(withTranslation(undefined, { withRef: true })(ConferenceTableContainer))
+  withStyles(styles)(
+    withTranslation(undefined, { withRef: true })(withPaginationContext(ConferenceTableContainer))
+  )
 );

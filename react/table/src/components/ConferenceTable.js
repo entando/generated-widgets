@@ -3,16 +3,19 @@ import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
+import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
-import TableHead from '@material-ui/core/TableHead';
 
 import conferenceType from 'components/__types__/conference';
 
 const styles = {
   root: {
     cursor: 'pointer',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
   },
 };
 

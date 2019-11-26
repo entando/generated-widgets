@@ -1,9 +1,6 @@
 import { INPUT_EVENT_TYPES } from 'custom-elements/widgetEventTypes';
+import { ADD_FILTER, UPDATE_FILTER, DELETE_FILTER, CLEAR_FILTERS } from 'state/filter.types';
 import {
-  ADD_FILTER,
-  UPDATE_FILTER,
-  DELETE_FILTER,
-  CLEAR_FILTERS,
   READ_ALL,
   ERROR_FETCH,
   CLEAR_ERRORS,
@@ -15,6 +12,7 @@ import {
 export const initialState = {
   filters: [],
   items: [],
+  itemCount: 0,
   errorMessage: null,
   errorStatus: null,
   loading: false,
@@ -40,9 +38,16 @@ export const reducer = (state = initialState, action) => {
         filters: state.filters.filter((f, index) => index !== action.payload.filterId),
       };
     case CLEAR_FILTERS:
-      return { ...state, filters: initialState.filters };
+      return {
+        ...state,
+        filters: initialState.filters,
+      };
     case READ_ALL:
-      return { ...state, items: action.payload };
+      return {
+        ...state,
+        items: action.payload.items,
+        itemCount: action.payload.count,
+      };
     case ERROR_FETCH:
       return { ...state, errorMessage: action.payload.message, errorStatus: action.payload.status };
     case CLEAR_ERRORS:

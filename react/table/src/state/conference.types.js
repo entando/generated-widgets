@@ -1,10 +1,6 @@
-export const ADD_FILTER = 'addFilter';
-export const UPDATE_FILTER = 'updateFilter';
-export const DELETE_FILTER = 'deleteFilter';
-export const CLEAR_FILTERS = 'clearFilters';
-export const READ_ALL = 'readAll';
-export const ERROR_FETCH = 'error';
-export const CLEAR_ERRORS = 'clearErrors';
-export const CREATE = 'create';
-export const UPDATE = 'update';
-export const DELETE = 'delete';
+export const READ_ALL = 'conference-table/readAll';
+export const ERROR_FETCH = 'conference-table/error';
+export const CLEAR_ERRORS = 'conference-table/clearErrors';
+export const CREATE = 'conference-table/create';
+export const UPDATE = 'conference-table/update';
+export const DELETE = 'conference-table/delete';
