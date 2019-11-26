@@ -4,6 +4,14 @@
     "notAuthenticated": "User is not authenticated.",
     "loadingMore": "Loading more..."
   },
+  "pagination": {
+    "ariaLabels": {
+      "firstPage": "first page",
+      "previousPage": "previous page",
+      "nextPage": "next page",
+      "lastPage": "last page"
+    }
+  },
   "filters": {
     "value": "Value",
     "addFilter": "Add filter",

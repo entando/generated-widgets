@@ -6,6 +6,8 @@ import { StylesProvider, jssPreset } from '@material-ui/core/styles';
 import { create } from 'jss';
 
 import { KeycloakContext } from 'auth/KeycloakContext';
+import { PaginationProvider } from 'components/pagination/PaginationContext';
+
 import ConferenceTableContainer from 'components/ConferenceTableContainer';
 import setLocale from 'i18n/setLocale';
 import {
@@ -137,13 +139,15 @@ class ConferenceTableElement extends HTMLElement {
     ReactDOM.render(
       <KeycloakContext.Provider value={this.keycloak}>
         <StylesProvider jss={this.jss}>
-          <ConferenceTableContainer
-            ref={this.reactRootRef}
-            onAdd={this.onAdd}
-            onSelect={this.onSelect}
-            onError={this.onError}
-            paginationMode={paginationMode}
-          />
+          <PaginationProvider paginationMode={paginationMode}>
+            <ConferenceTableContainer
+              ref={this.reactRootRef}
+              onAdd={this.onAdd}
+              onSelect={this.onSelect}
+              onError={this.onError}
+              paginationMode={paginationMode}
+            />
+          </PaginationProvider>
         </StylesProvider>
       </KeycloakContext.Provider>,
       this.mountPoint
