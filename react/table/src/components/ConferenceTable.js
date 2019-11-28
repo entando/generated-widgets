@@ -73,19 +73,12 @@ const ConferenceTable = ({ items, onSelect, classes, t, i18n }) => {
       </TableCell>
       <TableCell>
         <span>
-          <img
-            src={`data:${item.imageBlobFieldContentType};base64, ${item.imageBlobField}`}
-            alt=""
-          />
+          <img src={`data:${item.logoContentType};base64, ${item.logo}`} alt="" />
         </span>
       </TableCell>
-
       <TableCell>
         <span>
-          <a
-            download="filename"
-            href={`data:${item.binaryFileBlobFieldContentType};base64, ${item.binaryFileBlobField}`}
-          >
+          <a download="filename" href={`data:${item.contentContentType};base64, ${item.content}`}>
             {t('common.download')}
           </a>
         </span>
@@ -146,10 +139,10 @@ const ConferenceTable = ({ items, onSelect, classes, t, i18n }) => {
             <span>{t('entities.conference.region')}</span>
           </TableCell>
           <TableCell>
-            <span>{t('entities.conference.imageBlobField')}</span>
+            <span>{t('entities.conference.logo')}</span>
           </TableCell>
           <TableCell>
-            <span>{t('entities.conference.binaryFileBlobField')}</span>
+            <span>{t('entities.conference.content')}</span>
           </TableCell>
           <TableCell>
             <span>{t('entities.conference.signature')}</span>

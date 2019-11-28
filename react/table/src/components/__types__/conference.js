@@ -18,6 +18,8 @@ const conferenceType = PropTypes.shape({
   saleStartDate: PropTypes.string,
   earlyBirdActive: PropTypes.bool,
   region: PropTypes.string,
+  logo: PropTypes.string,
+  content: PropTypes.string,
   signature: PropTypes.string,
 });
 
