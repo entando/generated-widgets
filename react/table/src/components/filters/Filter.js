@@ -38,7 +38,7 @@ const Filter = ({ filter, t, update, remove, filterId, classes }) => {
     <Grid container>
       <Grid item xs={5}>
         <FormControl className={classes.formControl}>
-          <InputLabel id={`${filterId}-field-label`}>Field</InputLabel>
+          <InputLabel id={`${filterId}-field-label`}>{t('filters.field')}</InputLabel>
           <Select
             native
             labelId={`${filterId}-field-label`}
@@ -70,7 +70,7 @@ const Filter = ({ filter, t, update, remove, filterId, classes }) => {
       <Grid item xs={3}>
         {!!filter.field && (
           <FormControl className={classes.formControl}>
-            <InputLabel id={`${filterId}-operator-label`}>Operator</InputLabel>
+            <InputLabel id={`${filterId}-operator-label`}>{t('filters.operator')}</InputLabel>
             <Select
               native
               labelId={`${filterId}-operator-label`}

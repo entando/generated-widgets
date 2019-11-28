@@ -10,12 +10,12 @@ describe('ConferenceTable', () => {
     const { getByText } = render(<ConferenceTable items={conferenceMocks} />);
     expect(
       getByText(
-        'Delectus maxime excepturi et quia quasi quos et iure. Quos et eum est illo illum. A nostrum quasi ex voluptatibus accusantium non. Unde omnis quo ut quaerat nobis quaerat molestiae. Veritatis dolores et.'
+        'Nostrum voluptatem magnam. Aut consequatur omnis expedita earum illo et quidem a nihil. Molestiae rerum ut explicabo deleniti ipsam dolor.'
       )
     ).toBeInTheDocument();
     expect(
       getByText(
-        'Quibusdam qui sint ut beatae cupiditate aliquam officiis autem. Aperiam unde non soluta tempore eius sit maxime. Ducimus ut consequatur quam vel aperiam a sit facere. Aut atque dolor.'
+        'Voluptas voluptate ea fugiat corporis unde labore quod doloremque est. Amet id occaecati. Earum architecto quos nam excepturi sunt non accusamus quo. Vel perferendis itaque omnis error dolorem.'
       )
     ).toBeInTheDocument();
   });
@@ -24,12 +24,12 @@ describe('ConferenceTable', () => {
     const { queryByText } = render(<ConferenceTable items={[]} />);
     expect(
       queryByText(
-        'Delectus maxime excepturi et quia quasi quos et iure. Quos et eum est illo illum. A nostrum quasi ex voluptatibus accusantium non. Unde omnis quo ut quaerat nobis quaerat molestiae. Veritatis dolores et.'
+        'Nostrum voluptatem magnam. Aut consequatur omnis expedita earum illo et quidem a nihil. Molestiae rerum ut explicabo deleniti ipsam dolor.'
       )
     ).not.toBeInTheDocument();
     expect(
       queryByText(
-        'Quibusdam qui sint ut beatae cupiditate aliquam officiis autem. Aperiam unde non soluta tempore eius sit maxime. Ducimus ut consequatur quam vel aperiam a sit facere. Aut atque dolor.'
+        'Voluptas voluptate ea fugiat corporis unde labore quod doloremque est. Amet id occaecati. Earum architecto quos nam excepturi sunt non accusamus quo. Vel perferendis itaque omnis error dolorem.'
       )
     ).not.toBeInTheDocument();
 
@@ -43,7 +43,7 @@ describe('ConferenceTable', () => {
     );
     fireEvent.click(
       getByText(
-        'Delectus maxime excepturi et quia quasi quos et iure. Quos et eum est illo illum. A nostrum quasi ex voluptatibus accusantium non. Unde omnis quo ut quaerat nobis quaerat molestiae. Veritatis dolores et.'
+        'Nostrum voluptatem magnam. Aut consequatur omnis expedita earum illo et quidem a nihil. Molestiae rerum ut explicabo deleniti ipsam dolor.'
       )
     );
     expect(onSelectMock).toHaveBeenCalledTimes(1);

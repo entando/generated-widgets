@@ -46,6 +46,7 @@ export const apiConferencesGet = async ({ filters = [], pagination, mode }) => {
     filterQuery,
     paginationQuery
   );
+
   const token = getKeycloakToken();
 
   const defaultOptions = {

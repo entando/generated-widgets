@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
+import Checkbox from '@material-ui/core/Checkbox';
 import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -11,7 +12,10 @@ import TableRow from '@material-ui/core/TableRow';
 import conferenceType from 'components/__types__/conference';
 
 const styles = {
-  root: {
+  tableRoot: {
+    marginTop: '10px',
+  },
+  rowRoot: {
     cursor: 'pointer',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
@@ -19,9 +23,9 @@ const styles = {
   },
 };
 
-const ConferenceTable = ({ items, onSelect, classes, t }) => {
+const ConferenceTable = ({ items, onSelect, classes, t, i18n }) => {
   const tableRows = items.map(item => (
-    <TableRow hover className={classes.root} key={item.id} onClick={() => onSelect(item)}>
+    <TableRow hover className={classes.rowRoot} key={item.id} onClick={() => onSelect(item)}>
       <TableCell>
         <span>{item.name}</span>
       </TableCell>
@@ -29,10 +33,10 @@ const ConferenceTable = ({ items, onSelect, classes, t }) => {
         <span>{item.summary}</span>
       </TableCell>
       <TableCell>
-        <span>{item.start}</span>
+        <span>{new Date(item.start).toLocaleDateString('en')}</span>
       </TableCell>
       <TableCell>
-        <span>{item.end}</span>
+        <span>{new Date(item.end).toLocaleDateString('en')}</span>
       </TableCell>
       <TableCell>
         <span>{item.conferencePrice}</span>
@@ -41,7 +45,7 @@ const ConferenceTable = ({ items, onSelect, classes, t }) => {
         <span>{item.conferenceId}</span>
       </TableCell>
       <TableCell>
-        <span>{item.registration}</span>
+        <span>{new Date(item.registration).toLocaleString('en')}</span>
       </TableCell>
       <TableCell>
         <span>{item.attendeeCount}</span>
@@ -59,13 +63,32 @@ const ConferenceTable = ({ items, onSelect, classes, t }) => {
         <span>{item.venueId}</span>
       </TableCell>
       <TableCell>
-        <span>{item.saleStartDate}</span>
+        <span>{new Date(item.saleStartDate).toLocaleString(i18n.language)}</span>
       </TableCell>
-      <TableCell>
-        <span>{item.earlyBirdActive}</span>
+      <TableCell align="center">
+        <Checkbox disabled checked={item.earlyBirdActive} />
       </TableCell>
       <TableCell>
         <span>{item.region}</span>
+      </TableCell>
+      <TableCell>
+        <span>
+          <img
+            src={`data:${item.imageBlobFieldContentType};base64, ${item.imageBlobField}`}
+            alt=""
+          />
+        </span>
+      </TableCell>
+
+      <TableCell>
+        <span>
+          <a
+            download="filename"
+            href={`data:${item.binaryFileBlobFieldContentType};base64, ${item.binaryFileBlobField}`}
+          >
+            {t('common.download')}
+          </a>
+        </span>
       </TableCell>
       <TableCell>
         <span>{item.signature}</span>
@@ -74,7 +97,7 @@ const ConferenceTable = ({ items, onSelect, classes, t }) => {
   ));
 
   return items.length ? (
-    <Table>
+    <Table className={classes.tableRoot} stickyHeader>
       <TableHead>
         <TableRow>
           <TableCell>
@@ -123,6 +146,12 @@ const ConferenceTable = ({ items, onSelect, classes, t }) => {
             <span>{t('entities.conference.region')}</span>
           </TableCell>
           <TableCell>
+            <span>{t('entities.conference.imageBlobField')}</span>
+          </TableCell>
+          <TableCell>
+            <span>{t('entities.conference.binaryFileBlobField')}</span>
+          </TableCell>
+          <TableCell>
             <span>{t('entities.conference.signature')}</span>
           </TableCell>
         </TableRow>
@@ -138,9 +167,11 @@ ConferenceTable.propTypes = {
   items: PropTypes.arrayOf(conferenceType).isRequired,
   onSelect: PropTypes.func,
   classes: PropTypes.shape({
-    root: PropTypes.string,
+    rowRoot: PropTypes.string,
+    tableRoot: PropTypes.string,
   }).isRequired,
   t: PropTypes.func.isRequired,
+  i18n: PropTypes.shape({ language: PropTypes.string }).isRequired,
 };
 
 ConferenceTable.defaultProps = {
