@@ -17,7 +17,7 @@ describe('Conference Form', () => {
       </ThemeProvider>
     );
     expect(getByLabelText('entities.conference.name').value).toBe(
-      'Vel reprehenderit eos facilis illum ut accusantium. In non laboriosam explicabo suscipit culpa deleniti rerum. Aspernatur eveniet vero occaecati rerum atque autem. Sapiente voluptatem corporis in beatae modi ullam magnam. Veniam sit maiores.'
+      'Aut doloribus et. Velit deserunt nihil libero. Necessitatibus id qui eligendi corrupti et. Autem blanditiis et et. Qui hic dolorem dolores.'
     );
   });
 
