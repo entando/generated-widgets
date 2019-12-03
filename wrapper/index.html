@@ -55,13 +55,39 @@
     </script>
   </head>
   <body onLoad="onLoad();">
+    <style>
+      .wrapper {
+        margin: 15px;
+      }
+
+      .row {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: 100%;
+      }
+
+      .column {
+        display: flex;
+        flex-direction: column;
+        flex-basis: 100%;
+        flex: 1;
+        max-width: 50%;
+      }
+    </style>
     <noscript>You need to enable JavaScript to run this app.</noscript>
 
-    <conference-form id="1"></conference-form>
-    <br />
-    <br />
-    <br />
-    <conference-table></conference-table>
+    <div class="wrapper">
+      <div class="row">
+        <div class="column">
+          <conference-table></conference-table>
+        </div>
+        <div class="column">
+          <conference-form id="1"></conference-form>
+          <conference-details id="1"></conference-details>
+        </div>
+      </div>
+    </div>
 
     <script src="http://localhost:5001/static/js/runtime.conference-form.js"></script>
     <script src="http://localhost:5001/static/js/vendor.conference-form.js"></script>
@@ -70,5 +96,10 @@
     <script src="http://localhost:5002/static/js/runtime.conference-table.js"></script>
     <script src="http://localhost:5002/static/js/vendor.conference-table.js"></script>
     <script src="http://localhost:5002/static/js/main.conference-table.js"></script>
+
+    <script src="http://localhost:5003/static/js/runtime.conference-details.js"></script>
+    <script src="http://localhost:5003/static/js/vendor.conference-details.js"></script>
+
+    <script src="http://localhost:5003/static/js/main.conference-details.js"></script>
   </body>
 </html>

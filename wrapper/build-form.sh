@@ -1,3 +1,5 @@
+pushd ../react/form
+
 INLINE_RUNTIME_CHUNK=false npm run build
 
 pushd build/static/js
@@ -9,3 +11,5 @@ mv -f runtime~main*.js runtime.conference-form.js
 popd
 
 serve -l 5001 build
+
+popd
