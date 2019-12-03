@@ -16,7 +16,7 @@
           const keycloak = Keycloak({
             url: 'http://localhost:9080/auth',
             realm: 'jhipster',
-            clientId: 'jhipster-entando-react-client',
+            clientId: 'jhipster-entando-wrapper-client',
           });
 
           keycloak.onReady = createKcDispatcher({ eventType: 'onReady' });
