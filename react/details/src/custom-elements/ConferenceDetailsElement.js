@@ -1,6 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import { StylesProvider, jssPreset } from '@material-ui/core/styles';
+import { create } from 'jss';
+
 import { KeycloakContext } from 'auth/KeycloakContext';
 import ConferenceDetailsContainer from 'components/ConferenceDetailsContainer';
 import {
@@ -38,12 +41,26 @@ class ConferenceDetailsElement extends HTMLElement {
     this.keycloak = getKeycloakInstance();
   }
 
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (!this.mountPoint || oldValue === newValue) {
+      return;
+    }
+    if (!Object.values(ATTRIBUTES).includes(name)) {
+      throw new Error(`Untracked changed attribute: ${name}`);
+    }
+    this.render();
+  }
+
   connectedCallback() {
     this.mountPoint = document.createElement('div');
 
-    //TODO add shadow root
+    const shadowRoot = this.attachShadow({ mode: 'open' });
+    shadowRoot.appendChild(this.mountPoint);
 
-    this.appendChild(this.mountPoint);
+    this.jss = create({
+      ...jssPreset(),
+      insertionPoint: this.mountPoint,
+    });
 
     this.keycloak = { ...getKeycloakInstance(), initialized: true };
 
@@ -105,14 +122,13 @@ class ConferenceDetailsElement extends HTMLElement {
     }
 
     const id = this.getAttribute('id');
-    const onError = this.onError;
 
-    const ReactComponent = React.createElement(ConferenceDetailsContainer, {
-      id,
-      onError,
-    });
     ReactDOM.render(
-      <KeycloakContext.Provider value={this.keycloak}>{ReactComponent}</KeycloakContext.Provider>,
+      <KeycloakContext.Provider value={this.keycloak}>
+        <StylesProvider jss={this.jss}>
+          <ConferenceDetailsContainer id={id} onError={this.onError} />
+        </StylesProvider>
+      </KeycloakContext.Provider>,
       this.mountPoint
     );
   }
