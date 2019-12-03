@@ -1,22 +1,22 @@
 const conferenceMock = {
   name:
-    'Aut doloribus et. Velit deserunt nihil libero. Necessitatibus id qui eligendi corrupti et. Autem blanditiis et et. Qui hic dolorem dolores.',
+    'Et totam blanditiis. At qui sit omnis qui excepturi sunt suscipit qui ut. Ut magni voluptatum ut est fuga nesciunt. Ratione occaecati iure voluptatem illum qui.',
   summary:
-    'Et architecto veniam. Provident in nemo. Velit aliquam facilis aut hic recusandae qui id ad. Consequatur accusamus et rerum quo est ut fugit culpa. Debitis autem quae sit beatae dolores perspiciatis fugiat enim.',
-  start: '1991-03-18',
-  end: '1985-12-02',
-  conferencePrice: -614,
-  conferenceId: 435,
-  registration: '2001-07-29T07:40:48+02:00',
-  attendeeCount: -295,
+    'Aut ea perspiciatis quas odio nostrum sed. Id et facere. Quia magni consequatur et distinctio voluptas. Porro reprehenderit quo sed est reiciendis. Veniam provident fugiat atque.',
+  start: '1984-09-10',
+  end: '1988-09-18',
+  conferencePrice: -626,
+  conferenceId: 939,
+  registration: '1997-11-23T15:12:03+02:00',
+  attendeeCount: 381,
   venueName:
-    'Dolor odit rerum libero et consequatur dolores doloremque. Omnis minus nisi non. Non deleniti non debitis quia ea earum aut. Accusamus ut dolorem ut enim nobis similique. Debitis ad et soluta deleniti.',
-  venueLat: 0.2491393785458058,
-  venueLong: 0.42469292553141713,
-  venueId: 915.7693549059331,
-  saleStartDate: '1994-04-21T14:10:59+03:00',
+    'Et quia nostrum aliquid eos laboriosam deleniti neque. Libero ut dolores dolor et consequatur omnis. Et rerum sit hic quis quibusdam et. Consequuntur inventore recusandae.',
+  venueLat: 0.11186928604729474,
+  venueLong: 0.8942464252468199,
+  venueId: 24.6115792542696,
+  saleStartDate: '1992-05-05T00:01:28+03:00',
   earlyBirdActive: true,
-  region: 'SA',
+  region: 'ASIA',
   logo:
     'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=',
   content:

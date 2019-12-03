@@ -1,5 +1,5 @@
 {
-  "errors": {
+  "error": {
     "dataLoading": "Error during server connection"
   },
   "common": {

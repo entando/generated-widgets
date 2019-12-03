@@ -42,7 +42,7 @@ describe('ConferenceAddFormContainer', () => {
     jest.clearAllMocks();
   });
 
-  const errorMessageKey = 'errors.dataLoading';
+  const errorMessageKey = 'error.dataLoading';
   const successMessageKey = 'common.dataSaved';
 
   const onErrorMock = jest.fn();

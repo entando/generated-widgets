@@ -87,7 +87,7 @@ class ConferenceEditFormContainer extends PureComponent {
     const { t, onError } = this.props;
     onError(err);
     this.setState(() => ({
-      notificationMessage: t('errors.dataLoading'),
+      notificationMessage: t('error.dataLoading'),
       notificationStatus: Notification.ERROR,
     }));
   }
