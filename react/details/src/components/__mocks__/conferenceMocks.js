@@ -1,22 +1,22 @@
 const conferenceApiGetResponse = {
   name:
-    'Eaque eos qui corporis quos molestiae rerum sed eligendi. Ullam necessitatibus temporibus. Iusto sint nesciunt minima aliquam mollitia eos. Laboriosam animi vel eligendi autem et sed et. Et perferendis non expedita et voluptate quos quas.',
+    'Et totam blanditiis. At qui sit omnis qui excepturi sunt suscipit qui ut. Ut magni voluptatum ut est fuga nesciunt. Ratione occaecati iure voluptatem illum qui.',
   summary:
-    'Repellendus et voluptas aperiam nobis dolor quo sit. Blanditiis omnis quo consequatur aut beatae veritatis dolor. Nihil molestias nisi sed dolorum totam officiis suscipit. Veritatis dignissimos eligendi cum molestiae est ut sunt consequatur.',
-  start: '1973-04-02',
-  end: '1979-11-11',
-  conferencePrice: 787,
-  conferenceId: 971,
-  registration: '1972-09-23T15:22:41+03:00',
-  attendeeCount: 870,
+    'Aut ea perspiciatis quas odio nostrum sed. Id et facere. Quia magni consequatur et distinctio voluptas. Porro reprehenderit quo sed est reiciendis. Veniam provident fugiat atque.',
+  start: '1984-09-10',
+  end: '1988-09-18',
+  conferencePrice: -626,
+  conferenceId: 939,
+  registration: '1997-11-23T15:12:03+02:00',
+  attendeeCount: 381,
   venueName:
-    'Fugit ut fugiat soluta. Alias illo aut aut sed voluptatem reprehenderit. Et et perferendis quod qui autem sunt. Omnis earum atque non. Est voluptatem autem repudiandae expedita ipsum.',
-  venueLat: 0.3834523868281394,
-  venueLong: 0.4502836191095412,
-  venueId: -144.72924172878265,
-  saleStartDate: '2008-08-17T00:44:55+03:00',
-  earlyBirdActive: false,
-  region: 'SA',
+    'Et quia nostrum aliquid eos laboriosam deleniti neque. Libero ut dolores dolor et consequatur omnis. Et rerum sit hic quis quibusdam et. Consequuntur inventore recusandae.',
+  venueLat: 0.11186928604729474,
+  venueLong: 0.8942464252468199,
+  venueId: 24.6115792542696,
+  saleStartDate: '1992-05-05T00:01:28+03:00',
+  earlyBirdActive: true,
+  region: 'ASIA',
   logo:
     'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=',
   content:

@@ -147,7 +147,9 @@ const ConferenceFieldTable = ({ t, i18n: { language }, conference }) => {
             <span>{t(`${translationKeyPrefix}earlyBirdActive`)}</span>
           </TableCell>
           <TableCell>
-            <Checkbox disabled checked={conference.earlyBirdActive} />
+            <span>
+              <Checkbox disabled checked={conference.earlyBirdActive} />
+            </span>
           </TableCell>
         </TableRow>
         <TableRow>
