@@ -1,7 +1,6 @@
 {
   "common": {
     "couldNotFetchData": "Unfortunately we could not fetch entity data",
-    "widgetName": "Details about '{{widgetNamePlaceholder}}'",
     "name": "Name",
     "value": "Value",
     "loading": "Loading...",

@@ -1,11 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import i18next from 'i18next';
 
 import { KeycloakContext } from 'auth/KeycloakContext';
 import ConferenceDetailsContainer from 'components/ConferenceDetailsContainer';
-import { subscribeToWidgetEvent } from 'helpers/widgetEvents';
-import { KEYCLOAK_EVENT_TYPE } from 'custom-elements/widgetEventTypes';
+import {
+  subscribeToWidgetEvent,
+  createWidgetEventPublisher,
+  subscribeToWidgetEvents,
+} from 'helpers/widgetEvents';
+import {
+  KEYCLOAK_EVENT_TYPE,
+  OUTPUT_EVENT_TYPES,
+  INPUT_EVENT_TYPES,
+} from 'custom-elements/widgetEventTypes';
+import setLocale from 'i18n/setLocale';
 
 const getKeycloakInstance = () =>
   (window &&
@@ -14,21 +22,28 @@ const getKeycloakInstance = () =>
     initialized: false,
   };
 
+const ATTRIBUTES = {
+  hidden: 'hidden',
+  locale: 'locale',
+  disableDefaultEventHandler: 'disable-default-event-handler', // custom element attribute names MUST be written in kebab-case
+};
+
 class ConferenceDetailsElement extends HTMLElement {
-  constructor(...args) {
-    super(...args);
+  constructor() {
+    super();
 
     this.mountPoint = null;
     this.unsubscribeFromKeycloakEvent = null;
+    this.onError = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.error);
     this.keycloak = getKeycloakInstance();
   }
 
   connectedCallback() {
     this.mountPoint = document.createElement('div');
-    this.appendChild(this.mountPoint);
 
-    const locale = this.getAttribute('locale') || 'en';
-    i18next.changeLanguage(locale);
+    //TODO add shadow root
+
+    this.appendChild(this.mountPoint);
 
     this.keycloak = { ...getKeycloakInstance(), initialized: true };
 
@@ -40,19 +55,57 @@ class ConferenceDetailsElement extends HTMLElement {
     this.render();
   }
 
-  render() {
-    const customEventPrefix = 'conference.details.';
-
-    const onError = error => {
-      const customEvent = new CustomEvent(`${customEventPrefix}error`, {
-        details: {
-          error,
-        },
-      });
-      this.dispatchEvent(customEvent);
+  defaultWidgetEventHandler() {
+    return evt => {
+      const { formCreate, formUpdate, tableSelect } = INPUT_EVENT_TYPES;
+      const { id } = ATTRIBUTES;
+      switch (evt.type) {
+        case formCreate: {
+          this.setAttribute(id, '');
+          break;
+        }
+        case formUpdate: {
+          this.render();
+          break;
+        }
+        case tableSelect: {
+          this.setAttribute(id, evt.detail.payload.id);
+          break;
+        }
+        default:
+          throw new Error(`Unsupported event: ${evt.type}`);
+      }
     };
+  }
+
+  render() {
+    const hidden = this.getAttribute(ATTRIBUTES.hidden) === 'true';
+    if (hidden) {
+      return;
+    }
+
+    const locale = this.getAttribute(ATTRIBUTES.locale);
+    setLocale(locale);
+
+    const disableEventHandler = this.getAttribute(ATTRIBUTES.disableDefaultEventHandler) === 'true';
+    if (!disableEventHandler) {
+      const defaultWidgetEventHandler = this.defaultWidgetEventHandler();
+
+      this.unsubscribeFromWidgetEvents = subscribeToWidgetEvents(
+        Object.values(INPUT_EVENT_TYPES),
+        defaultWidgetEventHandler
+      );
+    } else {
+      if (this.unsubscribeFromWidgetEvents) {
+        this.unsubscribeFromWidgetEvents();
+      }
+      if (this.unsubscribeFromKeycloakEvent) {
+        this.unsubscribeFromKeycloakEvent();
+      }
+    }
 
     const id = this.getAttribute('id');
+    const onError = this.onError;
 
     const ReactComponent = React.createElement(ConferenceDetailsContainer, {
       id,

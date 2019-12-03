@@ -9,11 +9,6 @@ import ConferenceFieldTable from 'components/conference-field-table/ConferenceFi
 const ConferenceDetails = ({ t, conference }) => {
   return (
     <Box>
-      <h3>
-        {t('common.widgetName', {
-          widgetNamePlaceholder: 'Conference',
-        })}
-      </h3>
       <ConferenceFieldTable conference={conference} />
     </Box>
   );
