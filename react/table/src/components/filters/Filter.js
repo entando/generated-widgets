@@ -63,6 +63,8 @@ const Filter = ({ filter, t, update, remove, filterId, classes }) => {
             <option value="saleStartDate">{t('entities.conference.saleStartDate')}</option>
             <option value="earlyBirdActive">{t('entities.conference.earlyBirdActive')}</option>
             <option value="region">{t('entities.conference.region')}</option>
+            <option value="logo">{t('entities.conference.logo')}</option>
+            <option value="content">{t('entities.conference.content')}</option>
             <option value="signature">{t('entities.conference.signature')}</option>
           </Select>
         </FormControl>

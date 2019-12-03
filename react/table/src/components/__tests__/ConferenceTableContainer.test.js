@@ -26,7 +26,7 @@ jest.mock('auth/KeycloakContext', () => {
 });
 
 describe('ConferenceTableContainer', () => {
-  const errorMessageKey = 'conference.error.dataLoading';
+  const errorMessageKey = 'error.dataLoading';
 
   afterEach(() => {
     jest.clearAllMocks();

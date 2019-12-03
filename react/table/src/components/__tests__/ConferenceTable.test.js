@@ -10,12 +10,12 @@ describe('ConferenceTable', () => {
     const { getByText } = render(<ConferenceTable items={conferenceMocks} />);
     expect(
       getByText(
-        'Nostrum voluptatem magnam. Aut consequatur omnis expedita earum illo et quidem a nihil. Molestiae rerum ut explicabo deleniti ipsam dolor.'
+        'Et totam blanditiis. At qui sit omnis qui excepturi sunt suscipit qui ut. Ut magni voluptatum ut est fuga nesciunt. Ratione occaecati iure voluptatem illum qui.'
       )
     ).toBeInTheDocument();
     expect(
       getByText(
-        'Voluptas voluptate ea fugiat corporis unde labore quod doloremque est. Amet id occaecati. Earum architecto quos nam excepturi sunt non accusamus quo. Vel perferendis itaque omnis error dolorem.'
+        'Accusantium labore voluptates rem eos doloribus praesentium. Quaerat ab nihil minima. Magnam facilis odio. Perspiciatis qui enim omnis qui inventore.'
       )
     ).toBeInTheDocument();
   });
@@ -24,12 +24,12 @@ describe('ConferenceTable', () => {
     const { queryByText } = render(<ConferenceTable items={[]} />);
     expect(
       queryByText(
-        'Nostrum voluptatem magnam. Aut consequatur omnis expedita earum illo et quidem a nihil. Molestiae rerum ut explicabo deleniti ipsam dolor.'
+        'Et totam blanditiis. At qui sit omnis qui excepturi sunt suscipit qui ut. Ut magni voluptatum ut est fuga nesciunt. Ratione occaecati iure voluptatem illum qui.'
       )
     ).not.toBeInTheDocument();
     expect(
       queryByText(
-        'Voluptas voluptate ea fugiat corporis unde labore quod doloremque est. Amet id occaecati. Earum architecto quos nam excepturi sunt non accusamus quo. Vel perferendis itaque omnis error dolorem.'
+        'Accusantium labore voluptates rem eos doloribus praesentium. Quaerat ab nihil minima. Magnam facilis odio. Perspiciatis qui enim omnis qui inventore.'
       )
     ).not.toBeInTheDocument();
 
@@ -43,7 +43,7 @@ describe('ConferenceTable', () => {
     );
     fireEvent.click(
       getByText(
-        'Nostrum voluptatem magnam. Aut consequatur omnis expedita earum illo et quidem a nihil. Molestiae rerum ut explicabo deleniti ipsam dolor.'
+        'Et totam blanditiis. At qui sit omnis qui excepturi sunt suscipit qui ut. Ut magni voluptatum ut est fuga nesciunt. Ratione occaecati iure voluptatem illum qui.'
       )
     );
     expect(onSelectMock).toHaveBeenCalledTimes(1);

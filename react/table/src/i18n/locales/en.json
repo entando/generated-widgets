@@ -1,8 +1,12 @@
 {
+  "error": {
+    "dataLoading": "Error during server connection"
+  },
   "common": {
     "couldNotFetchData": "Unfortunately we could not fetch entity data",
     "notAuthenticated": "User is not authenticated.",
-    "loadingMore": "Loading more..."
+    "loadingMore": "Loading more...",
+    "download": "Download file"
   },
   "pagination": {
     "ariaLabels": {
@@ -48,10 +52,7 @@
       "region": "entities.conference.region",
       "logo": "entities.conference.logo",
       "content": "entities.conference.content",
-      "signature": "entities.conference.signature",
-      "error": {
-        "dataLoading": "Error during server connection"
-      }
+      "signature": "entities.conference.signature"
     }
   }
 }

@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
-import Checkbox from '@material-ui/core/Checkbox';
 import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
+import Checkbox from '@material-ui/core/Checkbox';
 
 import conferenceType from 'components/__types__/conference';
 
@@ -21,6 +21,9 @@ const styles = {
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
   },
+  noItems: {
+    margin: '15px',
+  },
 };
 
 const ConferenceTable = ({ items, onSelect, classes, t, i18n }) => {
@@ -33,10 +36,10 @@ const ConferenceTable = ({ items, onSelect, classes, t, i18n }) => {
         <span>{item.summary}</span>
       </TableCell>
       <TableCell>
-        <span>{new Date(item.start).toLocaleDateString('en')}</span>
+        <span>{new Date(item.start).toLocaleDateString(i18n.language)}</span>
       </TableCell>
       <TableCell>
-        <span>{new Date(item.end).toLocaleDateString('en')}</span>
+        <span>{new Date(item.end).toLocaleDateString(i18n.language)}</span>
       </TableCell>
       <TableCell>
         <span>{item.conferencePrice}</span>
@@ -45,7 +48,7 @@ const ConferenceTable = ({ items, onSelect, classes, t, i18n }) => {
         <span>{item.conferenceId}</span>
       </TableCell>
       <TableCell>
-        <span>{new Date(item.registration).toLocaleString('en')}</span>
+        <span>{new Date(item.registration).toLocaleString(i18n.language)}</span>
       </TableCell>
       <TableCell>
         <span>{item.attendeeCount}</span>
@@ -78,7 +81,7 @@ const ConferenceTable = ({ items, onSelect, classes, t, i18n }) => {
       </TableCell>
       <TableCell>
         <span>
-          <a download="filename" href={`data:${item.contentContentType};base64, ${item.content}`}>
+          <a download="conference" href={`data:${item.contentContentType};base64, ${item.content}`}>
             {t('common.download')}
           </a>
         </span>
@@ -152,7 +155,7 @@ const ConferenceTable = ({ items, onSelect, classes, t, i18n }) => {
       <TableBody>{tableRows}</TableBody>
     </Table>
   ) : (
-    t('entities.conference.noItems')
+    <div className={classes.noItems}>{t('entities.conference.noItems')}</div>
   );
 };
 
@@ -162,6 +165,7 @@ ConferenceTable.propTypes = {
   classes: PropTypes.shape({
     rowRoot: PropTypes.string,
     tableRoot: PropTypes.string,
+    noItems: PropTypes.string,
   }).isRequired,
   t: PropTypes.func.isRequired,
   i18n: PropTypes.shape({ language: PropTypes.string }).isRequired,

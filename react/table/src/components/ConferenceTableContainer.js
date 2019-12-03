@@ -128,7 +128,7 @@ class ConferenceTableContainer extends Component {
     this.dispatch({
       type: ERROR_FETCH,
       payload: {
-        message: t('conference.error.dataLoading'),
+        message: t('error.dataLoading'),
         status: Notification.ERROR,
       },
     });
