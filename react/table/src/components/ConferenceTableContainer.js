@@ -22,6 +22,11 @@ const styles = {
   fab: {
     float: 'right',
   },
+  tableWrapper: {
+    width: '100%',
+    overflowX: 'auto',
+    overflowY: 'hidden',
+  },
 };
 
 class ConferenceTableContainer extends Component {
@@ -156,7 +161,9 @@ class ConferenceTableContainer extends Component {
             filters={filters}
           />
           <PaginationWrapper items={items} paginationMode={paginationMode} itemCount={itemCount}>
-            <ConferenceTable items={items} onSelect={onSelect} />
+            <div className={classes.tableWrapper}>
+              <ConferenceTable items={items} onSelect={onSelect} />
+            </div>
           </PaginationWrapper>
         </AuthenticatedView>
         <Notification
@@ -172,6 +179,7 @@ class ConferenceTableContainer extends Component {
 ConferenceTableContainer.propTypes = {
   classes: PropTypes.shape({
     fab: PropTypes.string,
+    tableWrapper: PropTypes.string,
   }).isRequired,
   onAdd: PropTypes.func,
   onError: PropTypes.func,
