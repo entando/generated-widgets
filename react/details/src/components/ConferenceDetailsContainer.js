@@ -37,12 +37,13 @@ class ConferenceDetailsContainer extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { keycloak } = this.props;
+    const { keycloak, id } = this.props;
     const authenticated = keycloak.initialized && keycloak.authenticated;
 
     const changedAuth = prevProps.keycloak.authenticated !== authenticated;
+    const changedId = id && id !== prevProps.id;
 
-    if (authenticated && changedAuth) {
+    if (authenticated && (changedId || changedAuth)) {
       this.fetchData();
     }
   }

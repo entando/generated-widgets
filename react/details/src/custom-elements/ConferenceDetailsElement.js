@@ -26,6 +26,7 @@ const getKeycloakInstance = () =>
   };
 
 const ATTRIBUTES = {
+  id: 'id',
   hidden: 'hidden',
   locale: 'locale',
   disableDefaultEventHandler: 'disable-default-event-handler', // custom element attribute names MUST be written in kebab-case
@@ -39,6 +40,10 @@ class ConferenceDetailsElement extends HTMLElement {
     this.unsubscribeFromKeycloakEvent = null;
     this.onError = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.error);
     this.keycloak = getKeycloakInstance();
+  }
+
+  static get observedAttributes() {
+    return Object.values(ATTRIBUTES);
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
