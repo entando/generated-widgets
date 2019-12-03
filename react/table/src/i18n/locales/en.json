@@ -1,8 +1,12 @@
 {
+  "error": {
+    "dataLoading": "Error during server connection"
+  },
   "common": {
     "couldNotFetchData": "Unfortunately we could not fetch entity data",
     "notAuthenticated": "User is not authenticated.",
-    "loadingMore": "Loading more..."
+    "loadingMore": "Loading more...",
+    "download": "Download file"
   },
   "pagination": {
     "ariaLabels": {
@@ -13,10 +17,12 @@
     }
   },
   "filters": {
+    "field": "Field",
     "value": "Value",
     "addFilter": "Add filter",
     "clearFilters": "Clear filters",
     "filter": "Filter",
+    "operator": "Operator",
     "operators": {
       "equals": "equals",
       "in": "in",
@@ -29,25 +35,24 @@
     "conference": {
       "noItems": "No conferences available",
       "id": "ID",
-      "name": "Name",
-      "summary": "Summary",
-      "start": "Start date",
-      "end": "End date",
-      "conferencePrice": "Conference price",
-      "conferenceId": "Conference ID",
-      "registration": "Registration opens",
-      "attendeeCount": "Current attendee count",
-      "venueName": "Venue",
-      "venueLat": "Venue location (lat.)",
-      "venueLong": "Venue location (long.)",
-      "venueId": "Venue ID",
-      "saleStartDate": "Ticket sale date",
-      "earlyBirdActive": "Early-bird tickets available",
-      "region": "Conference region",
-      "signature": "Signature",
-      "error": {
-        "dataLoading": "Error during server connection"
-      }
+      "name": "entities.conference.name",
+      "summary": "entities.conference.summary",
+      "start": "entities.conference.start",
+      "end": "entities.conference.end",
+      "conferencePrice": "entities.conference.conferencePrice",
+      "conferenceId": "entities.conference.conferenceId",
+      "registration": "entities.conference.registration",
+      "attendeeCount": "entities.conference.attendeeCount",
+      "venueName": "entities.conference.venueName",
+      "venueLat": "entities.conference.venueLat",
+      "venueLong": "entities.conference.venueLong",
+      "venueId": "entities.conference.venueId",
+      "saleStartDate": "entities.conference.saleStartDate",
+      "earlyBirdActive": "entities.conference.earlyBirdActive",
+      "region": "entities.conference.region",
+      "logo": "entities.conference.logo",
+      "content": "entities.conference.content",
+      "signature": "entities.conference.signature"
     }
   }
 }

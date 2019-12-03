@@ -7,7 +7,6 @@ import { create } from 'jss';
 
 import { KeycloakContext } from 'auth/KeycloakContext';
 import { PaginationProvider } from 'components/pagination/PaginationContext';
-
 import ConferenceTableContainer from 'components/ConferenceTableContainer';
 import setLocale from 'i18n/setLocale';
 import {

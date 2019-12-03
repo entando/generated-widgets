@@ -1,22 +1,26 @@
 const conferenceMock = {
   name:
-    'Vel reprehenderit eos facilis illum ut accusantium. In non laboriosam explicabo suscipit culpa deleniti rerum. Aspernatur eveniet vero occaecati rerum atque autem. Sapiente voluptatem corporis in beatae modi ullam magnam. Veniam sit maiores.',
+    'Et totam blanditiis. At qui sit omnis qui excepturi sunt suscipit qui ut. Ut magni voluptatum ut est fuga nesciunt. Ratione occaecati iure voluptatem illum qui.',
   summary:
-    'Neque tempore quia fugiat. In doloremque nobis maxime qui in nam dolorem numquam. Aperiam consequuntur sed nihil quisquam facilis delectus adipisci. Vel cumque sit ab nemo dicta eum molestiae dolor.',
-  start: '1992-01-31',
-  end: '1991-06-02',
-  conferencePrice: 849,
-  conferenceId: 702,
-  registration: '1985-06-28T05:09:34+04:00',
-  attendeeCount: 159,
+    'Aut ea perspiciatis quas odio nostrum sed. Id et facere. Quia magni consequatur et distinctio voluptas. Porro reprehenderit quo sed est reiciendis. Veniam provident fugiat atque.',
+  start: '1984-09-10',
+  end: '1988-09-18',
+  conferencePrice: -626,
+  conferenceId: 939,
+  registration: '1997-11-23T15:12:03+02:00',
+  attendeeCount: 381,
   venueName:
-    'Accusamus sequi libero commodi ullam reiciendis aliquid et. Ducimus sit quo reprehenderit molestiae cum error illo. Dolore unde ut fuga deserunt magnam excepturi est odio tempora. Aut ipsa nobis velit non qui sed nihil qui. Asperiores velit error voluptate debitis id est illum. Quibusdam corrupti aliquam placeat nemo consequatur dolorem ea dolorem qui.',
-  venueLat: 0.07639952399767935,
-  venueLong: 0.16162852616980672,
-  venueId: 10.10042242705822,
-  saleStartDate: '2000-08-20T14:49:40+02:00',
-  earlyBirdActive: false,
-  region: 'SA',
+    'Et quia nostrum aliquid eos laboriosam deleniti neque. Libero ut dolores dolor et consequatur omnis. Et rerum sit hic quis quibusdam et. Consequuntur inventore recusandae.',
+  venueLat: 0.11186928604729474,
+  venueLong: 0.8942464252468199,
+  venueId: 24.6115792542696,
+  saleStartDate: '1992-05-05T00:01:28+03:00',
+  earlyBirdActive: true,
+  region: 'ASIA',
+  logo:
+    'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=',
+  content:
+    'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=',
   signature:
     'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=',
 };

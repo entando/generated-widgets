@@ -22,6 +22,19 @@ const styles = theme => ({
   root: {
     margin: theme.spacing(3),
   },
+  button: {
+    marginBottom: '10px',
+  },
+  downloadAnchor: {
+    color: 'inherit',
+    textDecoration: 'inherit',
+    fontWeight: 'inherit',
+    '&:link, &:visited, &:hover, &:active': {
+      color: 'inherit',
+      textDecoration: 'inherit',
+      fontWeight: 'inherit',
+    },
+  },
   textField: {
     width: '100%',
   },
@@ -50,6 +63,24 @@ class ConferenceForm extends PureComponent {
     const dateTimeLabelFn = date => (date ? new Date(date).toLocaleString(i18n.language) : '');
     const dateLabelFn = date => (date ? new Date(date).toLocaleDateString(i18n.language) : '');
     const getHelperText = field => (errors[field] && touched[field] ? errors[field] : '');
+    const getFormattedTime = () => {
+      const today = new Date();
+      return `${today.getFullYear()}${today.getMonth() + 1}${today.getDate()}`;
+    };
+
+    const handleFiles = field => event => {
+      const uploadedFile = event.target;
+      const reader = new FileReader();
+      reader.onload = function() {
+        const dataURL = reader.result;
+        const imageData = dataURL.match(/data:([^;]*);base64,(.*)$/);
+        if (imageData && imageData[1] && imageData[2]) {
+          setFieldValue(field, imageData[2]);
+          setFieldValue(`${field}ContentType`, imageData[1]);
+        }
+      };
+      reader.readAsDataURL(uploadedFile.files[0]);
+    };
 
     const handleSubmit = e => {
       e.stopPropagation(); // avoids double submission caused by react-shadow-dom-retarget-events
@@ -266,6 +297,51 @@ class ConferenceForm extends PureComponent {
               </Select>
             </Grid>
             <Grid item xs={12} sm={6}>
+              <InputLabel>{t('entities.conference.logo')}</InputLabel>
+              <div>
+                <input
+                  style={{ display: 'none' }}
+                  id="logo-upload-file-button"
+                  accept="image/*"
+                  type="file"
+                  onChange={handleFiles('logo')}
+                />
+                <label htmlFor="logo-upload-file-button">
+                  <Button className={classes.button} component="span">
+                    {t('common.selectImageFile')}
+                  </Button>
+                </label>
+              </div>
+              {values.logo && (
+                <div>
+                  <img src={`data:${values.logoContentType};base64, ${values.logo}`} alt="" />
+                </div>
+              )}
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <InputLabel>{t('entities.conference.content')}</InputLabel>
+              {values.content && (
+                <a
+                  className={classes.downloadAnchor}
+                  download={`content-${getFormattedTime()}`}
+                  href={`data:${values.contentContentType};base64, ${values.content}`}
+                >
+                  <Button className={classes.button}>{t('common.download')}</Button>
+                </a>
+              )}
+              <input
+                style={{ display: 'none' }}
+                id="content-upload-file-button"
+                type="file"
+                onChange={handleFiles('content')}
+              />
+              <label htmlFor="content-upload-file-button">
+                <Button className={classes.button} component="span">
+                  {t('common.selectFile')}
+                </Button>
+              </label>
+            </Grid>
+            <Grid item xs={12} sm={6}>
               <TextField
                 id="conference-signature"
                 error={errors.signature && touched.signature}
@@ -293,6 +369,8 @@ ConferenceForm.propTypes = {
     root: PropTypes.string,
     textField: PropTypes.string,
     submitButton: PropTypes.string,
+    button: PropTypes.string,
+    downloadAnchor: PropTypes.string,
   }),
   values: formValues,
   touched: formTouched,
@@ -329,6 +407,8 @@ const emptyConference = {
   saleStartDate: null,
   earlyBirdActive: false,
   region: '',
+  logo: '',
+  content: '',
   signature: '',
 };
 
@@ -354,6 +434,8 @@ const validationSchema = Yup.object().shape({
     .required(),
   earlyBirdActive: Yup.boolean().required(),
   region: Yup.string().required(),
+  logo: Yup.string().required(),
+  content: Yup.string().required(),
   signature: Yup.string(),
 });
 

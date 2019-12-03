@@ -7,17 +7,19 @@ export default PropTypes.shape({
   summary: PropTypes.string,
   start: PropTypes.string.isRequired,
   end: PropTypes.string,
-  conferencePrice: PropTypes.string,
-  conferenceId: PropTypes.string.isRequired,
+  conferencePrice: PropTypes.number,
+  conferenceId: PropTypes.number.isRequired,
   registration: PropTypes.string.isRequired,
-  attendeeCount: PropTypes.string.isRequired,
+  attendeeCount: PropTypes.number.isRequired,
   venueName: PropTypes.string.isRequired,
-  venueLat: PropTypes.string.isRequired,
-  venueLong: PropTypes.string.isRequired,
-  venueId: PropTypes.string.isRequired,
+  venueLat: PropTypes.number.isRequired,
+  venueLong: PropTypes.number.isRequired,
+  venueId: PropTypes.number.isRequired,
   saleStartDate: PropTypes.string.isRequired,
   earlyBirdActive: PropTypes.bool.isRequired,
   region: PropTypes.string.isRequired,
+  logo: PropTypes.string.isRequired,
+  content: PropTypes.string.isRequired,
   signature: PropTypes.string,
 });
 
@@ -37,6 +39,8 @@ export const formValues = PropTypes.shape({
   saleStartDate: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
   earlyBirdActive: PropTypes.bool,
   region: PropTypes.string,
+  logo: PropTypes.string,
+  content: PropTypes.string,
   signature: PropTypes.string,
 });
 
@@ -56,6 +60,8 @@ export const formTouched = PropTypes.shape({
   saleStartDate: PropTypes.oneOfType([PropTypes.bool, PropTypes.shape()]),
   earlyBirdActive: PropTypes.oneOfType([PropTypes.bool, PropTypes.shape()]),
   region: PropTypes.oneOfType([PropTypes.bool, PropTypes.shape()]),
+  logo: PropTypes.oneOfType([PropTypes.bool, PropTypes.shape()]),
+  content: PropTypes.oneOfType([PropTypes.bool, PropTypes.shape()]),
   signature: PropTypes.oneOfType([PropTypes.bool, PropTypes.shape()]),
 });
 
@@ -75,5 +81,7 @@ export const formErrors = PropTypes.shape({
   saleStartDate: PropTypes.oneOfType([PropTypes.string, PropTypes.shape()]),
   earlyBirdActive: PropTypes.oneOfType([PropTypes.string, PropTypes.shape()]),
   region: PropTypes.oneOfType([PropTypes.string, PropTypes.shape()]),
+  logo: PropTypes.oneOfType([PropTypes.string, PropTypes.shape()]),
+  content: PropTypes.oneOfType([PropTypes.string, PropTypes.shape()]),
   signature: PropTypes.oneOfType([PropTypes.string, PropTypes.shape()]),
 });

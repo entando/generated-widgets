@@ -6,7 +6,8 @@
     "value": "Value",
     "loading": "Loading...",
     "missingId": "Please provide conference ID",
-    "notAuthenticated": "User is not authenticated."
+    "notAuthenticated": "User is not authenticated.",
+    "download": "Download file"
   },
   "entities": {
     "conference": {

@@ -6,6 +6,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import Checkbox from '@material-ui/core/Checkbox';
 
 import conferenceType from 'components/__types__/conference';
 
@@ -147,9 +148,7 @@ const ConferenceFieldTable = ({ t, i18n: { language }, conference }) => {
           </TableCell>
           <TableCell>
             <span>
-              {typeof conference.earlyBirdActive !== 'undefined'
-                ? conference.earlyBirdActive.toString()
-                : ''}
+              <Checkbox disabled checked={conference.earlyBirdActive} />
             </span>
           </TableCell>
         </TableRow>

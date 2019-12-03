@@ -7,7 +7,7 @@ const DATE_NUMBER_FILTER_TYPES = [
   { value: 'lessOrEqualThan', title: '<=' },
 ];
 
-const STRING_FIELDS = ['name', 'summary', 'venueName'];
+const STRING_FIELDS = ['name', 'summary', 'venueName', 'region', 'signature'];
 const DATE_FIELDS = ['start', 'end', 'registration', 'saleStartDate'];
 const NUMBER_FIELDS = [
   'conferencePrice',
