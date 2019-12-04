@@ -30,6 +30,7 @@ const ATTRIBUTES = {
   hidden: 'hidden',
   locale: 'locale',
   disableDefaultEventHandler: 'disable-default-event-handler', // custom element attribute names MUST be written in kebab-case
+  hideEditButton: 'hide-edit-button',
 };
 
 class ConferenceDetailsElement extends HTMLElement {
@@ -39,11 +40,16 @@ class ConferenceDetailsElement extends HTMLElement {
     this.mountPoint = null;
     this.unsubscribeFromKeycloakEvent = null;
     this.onError = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.error);
+    this.onEdit = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.edit);
     this.keycloak = getKeycloakInstance();
   }
 
   static get observedAttributes() {
     return Object.values(ATTRIBUTES);
+  }
+
+  isAttributeTruthy(attribute) {
+    return ['true', ''].includes(this.getAttribute(attribute));
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -79,18 +85,25 @@ class ConferenceDetailsElement extends HTMLElement {
 
   defaultWidgetEventHandler() {
     return evt => {
-      const { formCreate, formUpdate, tableSelect } = INPUT_EVENT_TYPES;
-      const { id } = ATTRIBUTES;
+      const { formCancelEdit, formCreate, formUpdate, tableSelect } = INPUT_EVENT_TYPES;
+      const { id, hidden } = ATTRIBUTES;
       switch (evt.type) {
         case formCreate: {
-          this.setAttribute(id, '');
+          this.setAttribute(hidden, false);
+          this.setAttribute(id, evt.detail.payload.id);
+          break;
+        }
+        case formCancelEdit: {
+          this.setAttribute(hidden, false);
           break;
         }
         case formUpdate: {
+          this.setAttribute(hidden, false);
           this.render();
           break;
         }
         case tableSelect: {
+          this.setAttribute(hidden, false);
           this.setAttribute(id, evt.detail.payload.id);
           break;
         }
@@ -101,7 +114,7 @@ class ConferenceDetailsElement extends HTMLElement {
   }
 
   render() {
-    const hidden = this.getAttribute(ATTRIBUTES.hidden) === 'true';
+    const hidden = this.isAttributeTruthy(ATTRIBUTES.hidden);
     if (hidden) {
       return;
     }
@@ -109,7 +122,7 @@ class ConferenceDetailsElement extends HTMLElement {
     const locale = this.getAttribute(ATTRIBUTES.locale);
     setLocale(locale);
 
-    const disableEventHandler = this.getAttribute(ATTRIBUTES.disableDefaultEventHandler) === 'true';
+    const disableEventHandler = this.isAttributeTruthy(ATTRIBUTES.disableDefaultEventHandler);
     if (!disableEventHandler) {
       const defaultWidgetEventHandler = this.defaultWidgetEventHandler();
 
@@ -126,12 +139,18 @@ class ConferenceDetailsElement extends HTMLElement {
       }
     }
 
-    const id = this.getAttribute('id');
+    const id = this.getAttribute(ATTRIBUTES.id);
+    const hideEditButton = this.isAttributeTruthy(ATTRIBUTES.hideEditButton);
 
     ReactDOM.render(
       <KeycloakContext.Provider value={this.keycloak}>
         <StylesProvider jss={this.jss}>
-          <ConferenceDetailsContainer id={id} onError={this.onError} />
+          <ConferenceDetailsContainer
+            id={id}
+            onError={this.onError}
+            onEdit={this.onEdit}
+            hideEditButton={hideEditButton}
+          />
         </StylesProvider>
       </KeycloakContext.Provider>,
       this.mountPoint
