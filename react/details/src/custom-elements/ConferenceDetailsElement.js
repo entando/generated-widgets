@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import retargetEvents from 'react-shadow-dom-retarget-events';
 
 import { StylesProvider, jssPreset } from '@material-ui/core/styles';
 import { create } from 'jss';
@@ -39,6 +40,7 @@ class ConferenceDetailsElement extends HTMLElement {
 
     this.mountPoint = null;
     this.unsubscribeFromKeycloakEvent = null;
+    this.unsubscribeFromWidgetEvents = null;
     this.onError = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.error);
     this.onEdit = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.edit);
     this.keycloak = getKeycloakInstance();
@@ -49,17 +51,17 @@ class ConferenceDetailsElement extends HTMLElement {
   }
 
   isAttributeTruthy(attribute) {
-    return ['true', ''].includes(this.getAttribute(attribute));
+    const val = this.getAttribute(attribute);
+    return val !== undefined && val !== null && val !== 'false';
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    if (!this.mountPoint || oldValue === newValue) {
-      return;
-    }
     if (!Object.values(ATTRIBUTES).includes(name)) {
       throw new Error(`Untracked changed attribute: ${name}`);
     }
-    this.render();
+    if (this.mountPoint && newValue !== oldValue) {
+      this.render();
+    }
   }
 
   connectedCallback() {
@@ -81,29 +83,34 @@ class ConferenceDetailsElement extends HTMLElement {
     });
 
     this.render();
+
+    retargetEvents(shadowRoot);
   }
 
   defaultWidgetEventHandler() {
     return evt => {
-      const { formCancelEdit, formCreate, formUpdate, tableSelect } = INPUT_EVENT_TYPES;
+      const { formCancelEditing, formCreate, edit, formUpdate, tableSelect } = INPUT_EVENT_TYPES;
       const { id, hidden } = ATTRIBUTES;
       switch (evt.type) {
         case formCreate: {
-          this.setAttribute(hidden, false);
+          this.removeAttribute(hidden);
           this.setAttribute(id, evt.detail.payload.id);
           break;
         }
-        case formCancelEdit: {
-          this.setAttribute(hidden, false);
+        case edit: {
+          this.setAttribute(hidden, true);
+          break;
+        }
+        case formCancelEditing: {
+          this.removeAttribute(hidden);
           break;
         }
         case formUpdate: {
-          this.setAttribute(hidden, false);
-          this.render();
+          this.removeAttribute(hidden);
           break;
         }
         case tableSelect: {
-          this.setAttribute(hidden, false);
+          this.removeAttribute(hidden);
           this.setAttribute(id, evt.detail.payload.id);
           break;
         }
@@ -116,27 +123,27 @@ class ConferenceDetailsElement extends HTMLElement {
   render() {
     const hidden = this.isAttributeTruthy(ATTRIBUTES.hidden);
     if (hidden) {
+      ReactDOM.render(<></>, this.mountPoint);
       return;
     }
 
     const locale = this.getAttribute(ATTRIBUTES.locale);
     setLocale(locale);
 
-    const disableEventHandler = this.isAttributeTruthy(ATTRIBUTES.disableDefaultEventHandler);
-    if (!disableEventHandler) {
+    if (this.unsubscribeFromWidgetEvents) {
+      this.unsubscribeFromWidgetEvents();
+    }
+
+    const disableDefaultEventHandler = this.isAttributeTruthy(
+      ATTRIBUTES.disableDefaultEventHandler
+    );
+    if (!disableDefaultEventHandler) {
       const defaultWidgetEventHandler = this.defaultWidgetEventHandler();
 
       this.unsubscribeFromWidgetEvents = subscribeToWidgetEvents(
         Object.values(INPUT_EVENT_TYPES),
         defaultWidgetEventHandler
       );
-    } else {
-      if (this.unsubscribeFromWidgetEvents) {
-        this.unsubscribeFromWidgetEvents();
-      }
-      if (this.unsubscribeFromKeycloakEvent) {
-        this.unsubscribeFromKeycloakEvent();
-      }
     }
 
     const id = this.getAttribute(ATTRIBUTES.id);
@@ -158,6 +165,9 @@ class ConferenceDetailsElement extends HTMLElement {
   }
 
   disconnectedCallback() {
+    if (this.unsubscribeFromWidgetEvents) {
+      this.unsubscribeFromWidgetEvents();
+    }
     if (this.unsubscribeFromKeycloakEvent) {
       this.unsubscribeFromKeycloakEvent();
     }
@@ -165,3 +175,16 @@ class ConferenceDetailsElement extends HTMLElement {
 }
 
 customElements.define('conference-details', ConferenceDetailsElement);
+
+window.test = name => {
+  const customEvent = new CustomEvent('conference.table.select', {
+    detail: {
+      payload: {
+        id: 1,
+        name: name || 'pippppo',
+        summary: 'summaryyy',
+      },
+    },
+  });
+  window.dispatchEvent(customEvent);
+};

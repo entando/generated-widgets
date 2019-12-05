@@ -50,6 +50,7 @@ class ConferenceForm extends PureComponent {
       handleChange,
       handleBlur,
       handleSubmit: formikHandleSubmit,
+      onCancelEditing,
       isSubmitting,
       setFieldValue,
       t,
@@ -354,6 +355,10 @@ class ConferenceForm extends PureComponent {
                 label={t('entities.conference.signature')}
               />
             </Grid>
+            <Button onClick={onCancelEditing} disabled={isSubmitting} data-testid="cancel-btn">
+              {t('common.cancel')}
+            </Button>
+
             <Button type="submit" color="primary" disabled={isSubmitting} data-testid="submit-btn">
               {t('common.save')}
             </Button>
@@ -378,6 +383,7 @@ ConferenceForm.propTypes = {
   handleChange: PropTypes.func.isRequired,
   handleBlur: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
+  onCancelEditing: PropTypes.func.isRequired,
   isSubmitting: PropTypes.bool.isRequired,
   setFieldValue: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired,

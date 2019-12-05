@@ -5,9 +5,9 @@ export const INPUT_EVENT_TYPES = {
 };
 
 export const OUTPUT_EVENT_TYPES = {
-  select: 'conference.table.select',
   add: 'conference.table.add',
   error: 'conference.table.error',
+  select: 'conference.table.select',
 };
 
 export const KEYCLOAK_EVENT_TYPE = 'keycloak';

@@ -36,38 +36,37 @@ const ATTRIBUTES = {
 };
 
 class ConferenceFormElement extends HTMLElement {
-  jss;
-
-  mountPoint;
-
-  keycloak = getKeycloakInstance();
-
-  unsubscribeFromWidgetEvents;
-
-  unsubscribeFromKeycloakEvent;
-
-  onCreate = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.create);
-
-  onUpdate = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.update);
-
-  onErrorCreate = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.errorCreate);
-
-  onErrorUpdate = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.errorUpdate);
-
-  muiTheme;
+  constructor() {
+    super();
+    this.muiTheme = null;
+    this.jss = null;
+    this.mountPoint = null;
+    this.keycloak = getKeycloakInstance();
+    this.unsubscribeFromWidgetEvents = null;
+    this.unsubscribeFromKeycloakEvent = null;
+    this.onCreate = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.create);
+    this.onCancelEditing = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.cancelEditing);
+    this.onUpdate = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.update);
+    this.onErrorCreate = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.errorCreate);
+    this.onErrorUpdate = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.errorUpdate);
+  }
 
   static get observedAttributes() {
     return Object.values(ATTRIBUTES);
   }
 
+  isAttributeTruthy(attribute) {
+    const val = this.getAttribute(attribute);
+    return val !== undefined && val !== null && val !== 'false';
+  }
+
   attributeChangedCallback(name, oldValue, newValue) {
-    if (!this.mountPoint || oldValue === newValue) {
-      return;
-    }
     if (!Object.values(ATTRIBUTES).includes(name)) {
       throw new Error(`Untracked changed attribute: ${name}`);
     }
-    this.render();
+    if (this.mountPoint && newValue !== oldValue) {
+      this.render();
+    }
   }
 
   connectedCallback() {
@@ -115,14 +114,28 @@ class ConferenceFormElement extends HTMLElement {
 
   defaultWidgetEventHandler() {
     return evt => {
-      const { tableAdd, tableSelect } = INPUT_EVENT_TYPES;
-      const { id } = ATTRIBUTES;
+      const { tableAdd, cancelEditing, create, edit, tableSelect, update } = INPUT_EVENT_TYPES;
+      const { id, hidden } = ATTRIBUTES;
+
       switch (evt.type) {
         case tableAdd: {
+          this.removeAttribute(hidden);
           this.setAttribute(id, '');
           break;
         }
+        case edit: {
+          this.removeAttribute(hidden);
+          this.setAttribute(id, evt.detail.payload.id);
+          break;
+        }
+        case create:
+        case cancelEditing:
+        case update: {
+          this.setAttribute(hidden, true);
+          break;
+        }
         case tableSelect: {
+          this.setAttribute(hidden, true);
           this.setAttribute(id, evt.detail.payload.id);
           break;
         }
@@ -133,16 +146,20 @@ class ConferenceFormElement extends HTMLElement {
   }
 
   render() {
-    const hidden = this.getAttribute(ATTRIBUTES.hidden) === 'true';
+    const hidden = this.isAttributeTruthy(ATTRIBUTES.hidden);
     if (hidden) {
-      ReactDOM.render(<></>);
+      ReactDOM.render(<></>, this.mountPoint);
       return;
     }
 
     const locale = this.getAttribute(ATTRIBUTES.locale);
     setLocale(locale);
 
-    const disableEventHandler = this.getAttribute(ATTRIBUTES.disableDefaultEventHandler) === 'true';
+    if (this.unsubscribeFromWidgetEvents) {
+      this.unsubscribeFromWidgetEvents();
+    }
+
+    const disableEventHandler = this.isAttributeTruthy(ATTRIBUTES.disableDefaultEventHandler);
     if (!disableEventHandler) {
       const defaultWidgetEventHandler = this.defaultWidgetEventHandler();
 
@@ -150,13 +167,6 @@ class ConferenceFormElement extends HTMLElement {
         Object.values(INPUT_EVENT_TYPES),
         defaultWidgetEventHandler
       );
-    } else {
-      if (this.unsubscribeFromWidgetEvents) {
-        this.unsubscribeFromWidgetEvents();
-      }
-      if (this.unsubscribeFromKeycloakEvent) {
-        this.unsubscribeFromKeycloakEvent();
-      }
     }
 
     const id = this.getAttribute(ATTRIBUTES.id);
@@ -164,12 +174,21 @@ class ConferenceFormElement extends HTMLElement {
     const FormContainer = id
       ? React.createElement(
           ConferenceEditFormContainer,
-          { id, onUpdate: this.onUpdate, onError: this.onErrorUpdate },
+          {
+            id,
+            onUpdate: this.onUpdate,
+            onError: this.onErrorUpdate,
+            onCancelEditing: this.onCancelEditing,
+          },
           null
         )
       : React.createElement(
           ConferenceAddFormContainer,
-          { onCreate: this.onCreate, onError: this.onErrorCreate },
+          {
+            onCreate: this.onCreate,
+            onError: this.onErrorCreate,
+            onCancelEditing: this.onCancelEditing,
+          },
           null
         );
 
