@@ -4,7 +4,7 @@ import retargetEvents from 'react-shadow-dom-retarget-events';
 
 import { StylesProvider, ThemeProvider, jssPreset } from '@material-ui/core/styles';
 import { createMuiTheme } from '@material-ui/core';
-import { create } from 'jss';
+import { create as jssCreate } from 'jss';
 
 import { KeycloakContext } from 'auth/KeycloakContext';
 import setLocale from 'i18n/setLocale';
@@ -75,7 +75,7 @@ class ConferenceFormElement extends HTMLElement {
     const shadowRoot = this.attachShadow({ mode: 'open' });
     shadowRoot.appendChild(this.mountPoint);
 
-    this.jss = create({
+    this.jss = jssCreate({
       ...jssPreset(),
       insertionPoint: this.mountPoint,
     });

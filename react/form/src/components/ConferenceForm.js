@@ -72,7 +72,7 @@ class ConferenceForm extends PureComponent {
     const handleFiles = field => event => {
       const uploadedFile = event.target;
       const reader = new FileReader();
-      reader.onload = function() {
+      reader.onload = () => {
         const dataURL = reader.result;
         const imageData = dataURL.match(/data:([^;]*);base64,(.*)$/);
         if (imageData && imageData[1] && imageData[2]) {
