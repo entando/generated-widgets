@@ -11,12 +11,12 @@ import ConferenceFieldTable from 'components/conference-field-table/ConferenceFi
 const ConferenceDetails = ({ conference, hideEditButton, onEdit, t }) => {
   return (
     <Box>
+      <ConferenceFieldTable conference={conference} />
       {!hideEditButton && (
-        <Button color="primary" onClick={onEdit}>
+        <Button color="primary" onClick={() => onEdit(conference)}>
           {t('common.edit')}
         </Button>
       )}
-      <ConferenceFieldTable conference={conference} />
     </Box>
   );
 };

@@ -32,7 +32,7 @@ const ATTRIBUTES = {
   hidden: 'hidden',
   locale: 'locale',
   paginationMode: 'pagination-mode',
-  disableDefaultEventHandler: 'disable-default-event-handler', // custom element attribute names MUST be written in kebab-case
+  overrideEventHandler: 'override-event-handler', // custom element attribute names MUST be written in kebab-case
 };
 
 class ConferenceTableElement extends HTMLElement {
@@ -85,6 +85,13 @@ class ConferenceTableElement extends HTMLElement {
       this.render();
     });
 
+    const defaultWidgetEventHandler = this.defaultWidgetEventHandler();
+
+    this.unsubscribeFromWidgetEvents = subscribeToWidgetEvents(
+      Object.values(INPUT_EVENT_TYPES),
+      defaultWidgetEventHandler
+    );
+
     this.render();
 
     retargetEvents(shadowRoot);
@@ -101,8 +108,12 @@ class ConferenceTableElement extends HTMLElement {
 
   defaultWidgetEventHandler() {
     return evt => {
-      const action = widgetEventToFSA(evt);
-      this.reactRootRef.current.dispatch(action);
+      const { overrideEventHandler } = ATTRIBUTES;
+
+      if (!this.isAttributeTruthy(overrideEventHandler)) {
+        const action = widgetEventToFSA(evt);
+        this.reactRootRef.current.dispatch(action);
+      }
     };
   }
 
@@ -117,22 +128,6 @@ class ConferenceTableElement extends HTMLElement {
     setLocale(locale);
 
     const paginationMode = this.getAttribute(ATTRIBUTES.paginationMode) || '';
-
-    if (this.unsubscribeFromWidgetEvents) {
-      this.unsubscribeFromWidgetEvents();
-    }
-
-    const disableDefaultEventHandler = this.isAttributeTruthy(
-      ATTRIBUTES.disableDefaultEventHandler
-    );
-    if (!disableDefaultEventHandler) {
-      const defaultWidgetEventHandler = this.defaultWidgetEventHandler();
-
-      this.unsubscribeFromWidgetEvents = subscribeToWidgetEvents(
-        Object.values(INPUT_EVENT_TYPES),
-        defaultWidgetEventHandler
-      );
-    }
 
     ReactDOM.render(
       <KeycloakContext.Provider value={this.keycloak}>

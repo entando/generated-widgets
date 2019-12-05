@@ -30,7 +30,7 @@ const ATTRIBUTES = {
   id: 'id',
   hidden: 'hidden',
   locale: 'locale',
-  disableDefaultEventHandler: 'disable-default-event-handler', // custom element attribute names MUST be written in kebab-case
+  overrideEventHandler: 'override-event-handler', // custom element attribute names MUST be written in kebab-case
   hideEditButton: 'hide-edit-button',
 };
 
@@ -82,6 +82,13 @@ class ConferenceDetailsElement extends HTMLElement {
       this.render();
     });
 
+    const defaultWidgetEventHandler = this.defaultWidgetEventHandler();
+
+    this.unsubscribeFromWidgetEvents = subscribeToWidgetEvents(
+      Object.values(INPUT_EVENT_TYPES),
+      defaultWidgetEventHandler
+    );
+
     this.render();
 
     retargetEvents(shadowRoot);
@@ -90,32 +97,35 @@ class ConferenceDetailsElement extends HTMLElement {
   defaultWidgetEventHandler() {
     return evt => {
       const { formCancelEditing, formCreate, edit, formUpdate, tableSelect } = INPUT_EVENT_TYPES;
-      const { id, hidden } = ATTRIBUTES;
-      switch (evt.type) {
-        case formCreate: {
-          this.removeAttribute(hidden);
-          this.setAttribute(id, evt.detail.payload.id);
-          break;
+      const { id, hidden, overrideEventHandler } = ATTRIBUTES;
+
+      if (!this.isAttributeTruthy(overrideEventHandler)) {
+        switch (evt.type) {
+          case formCreate: {
+            this.removeAttribute(hidden);
+            this.setAttribute(id, evt.detail.payload.id);
+            break;
+          }
+          case edit: {
+            this.setAttribute(hidden, true);
+            break;
+          }
+          case formCancelEditing: {
+            this.removeAttribute(hidden);
+            break;
+          }
+          case formUpdate: {
+            this.removeAttribute(hidden);
+            break;
+          }
+          case tableSelect: {
+            this.removeAttribute(hidden);
+            this.setAttribute(id, evt.detail.payload.id);
+            break;
+          }
+          default:
+            throw new Error(`Unsupported event: ${evt.type}`);
         }
-        case edit: {
-          this.setAttribute(hidden, true);
-          break;
-        }
-        case formCancelEditing: {
-          this.removeAttribute(hidden);
-          break;
-        }
-        case formUpdate: {
-          this.removeAttribute(hidden);
-          break;
-        }
-        case tableSelect: {
-          this.removeAttribute(hidden);
-          this.setAttribute(id, evt.detail.payload.id);
-          break;
-        }
-        default:
-          throw new Error(`Unsupported event: ${evt.type}`);
       }
     };
   }
@@ -129,22 +139,6 @@ class ConferenceDetailsElement extends HTMLElement {
 
     const locale = this.getAttribute(ATTRIBUTES.locale);
     setLocale(locale);
-
-    if (this.unsubscribeFromWidgetEvents) {
-      this.unsubscribeFromWidgetEvents();
-    }
-
-    const disableDefaultEventHandler = this.isAttributeTruthy(
-      ATTRIBUTES.disableDefaultEventHandler
-    );
-    if (!disableDefaultEventHandler) {
-      const defaultWidgetEventHandler = this.defaultWidgetEventHandler();
-
-      this.unsubscribeFromWidgetEvents = subscribeToWidgetEvents(
-        Object.values(INPUT_EVENT_TYPES),
-        defaultWidgetEventHandler
-      );
-    }
 
     const id = this.getAttribute(ATTRIBUTES.id);
     const hideEditButton = this.isAttributeTruthy(ATTRIBUTES.hideEditButton);
@@ -175,16 +169,3 @@ class ConferenceDetailsElement extends HTMLElement {
 }
 
 customElements.define('conference-details', ConferenceDetailsElement);
-
-window.test = name => {
-  const customEvent = new CustomEvent('conference.table.select', {
-    detail: {
-      payload: {
-        id: 1,
-        name: name || 'pippppo',
-        summary: 'summaryyy',
-      },
-    },
-  });
-  window.dispatchEvent(customEvent);
-};

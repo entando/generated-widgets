@@ -32,7 +32,7 @@ const ATTRIBUTES = {
   id: 'id',
   hidden: 'hidden',
   locale: 'locale',
-  disableDefaultEventHandler: 'disable-default-event-handler', // custom element attribute names MUST be written in kebab-case
+  overrideEventHandler: 'override-event-handler', // custom element attribute names MUST be written in kebab-case
 };
 
 class ConferenceFormElement extends HTMLElement {
@@ -42,7 +42,7 @@ class ConferenceFormElement extends HTMLElement {
     this.jss = null;
     this.mountPoint = null;
     this.keycloak = getKeycloakInstance();
-    this.unsubscribeFromWidgetEvents = null;
+    this.unsubscribeFromDefaultWidgetEvents = null;
     this.unsubscribeFromKeycloakEvent = null;
     this.onCreate = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.create);
     this.onCancelEditing = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.cancelEditing);
@@ -98,14 +98,21 @@ class ConferenceFormElement extends HTMLElement {
       this.render();
     });
 
+    const defaultWidgetEventHandler = this.defaultWidgetEventHandler();
+
+    this.unsubscribeFromDefaultWidgetEvents = subscribeToWidgetEvents(
+      Object.values(INPUT_EVENT_TYPES),
+      defaultWidgetEventHandler
+    );
+
     this.render();
 
     retargetEvents(shadowRoot);
   }
 
   disconnectedCallback() {
-    if (this.unsubscribeFromWidgetEvents) {
-      this.unsubscribeFromWidgetEvents();
+    if (this.unsubscribeFromDefaultWidgetEvents) {
+      this.unsubscribeFromDefaultWidgetEvents();
     }
     if (this.unsubscribeFromKeycloakEvent) {
       this.unsubscribeFromKeycloakEvent();
@@ -115,32 +122,34 @@ class ConferenceFormElement extends HTMLElement {
   defaultWidgetEventHandler() {
     return evt => {
       const { tableAdd, cancelEditing, create, edit, tableSelect, update } = INPUT_EVENT_TYPES;
-      const { id, hidden } = ATTRIBUTES;
+      const { id, hidden, overrideEventHandler } = ATTRIBUTES;
 
-      switch (evt.type) {
-        case tableAdd: {
-          this.removeAttribute(hidden);
-          this.setAttribute(id, '');
-          break;
+      if (!this.isAttributeTruthy(overrideEventHandler)) {
+        switch (evt.type) {
+          case tableAdd: {
+            this.removeAttribute(hidden);
+            this.setAttribute(id, '');
+            break;
+          }
+          case edit: {
+            this.removeAttribute(hidden);
+            this.setAttribute(id, evt.detail.payload.id);
+            break;
+          }
+          case create:
+          case cancelEditing:
+          case update: {
+            this.setAttribute(hidden, true);
+            break;
+          }
+          case tableSelect: {
+            this.setAttribute(hidden, true);
+            this.setAttribute(id, evt.detail.payload.id);
+            break;
+          }
+          default:
+            throw new Error(`Unsupported event: ${evt.type}`);
         }
-        case edit: {
-          this.removeAttribute(hidden);
-          this.setAttribute(id, evt.detail.payload.id);
-          break;
-        }
-        case create:
-        case cancelEditing:
-        case update: {
-          this.setAttribute(hidden, true);
-          break;
-        }
-        case tableSelect: {
-          this.setAttribute(hidden, true);
-          this.setAttribute(id, evt.detail.payload.id);
-          break;
-        }
-        default:
-          throw new Error(`Unsupported event: ${evt.type}`);
       }
     };
   }
@@ -154,20 +163,6 @@ class ConferenceFormElement extends HTMLElement {
 
     const locale = this.getAttribute(ATTRIBUTES.locale);
     setLocale(locale);
-
-    if (this.unsubscribeFromWidgetEvents) {
-      this.unsubscribeFromWidgetEvents();
-    }
-
-    const disableEventHandler = this.isAttributeTruthy(ATTRIBUTES.disableDefaultEventHandler);
-    if (!disableEventHandler) {
-      const defaultWidgetEventHandler = this.defaultWidgetEventHandler();
-
-      this.unsubscribeFromWidgetEvents = subscribeToWidgetEvents(
-        Object.values(INPUT_EVENT_TYPES),
-        defaultWidgetEventHandler
-      );
-    }
 
     const id = this.getAttribute(ATTRIBUTES.id);
 
