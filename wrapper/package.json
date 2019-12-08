@@ -3,9 +3,14 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "serve -l 5000"
+    "start": "serve -l 5000",
+    "serve-widgets": "concurrently --kill-others \"npm:serve-widgets-*\"",
+    "serve-widgets-details": "./build-details.sh",
+    "serve-widgets-form": "./build-form.sh",
+    "serve-widgets-table": "./build-table.sh"
   },
   "devDependencies": {
+    "concurrently": "^5.0.0",
     "serve": "^11.2.0"
   }
 }
