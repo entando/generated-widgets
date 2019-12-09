@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
-import { ThemeProvider } from '@material-ui/styles';
+import { ThemeProvider } from '@material-ui/core/styles';
 import { createMuiTheme } from '@material-ui/core';
 
 import keycloakType from 'components/__types__/keycloak';
@@ -37,12 +37,13 @@ class ConferenceDetailsContainer extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { keycloak } = this.props;
+    const { keycloak, id } = this.props;
     const authenticated = keycloak.initialized && keycloak.authenticated;
 
     const changedAuth = prevProps.keycloak.authenticated !== authenticated;
+    const changedId = id && id !== prevProps.id;
 
-    if (authenticated && changedAuth) {
+    if (authenticated && (changedId || changedAuth)) {
       this.fetchData();
     }
   }
@@ -88,7 +89,7 @@ class ConferenceDetailsContainer extends React.Component {
 
   render() {
     const { conference, notificationStatus, notificationMessage, loading } = this.state;
-    const { t, keycloak } = this.props;
+    const { t, keycloak, hideEditButton, onEdit } = this.props;
 
     return (
       <ThemeProvider theme={this.theme}>
@@ -97,7 +98,13 @@ class ConferenceDetailsContainer extends React.Component {
         </UnauthenticatedView>
         <AuthenticatedView keycloak={keycloak}>
           {loading && t('common.loading')}
-          {!loading && <ConferenceDetails conference={conference} />}
+          {!loading && (
+            <ConferenceDetails
+              hideEditButton={hideEditButton}
+              onEdit={onEdit}
+              conference={conference}
+            />
+          )}
         </AuthenticatedView>
         <Notification
           status={notificationStatus}
@@ -111,12 +118,15 @@ class ConferenceDetailsContainer extends React.Component {
 
 ConferenceDetailsContainer.propTypes = {
   id: PropTypes.string.isRequired,
+  onEdit: PropTypes.func,
   onError: PropTypes.func,
   t: PropTypes.func.isRequired,
   keycloak: keycloakType.isRequired,
+  hideEditButton: PropTypes.bool.isRequired,
 };
 
 ConferenceDetailsContainer.defaultProps = {
+  onEdit: () => {},
   onError: () => {},
 };
 

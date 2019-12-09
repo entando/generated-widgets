@@ -4,7 +4,7 @@ import retargetEvents from 'react-shadow-dom-retarget-events';
 
 import { StylesProvider, ThemeProvider, jssPreset } from '@material-ui/core/styles';
 import { createMuiTheme } from '@material-ui/core';
-import { create } from 'jss';
+import { create as jssCreate } from 'jss';
 
 import { KeycloakContext } from 'auth/KeycloakContext';
 import setLocale from 'i18n/setLocale';
@@ -30,44 +30,41 @@ const getKeycloakInstance = () =>
 
 const ATTRIBUTES = {
   id: 'id',
-  hidden: 'hidden',
   locale: 'locale',
-  disableDefaultEventHandler: 'disable-default-event-handler', // custom element attribute names MUST be written in kebab-case
+  overrideEventHandler: 'override-event-handler', // custom element attribute names MUST be written in kebab-case
 };
 
 class ConferenceFormElement extends HTMLElement {
-  jss;
-
-  mountPoint;
-
-  keycloak = getKeycloakInstance();
-
-  unsubscribeFromWidgetEvents;
-
-  unsubscribeFromKeycloakEvent;
-
-  onCreate = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.create);
-
-  onUpdate = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.update);
-
-  onErrorCreate = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.errorCreate);
-
-  onErrorUpdate = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.errorUpdate);
-
-  muiTheme;
+  constructor() {
+    super();
+    this.muiTheme = null;
+    this.jss = null;
+    this.mountPoint = null;
+    this.keycloak = getKeycloakInstance();
+    this.unsubscribeFromDefaultWidgetEvents = null;
+    this.unsubscribeFromKeycloakEvent = null;
+    this.onCreate = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.create);
+    this.onCancelEditing = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.cancelEditing);
+    this.onUpdate = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.update);
+    this.onErrorCreate = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.errorCreate);
+    this.onErrorUpdate = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.errorUpdate);
+  }
 
   static get observedAttributes() {
     return Object.values(ATTRIBUTES);
   }
 
+  isAttributeTruthy(attribute) {
+    return this.hasAttribute(attribute) && this.getAttribute(attribute) !== 'false';
+  }
+
   attributeChangedCallback(name, oldValue, newValue) {
-    if (!this.mountPoint || oldValue === newValue) {
-      return;
-    }
     if (!Object.values(ATTRIBUTES).includes(name)) {
       throw new Error(`Untracked changed attribute: ${name}`);
     }
-    this.render();
+    if (this.mountPoint && newValue !== oldValue) {
+      this.render();
+    }
   }
 
   connectedCallback() {
@@ -76,7 +73,7 @@ class ConferenceFormElement extends HTMLElement {
     const shadowRoot = this.attachShadow({ mode: 'open' });
     shadowRoot.appendChild(this.mountPoint);
 
-    this.jss = create({
+    this.jss = jssCreate({
       ...jssPreset(),
       insertionPoint: this.mountPoint,
     });
@@ -99,14 +96,21 @@ class ConferenceFormElement extends HTMLElement {
       this.render();
     });
 
+    const defaultWidgetEventHandler = this.defaultWidgetEventHandler();
+
+    this.unsubscribeFromDefaultWidgetEvents = subscribeToWidgetEvents(
+      Object.values(INPUT_EVENT_TYPES),
+      defaultWidgetEventHandler
+    );
+
     this.render();
 
     retargetEvents(shadowRoot);
   }
 
   disconnectedCallback() {
-    if (this.unsubscribeFromWidgetEvents) {
-      this.unsubscribeFromWidgetEvents();
+    if (this.unsubscribeFromDefaultWidgetEvents) {
+      this.unsubscribeFromDefaultWidgetEvents();
     }
     if (this.unsubscribeFromKeycloakEvent) {
       this.unsubscribeFromKeycloakEvent();
@@ -115,61 +119,63 @@ class ConferenceFormElement extends HTMLElement {
 
   defaultWidgetEventHandler() {
     return evt => {
-      const { tableAdd, tableSelect } = INPUT_EVENT_TYPES;
-      const { id } = ATTRIBUTES;
-      switch (evt.type) {
-        case tableAdd: {
-          this.setAttribute(id, '');
-          break;
+      const { tableAdd, cancelEditing, create, edit, tableSelect, update } = INPUT_EVENT_TYPES;
+      const { id, overrideEventHandler } = ATTRIBUTES;
+
+      if (!this.isAttributeTruthy(overrideEventHandler)) {
+        switch (evt.type) {
+          case tableAdd: {
+            this.hidden = false;
+            this.setAttribute(id, '');
+            break;
+          }
+          case edit: {
+            this.hidden = false;
+            this.setAttribute(id, evt.detail.payload.id);
+            break;
+          }
+          case create:
+          case cancelEditing:
+          case update: {
+            this.hidden = true;
+            break;
+          }
+          case tableSelect: {
+            this.hidden = true;
+            this.setAttribute(id, evt.detail.payload.id);
+            break;
+          }
+          default:
+            throw new Error(`Unsupported event: ${evt.type}`);
         }
-        case tableSelect: {
-          this.setAttribute(id, evt.detail.payload.id);
-          break;
-        }
-        default:
-          throw new Error(`Unsupported event: ${evt.type}`);
       }
     };
   }
 
   render() {
-    const hidden = this.getAttribute(ATTRIBUTES.hidden) === 'true';
-    if (hidden) {
-      ReactDOM.render(<></>);
-      return;
-    }
-
     const locale = this.getAttribute(ATTRIBUTES.locale);
     setLocale(locale);
-
-    const disableEventHandler = this.getAttribute(ATTRIBUTES.disableDefaultEventHandler) === 'true';
-    if (!disableEventHandler) {
-      const defaultWidgetEventHandler = this.defaultWidgetEventHandler();
-
-      this.unsubscribeFromWidgetEvents = subscribeToWidgetEvents(
-        Object.values(INPUT_EVENT_TYPES),
-        defaultWidgetEventHandler
-      );
-    } else {
-      if (this.unsubscribeFromWidgetEvents) {
-        this.unsubscribeFromWidgetEvents();
-      }
-      if (this.unsubscribeFromKeycloakEvent) {
-        this.unsubscribeFromKeycloakEvent();
-      }
-    }
 
     const id = this.getAttribute(ATTRIBUTES.id);
 
     const FormContainer = id
       ? React.createElement(
           ConferenceEditFormContainer,
-          { id, onUpdate: this.onUpdate, onError: this.onErrorUpdate },
+          {
+            id,
+            onUpdate: this.onUpdate,
+            onError: this.onErrorUpdate,
+            onCancelEditing: this.onCancelEditing,
+          },
           null
         )
       : React.createElement(
           ConferenceAddFormContainer,
-          { onCreate: this.onCreate, onError: this.onErrorCreate },
+          {
+            onCreate: this.onCreate,
+            onError: this.onErrorCreate,
+            onCancelEditing: this.onCancelEditing,
+          },
           null
         );
 

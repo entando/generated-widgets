@@ -4,6 +4,7 @@
   },
   "common": {
     "save": "Save",
+    "cancel": "Cancel",
     "dataSaved": "Data successfully saved",
     "notAuthenticated": "User is not authenticated.",
     "selectFile": "Upload new file",

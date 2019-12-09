@@ -29,43 +29,40 @@ const getKeycloakInstance = () =>
   };
 
 const ATTRIBUTES = {
-  hidden: 'hidden',
   locale: 'locale',
   paginationMode: 'pagination-mode',
-  disableDefaultEventHandler: 'disable-default-event-handler', // custom element attribute names MUST be written in kebab-case
+  overrideEventHandler: 'override-event-handler', // custom element attribute names MUST be written in kebab-case
 };
 
 class ConferenceTableElement extends HTMLElement {
-  jss;
-
-  mountPoint;
-
-  unsubscribeFromWidgetEvents;
-
-  unsubscribeFromKeycloakEvent;
-
-  keycloak = getKeycloakInstance();
-
-  onAdd = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.add);
-
-  onError = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.error);
-
-  onSelect = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.select);
-
-  reactRootRef = React.createRef();
+  constructor() {
+    super();
+    this.jss = null;
+    this.mountPoint = null;
+    this.unsubscribeFromWidgetEvents = null;
+    this.unsubscribeFromKeycloakEvent = null;
+    this.keycloak = getKeycloakInstance();
+    this.onAdd = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.add);
+    this.onError = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.error);
+    this.onSelect = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.select);
+    this.reactRootRef = React.createRef();
+  }
 
   static get observedAttributes() {
     return Object.values(ATTRIBUTES);
   }
 
+  isAttributeTruthy(attribute) {
+    return this.hasAttribute(attribute) && this.getAttribute(attribute) !== 'false';
+  }
+
   attributeChangedCallback(name, oldValue, newValue) {
-    if (!this.mountPoint || oldValue === newValue) {
-      return;
-    }
     if (!Object.values(ATTRIBUTES).includes(name)) {
       throw new Error(`Untracked changed attribute: ${name}`);
     }
-    this.render();
+    if (this.mountPoint && newValue !== oldValue) {
+      this.render();
+    }
   }
 
   connectedCallback() {
@@ -86,6 +83,13 @@ class ConferenceTableElement extends HTMLElement {
       this.render();
     });
 
+    const defaultWidgetEventHandler = this.defaultWidgetEventHandler();
+
+    this.unsubscribeFromWidgetEvents = subscribeToWidgetEvents(
+      Object.values(INPUT_EVENT_TYPES),
+      defaultWidgetEventHandler
+    );
+
     this.render();
 
     retargetEvents(shadowRoot);
@@ -102,38 +106,20 @@ class ConferenceTableElement extends HTMLElement {
 
   defaultWidgetEventHandler() {
     return evt => {
-      const action = widgetEventToFSA(evt);
-      this.reactRootRef.current.dispatch(action);
+      const { overrideEventHandler } = ATTRIBUTES;
+
+      if (!this.isAttributeTruthy(overrideEventHandler)) {
+        const action = widgetEventToFSA(evt);
+        this.reactRootRef.current.dispatch(action);
+      }
     };
   }
 
   render() {
-    const hidden = this.getAttribute(ATTRIBUTES.hidden) === 'true';
-    if (hidden) {
-      return;
-    }
-
     const locale = this.getAttribute(ATTRIBUTES.locale);
     setLocale(locale);
 
     const paginationMode = this.getAttribute(ATTRIBUTES.paginationMode) || '';
-
-    const disableEventHandler = this.getAttribute(ATTRIBUTES.disableDefaultEventHandler) === 'true';
-    if (!disableEventHandler) {
-      const defaultWidgetEventHandler = this.defaultWidgetEventHandler();
-
-      this.unsubscribeFromWidgetEvents = subscribeToWidgetEvents(
-        Object.values(INPUT_EVENT_TYPES),
-        defaultWidgetEventHandler
-      );
-    } else {
-      if (this.unsubscribeFromWidgetEvents) {
-        this.unsubscribeFromWidgetEvents();
-      }
-      if (this.unsubscribeFromKeycloakEvent) {
-        this.unsubscribeFromKeycloakEvent();
-      }
-    }
 
     ReactDOM.render(
       <KeycloakContext.Provider value={this.keycloak}>

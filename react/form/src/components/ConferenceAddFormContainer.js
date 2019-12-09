@@ -54,7 +54,7 @@ class ConferenceAddFormContainer extends PureComponent {
   }
 
   render() {
-    const { keycloak, t } = this.props;
+    const { keycloak, onCancelEditing, t } = this.props;
     const { notificationMessage, notificationStatus } = this.state;
 
     return (
@@ -63,7 +63,7 @@ class ConferenceAddFormContainer extends PureComponent {
           {t('common.notAuthenticated')}
         </UnauthenticatedView>
         <AuthenticatedView keycloak={keycloak}>
-          <ConferenceForm onSubmit={this.handleSubmit} />
+          <ConferenceForm onSubmit={this.handleSubmit} onCancelEditing={onCancelEditing} />
         </AuthenticatedView>
         <Notification
           status={notificationStatus}
@@ -77,6 +77,7 @@ class ConferenceAddFormContainer extends PureComponent {
 
 ConferenceAddFormContainer.propTypes = {
   onError: PropTypes.func,
+  onCancelEditing: PropTypes.func,
   onCreate: PropTypes.func,
   t: PropTypes.func.isRequired,
   keycloak: keycloakType.isRequired,
@@ -84,6 +85,7 @@ ConferenceAddFormContainer.propTypes = {
 
 ConferenceAddFormContainer.defaultProps = {
   onError: () => {},
+  onCancelEditing: () => {},
   onCreate: () => {},
 };
 
