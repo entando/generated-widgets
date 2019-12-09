@@ -28,7 +28,6 @@ const getKeycloakInstance = () =>
 
 const ATTRIBUTES = {
   id: 'id',
-  hidden: 'hidden',
   locale: 'locale',
   overrideEventHandler: 'override-event-handler', // custom element attribute names MUST be written in kebab-case
   hideEditButton: 'hide-edit-button',
@@ -51,8 +50,7 @@ class ConferenceDetailsElement extends HTMLElement {
   }
 
   isAttributeTruthy(attribute) {
-    const val = this.getAttribute(attribute);
-    return val !== undefined && val !== null && val !== 'false';
+    return this.hasAttribute(attribute) && this.getAttribute(attribute) !== 'false';
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -97,29 +95,29 @@ class ConferenceDetailsElement extends HTMLElement {
   defaultWidgetEventHandler() {
     return evt => {
       const { formCancelEditing, formCreate, edit, formUpdate, tableSelect } = INPUT_EVENT_TYPES;
-      const { id, hidden, overrideEventHandler } = ATTRIBUTES;
+      const { id, overrideEventHandler } = ATTRIBUTES;
 
       if (!this.isAttributeTruthy(overrideEventHandler)) {
         switch (evt.type) {
           case formCreate: {
-            this.removeAttribute(hidden);
+            this.hidden = false;
             this.setAttribute(id, evt.detail.payload.id);
             break;
           }
           case edit: {
-            this.setAttribute(hidden, true);
+            this.hidden = true;
             break;
           }
           case formCancelEditing: {
-            this.removeAttribute(hidden);
+            this.hidden = false;
             break;
           }
           case formUpdate: {
-            this.removeAttribute(hidden);
+            this.hidden = false;
             break;
           }
           case tableSelect: {
-            this.removeAttribute(hidden);
+            this.hidden = false;
             this.setAttribute(id, evt.detail.payload.id);
             break;
           }
@@ -131,12 +129,6 @@ class ConferenceDetailsElement extends HTMLElement {
   }
 
   render() {
-    const hidden = this.isAttributeTruthy(ATTRIBUTES.hidden);
-    if (hidden) {
-      ReactDOM.render(<></>, this.mountPoint);
-      return;
-    }
-
     const locale = this.getAttribute(ATTRIBUTES.locale);
     setLocale(locale);
 

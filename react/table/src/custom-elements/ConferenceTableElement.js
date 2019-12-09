@@ -29,7 +29,6 @@ const getKeycloakInstance = () =>
   };
 
 const ATTRIBUTES = {
-  hidden: 'hidden',
   locale: 'locale',
   paginationMode: 'pagination-mode',
   overrideEventHandler: 'override-event-handler', // custom element attribute names MUST be written in kebab-case
@@ -54,8 +53,7 @@ class ConferenceTableElement extends HTMLElement {
   }
 
   isAttributeTruthy(attribute) {
-    const val = this.getAttribute(attribute);
-    return val !== undefined && val !== null && val !== 'false';
+    return this.hasAttribute(attribute) && this.getAttribute(attribute) !== 'false';
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -118,12 +116,6 @@ class ConferenceTableElement extends HTMLElement {
   }
 
   render() {
-    const hidden = this.isAttributeTruthy(ATTRIBUTES.hidden);
-    if (hidden) {
-      ReactDOM.render(<></>, this.mountPoint);
-      return;
-    }
-
     const locale = this.getAttribute(ATTRIBUTES.locale);
     setLocale(locale);
 

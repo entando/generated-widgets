@@ -30,7 +30,6 @@ const getKeycloakInstance = () =>
 
 const ATTRIBUTES = {
   id: 'id',
-  hidden: 'hidden',
   locale: 'locale',
   overrideEventHandler: 'override-event-handler', // custom element attribute names MUST be written in kebab-case
 };
@@ -56,8 +55,7 @@ class ConferenceFormElement extends HTMLElement {
   }
 
   isAttributeTruthy(attribute) {
-    const val = this.getAttribute(attribute);
-    return val !== undefined && val !== null && val !== 'false';
+    return this.hasAttribute(attribute) && this.getAttribute(attribute) !== 'false';
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -122,28 +120,28 @@ class ConferenceFormElement extends HTMLElement {
   defaultWidgetEventHandler() {
     return evt => {
       const { tableAdd, cancelEditing, create, edit, tableSelect, update } = INPUT_EVENT_TYPES;
-      const { id, hidden, overrideEventHandler } = ATTRIBUTES;
+      const { id, overrideEventHandler } = ATTRIBUTES;
 
       if (!this.isAttributeTruthy(overrideEventHandler)) {
         switch (evt.type) {
           case tableAdd: {
-            this.removeAttribute(hidden);
+            this.hidden = false;
             this.setAttribute(id, '');
             break;
           }
           case edit: {
-            this.removeAttribute(hidden);
+            this.hidden = false;
             this.setAttribute(id, evt.detail.payload.id);
             break;
           }
           case create:
           case cancelEditing:
           case update: {
-            this.setAttribute(hidden, true);
+            this.hidden = true;
             break;
           }
           case tableSelect: {
-            this.setAttribute(hidden, true);
+            this.hidden = true;
             this.setAttribute(id, evt.detail.payload.id);
             break;
           }
@@ -155,12 +153,6 @@ class ConferenceFormElement extends HTMLElement {
   }
 
   render() {
-    const hidden = this.isAttributeTruthy(ATTRIBUTES.hidden);
-    if (hidden) {
-      ReactDOM.render(<></>, this.mountPoint);
-      return;
-    }
-
     const locale = this.getAttribute(ATTRIBUTES.locale);
     setLocale(locale);
 
