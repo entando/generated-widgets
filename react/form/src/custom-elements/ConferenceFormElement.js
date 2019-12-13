@@ -39,7 +39,8 @@ class ConferenceFormElement extends HTMLElement {
     super();
     this.muiTheme = null;
     this.jss = null;
-    this.mountPoint = null;
+    this.scrollContainer = null;
+    this.container = null;
     this.keycloak = getKeycloakInstance();
     this.unsubscribeFromDefaultWidgetEvents = null;
     this.unsubscribeFromKeycloakEvent = null;
@@ -62,32 +63,36 @@ class ConferenceFormElement extends HTMLElement {
     if (!Object.values(ATTRIBUTES).includes(name)) {
       throw new Error(`Untracked changed attribute: ${name}`);
     }
-    if (this.mountPoint && newValue !== oldValue) {
+    if (this.scrollContainer && newValue !== oldValue) {
       this.render();
     }
   }
 
   connectedCallback() {
-    this.mountPoint = document.createElement('div');
+    const scrollContainer = document.createElement('div');
+    const container = document.createElement('div');
+    scrollContainer.appendChild(container);
 
     const shadowRoot = this.attachShadow({ mode: 'open' });
-    shadowRoot.appendChild(this.mountPoint);
+    shadowRoot.appendChild(scrollContainer);
 
     this.jss = jssCreate({
       ...jssPreset(),
-      insertionPoint: this.mountPoint,
+      insertionPoint: container,
     });
 
     this.muiTheme = createMuiTheme({
       props: {
         MuiDialog: {
-          container: this.mountPoint,
+          container,
         },
         MuiPopover: {
-          container: this.mountPoint,
+          container,
         },
       },
     });
+    this.container = container;
+    this.scrollContainer = scrollContainer;
 
     this.keycloak = { ...getKeycloakInstance(), initialized: true };
 
@@ -185,7 +190,7 @@ class ConferenceFormElement extends HTMLElement {
           <ThemeProvider theme={this.muiTheme}>{FormContainer}</ThemeProvider>
         </StylesProvider>
       </KeycloakContext.Provider>,
-      this.mountPoint
+      this.container
     );
   }
 }
