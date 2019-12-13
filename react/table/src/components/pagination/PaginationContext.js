@@ -5,7 +5,6 @@ export const itemsPerPageOptions = [5, 10, 25];
 
 const initialState = {
   currentPage: 0,
-  totalItemCount: 0,
   itemsPerPage: itemsPerPageOptions[itemsPerPageOptions.length - 1],
 };
 
@@ -29,23 +28,11 @@ export class PaginationProvider extends React.Component {
 
     this.onChangeItemsPerPage = this.onChangeItemsPerPage.bind(this);
     this.onChangeCurrentPage = this.onChangeCurrentPage.bind(this);
-    this.onChangeTotalItemCount = this.onChangeTotalItemCount.bind(this);
-  }
-
-  onChangeTotalItemCount(totalItemCount) {
-    this.setState(state => ({
-      ...state,
-      pagination: { ...state.pagination, totalItemCount },
-    }));
   }
 
   onChangeItemsPerPage({ target: { value } }) {
     const itemsPerPage = parseInt(value, 10);
-    const {
-      pagination: { currentPage: oldPage, totalItemCount },
-    } = this.state;
-
-    const currentPage = itemsPerPage > totalItemCount ? 0 : oldPage;
+    const currentPage = 0;
 
     this.setState(state => ({
       ...state,
@@ -70,7 +57,6 @@ export class PaginationProvider extends React.Component {
           ...pagination,
           onChangeCurrentPage: this.onChangeCurrentPage,
           onChangeItemsPerPage: this.onChangeItemsPerPage,
-          onChangeTotalItemCount: this.onChangeTotalItemCount,
         }}
       >
         {children}
