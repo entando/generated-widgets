@@ -45,6 +45,7 @@ class ConferenceTableElement extends HTMLElement {
     this.onAdd = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.add);
     this.onError = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.error);
     this.onSelect = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.select);
+    this.onDelete = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.delete);
     this.reactRootRef = React.createRef();
   }
 
@@ -128,6 +129,7 @@ class ConferenceTableElement extends HTMLElement {
             <ConferenceTableContainer
               ref={this.reactRootRef}
               onAdd={this.onAdd}
+              onDelete={this.onDelete}
               onSelect={this.onSelect}
               onError={this.onError}
               paginationMode={paginationMode}
