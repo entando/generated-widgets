@@ -180,7 +180,7 @@ ConferenceTable.propTypes = {
   }).isRequired,
   t: PropTypes.func.isRequired,
   i18n: PropTypes.shape({ language: PropTypes.string }).isRequired,
-  Actions: PropTypes.node,
+  Actions: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
 };
 
 ConferenceTable.defaultProps = {

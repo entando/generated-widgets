@@ -80,7 +80,7 @@ DeleteConferenceButton.propTypes = {
   title: PropTypes.string,
   description: PropTypes.string,
   onClose: PropTypes.func.isRequired,
-  Renderer: PropTypes.node,
+  Renderer: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
 };
 
 DeleteConferenceButton.defaultProps = {
