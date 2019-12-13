@@ -9,7 +9,7 @@ import keycloakType from 'components/__types__/keycloak';
 import { withKeycloak } from 'auth/KeycloakContext';
 import { AuthenticatedView, UnauthenticatedView } from 'auth/KeycloakViews';
 import PaginationWrapper from 'components/pagination/PaginationWrapper';
-import { withPaginationContext } from 'components/pagination/PaginationContext';
+import { withPagination } from 'components/pagination/PaginationContext';
 import FiltersContainer from 'components/filters/FiltersContainer';
 import ConferenceTable from 'components/ConferenceTable';
 import Notification from 'components/common/Notification';
@@ -92,13 +92,13 @@ class ConferenceTableContainer extends Component {
         };
 
         const { conferences, headers } = await apiConferencesGet(requestParameters);
-        const conferenceCount = (headers && headers['X-Total-Count']) || null;
+        const count = (headers && headers['X-Total-Count']) || null;
 
         this.dispatch({
           type: READ_ALL,
           payload: {
             items: paginationMode === 'infinite-scroll' ? [...items, ...conferences] : conferences,
-            count: conferenceCount,
+            count,
           },
         });
       } catch (err) {
@@ -140,7 +140,7 @@ class ConferenceTableContainer extends Component {
   }
 
   render() {
-    const { items, itemCount, errorMessage, errorStatus, filters } = this.state;
+    const { items, count, errorMessage, errorStatus, filters } = this.state;
     const { classes, onSelect, onAdd, t, keycloak, paginationMode = '' } = this.props;
 
     return (
@@ -160,7 +160,7 @@ class ConferenceTableContainer extends Component {
             clear={this.clearFilters}
             filters={filters}
           />
-          <PaginationWrapper items={items} paginationMode={paginationMode} itemCount={itemCount}>
+          <PaginationWrapper items={items} paginationMode={paginationMode} count={count}>
             <div className={classes.tableWrapper}>
               <ConferenceTable items={items} onSelect={onSelect} />
             </div>
@@ -203,6 +203,6 @@ ConferenceTableContainer.defaultProps = {
 
 export default withKeycloak(
   withStyles(styles)(
-    withTranslation(undefined, { withRef: true })(withPaginationContext(ConferenceTableContainer))
+    withTranslation(undefined, { withRef: true })(withPagination(ConferenceTableContainer))
   )
 );

@@ -12,7 +12,7 @@ import {
 export const initialState = {
   filters: [],
   items: [],
-  itemCount: 0,
+  count: 0,
   errorMessage: null,
   errorStatus: null,
   loading: false,
@@ -46,7 +46,7 @@ export const reducer = (state = initialState, action) => {
       return {
         ...state,
         items: action.payload.items,
-        itemCount: action.payload.count,
+        count: action.payload.count,
       };
     case ERROR_FETCH:
       return { ...state, errorMessage: action.payload.message, errorStatus: action.payload.status };
