@@ -4,21 +4,18 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { withTranslation } from 'react-i18next';
 import TablePagination from '@material-ui/core/TablePagination';
 
-import {
-  withPaginationContext,
-  itemsPerPageOptions,
-} from 'components/pagination/PaginationContext';
+import { withPagination, itemsPerPageOptions } from 'components/pagination/PaginationContext';
 import TablePaginationActions from 'components/pagination/TablePaginationActions';
 
 import conferenceType from 'components/__types__/conference';
 
-const PaginationWrapper = ({ children, pagination, paginationMode, items, itemCount, t }) => {
+const PaginationWrapper = ({ children, pagination, paginationMode, items, count, t }) => {
   if (paginationMode === 'infinite-scroll') {
     return (
       <InfiniteScroll
         dataLength={items.length}
         next={() => pagination.onChangeCurrentPage(pagination.currentPage + 1)}
-        hasMore={items.length < itemCount}
+        hasMore={items.length < count}
         loader={<div>{t('common.loadingMore')}</div>}
       >
         {children}
@@ -29,11 +26,11 @@ const PaginationWrapper = ({ children, pagination, paginationMode, items, itemCo
     return (
       <>
         {children}
-        {itemCount > 0 && (
+        {count > 0 && (
           <TablePagination
             component="div"
             rowsPerPageOptions={itemsPerPageOptions}
-            count={itemCount}
+            count={count}
             rowsPerPage={pagination.itemsPerPage}
             page={pagination.currentPage}
             SelectProps={{
@@ -51,15 +48,17 @@ const PaginationWrapper = ({ children, pagination, paginationMode, items, itemCo
 };
 
 PaginationWrapper.propTypes = {
-  children: PropTypes.node,
+  children: PropTypes.node.isRequired,
   pagination: PropTypes.shape({
     itemsPerPage: PropTypes.number,
     currentPage: PropTypes.number,
-  }),
-  paginationMode: PropTypes.string,
+    onChangeItemsPerPage: PropTypes.func.isRequired,
+    onChangeCurrentPage: PropTypes.func.isRequired,
+  }).isRequired,
+  paginationMode: PropTypes.string.isRequired,
   items: PropTypes.arrayOf(conferenceType).isRequired,
-  itemCount: PropTypes.number,
+  count: PropTypes.number.isRequired,
   t: PropTypes.func.isRequired,
 };
 
-export default withTranslation()(withPaginationContext(PaginationWrapper));
+export default withTranslation()(withPagination(PaginationWrapper));
