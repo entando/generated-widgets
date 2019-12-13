@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import retargetEvents from 'react-shadow-dom-retarget-events';
 
-import { StylesProvider, jssPreset } from '@material-ui/core/styles';
+import { StylesProvider, jssPreset, createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { create } from 'jss';
 
 import { KeycloakContext } from 'auth/KeycloakContext';
@@ -37,11 +37,13 @@ const ATTRIBUTES = {
 class ConferenceTableElement extends HTMLElement {
   constructor() {
     super();
+    this.muiTheme = null;
     this.jss = null;
-    this.mountPoint = null;
+    this.scrollContainer = null;
+    this.container = null;
+    this.keycloak = getKeycloakInstance();
     this.unsubscribeFromWidgetEvents = null;
     this.unsubscribeFromKeycloakEvent = null;
-    this.keycloak = getKeycloakInstance();
     this.onAdd = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.add);
     this.onError = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.error);
     this.onSelect = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.select);
@@ -61,21 +63,33 @@ class ConferenceTableElement extends HTMLElement {
     if (!Object.values(ATTRIBUTES).includes(name)) {
       throw new Error(`Untracked changed attribute: ${name}`);
     }
-    if (this.mountPoint && newValue !== oldValue) {
+    if (this.scrollContainer && newValue !== oldValue) {
       this.render();
     }
   }
 
   connectedCallback() {
-    this.mountPoint = document.createElement('div');
+    const scrollContainer = document.createElement('div');
+    const container = document.createElement('div');
+    scrollContainer.appendChild(container);
 
     const shadowRoot = this.attachShadow({ mode: 'open' });
-    shadowRoot.appendChild(this.mountPoint);
+    shadowRoot.appendChild(scrollContainer);
 
     this.jss = create({
       ...jssPreset(),
-      insertionPoint: this.mountPoint,
+      insertionPoint: container,
     });
+
+    this.muiTheme = createMuiTheme({
+      props: {
+        MuiDialog: {
+          container,
+        },
+      },
+    });
+    this.container = container;
+    this.scrollContainer = scrollContainer;
 
     this.keycloak = { ...getKeycloakInstance(), initialized: true };
 
@@ -125,19 +139,21 @@ class ConferenceTableElement extends HTMLElement {
     ReactDOM.render(
       <KeycloakContext.Provider value={this.keycloak}>
         <StylesProvider jss={this.jss}>
-          <PaginationProvider paginationMode={paginationMode}>
-            <ConferenceTableContainer
-              ref={this.reactRootRef}
-              onAdd={this.onAdd}
-              onDelete={this.onDelete}
-              onSelect={this.onSelect}
-              onError={this.onError}
-              paginationMode={paginationMode}
-            />
-          </PaginationProvider>
+          <ThemeProvider theme={this.muiTheme}>
+            <PaginationProvider paginationMode={paginationMode}>
+              <ConferenceTableContainer
+                ref={this.reactRootRef}
+                onAdd={this.onAdd}
+                onDelete={this.onDelete}
+                onSelect={this.onSelect}
+                onError={this.onError}
+                paginationMode={paginationMode}
+              />
+            </PaginationProvider>
+          </ThemeProvider>
         </StylesProvider>
       </KeycloakContext.Provider>,
-      this.mountPoint
+      this.container
     );
   }
 }

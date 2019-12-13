@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
+
 import { Fab } from '@material-ui/core';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteForever from '@material-ui/icons/DeleteForever';
 import { withStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 
@@ -17,6 +20,7 @@ import { apiConferencesGet, apiConferenceDelete } from 'api/conferences';
 import { reducer, initialState } from 'state/conference.reducer';
 import { ADD_FILTER, UPDATE_FILTER, DELETE_FILTER, CLEAR_FILTERS } from 'state/filter.types';
 import { DELETE, ERROR_FETCH, CLEAR_ERRORS, READ_ALL } from 'state/conference.types';
+import DeleteConferenceButton from 'components/DeleteConferenceButton';
 
 const styles = {
   fab: {
@@ -155,9 +159,31 @@ class ConferenceTableContainer extends Component {
     }
   }
 
+  handleCloseDeleteConfirmationDialog(action, item) {
+    switch (action) {
+      case DeleteConferenceButton.CONFIRM: {
+        this.handleDelete(item);
+        break;
+      }
+      default:
+        break;
+    }
+  }
+
   render() {
     const { items, count, errorMessage, errorStatus, filters } = this.state;
     const { classes, onSelect, onAdd, t, keycloak, paginationMode = '' } = this.props;
+
+    const Actions = ({ item }) => (
+      <DeleteConferenceButton
+        onClose={action => this.handleCloseDeleteConfirmationDialog(action, item)}
+        Renderer={({ onClick }) => (
+          <IconButton aria-label="Remove" onClick={onClick}>
+            <DeleteForever />
+          </IconButton>
+        )}
+      />
+    );
 
     return (
       <>
@@ -178,7 +204,7 @@ class ConferenceTableContainer extends Component {
           />
           <PaginationWrapper items={items} paginationMode={paginationMode} count={count}>
             <div className={classes.tableWrapper}>
-              <ConferenceTable items={items} onSelect={onSelect} onDelete={this.handleDelete} />
+              <ConferenceTable items={items} onSelect={onSelect} Actions={Actions} />
             </div>
           </PaginationWrapper>
         </AuthenticatedView>

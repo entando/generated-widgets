@@ -9,8 +9,6 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
-import IconButton from '@material-ui/core/IconButton';
-import DeleteForever from '@material-ui/icons/DeleteForever';
 
 import conferenceType from 'components/__types__/conference';
 
@@ -32,7 +30,7 @@ const styles = {
   },
 };
 
-const ConferenceTable = ({ items, onSelect, onDelete, readonly, classes, t, i18n }) => {
+const ConferenceTable = ({ items, onSelect, classes, t, i18n, Actions }) => {
   const tableRows = items.map(item => (
     <TableRow hover className={classes.rowRoot} key={item.id} onClick={() => onSelect(item)}>
       <TableCell>
@@ -95,15 +93,9 @@ const ConferenceTable = ({ items, onSelect, onDelete, readonly, classes, t, i18n
       <TableCell>
         <span>{item.signature}</span>
       </TableCell>
-      {!readonly && (
+      {Actions && (
         <TableCell>
-          <IconButton
-            aria-label="Remove filter"
-            className={classes.icon}
-            onClick={() => onDelete(item)}
-          >
-            <DeleteForever />
-          </IconButton>
+          <Actions item={item} />
         </TableCell>
       )}
     </TableRow>
@@ -167,6 +159,7 @@ const ConferenceTable = ({ items, onSelect, onDelete, readonly, classes, t, i18n
           <TableCell>
             <span>{t('entities.conference.signature')}</span>
           </TableCell>
+          {Actions && <TableCell />}
         </TableRow>
       </TableHead>
       <TableBody>{tableRows}</TableBody>
@@ -179,7 +172,6 @@ const ConferenceTable = ({ items, onSelect, onDelete, readonly, classes, t, i18n
 ConferenceTable.propTypes = {
   items: PropTypes.arrayOf(conferenceType).isRequired,
   onSelect: PropTypes.func,
-  onDelete: PropTypes.func,
   classes: PropTypes.shape({
     icon: PropTypes.string,
     rowRoot: PropTypes.string,
@@ -188,13 +180,12 @@ ConferenceTable.propTypes = {
   }).isRequired,
   t: PropTypes.func.isRequired,
   i18n: PropTypes.shape({ language: PropTypes.string }).isRequired,
-  readonly: PropTypes.bool,
+  Actions: PropTypes.node,
 };
 
 ConferenceTable.defaultProps = {
   onSelect: () => {},
-  onDelete: () => {},
-  readonly: false,
+  Actions: null,
 };
 
 export default withStyles(styles)(withTranslation()(ConferenceTable));
