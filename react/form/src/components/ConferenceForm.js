@@ -419,7 +419,7 @@ ConferenceForm.propTypes = {
   handleChange: PropTypes.func.isRequired,
   handleBlur: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired,
+  onDelete: PropTypes.func,
   onCancelEditing: PropTypes.func.isRequired,
   isSubmitting: PropTypes.bool.isRequired,
   setFieldValue: PropTypes.func.isRequired,
@@ -432,6 +432,7 @@ ConferenceForm.defaultProps = {
   values: {},
   touched: {},
   errors: {},
+  onDelete: null,
 };
 
 const emptyConference = {
