@@ -106,6 +106,7 @@ class ConferenceEditFormContainer extends PureComponent {
             conference={conference}
             onSubmit={this.handleSubmit}
             onCancelEditing={onCancelEditing}
+            onDelete={() => console.log('should delete')}
           />
         </AuthenticatedView>
         <Notification
