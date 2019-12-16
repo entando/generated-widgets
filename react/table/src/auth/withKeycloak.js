@@ -1,6 +1,6 @@
-/* eslint-disable react/prop-types */
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { forwardRef, Component } from 'react';
+import refType from 'components/__types__/ref';
 import KeycloakContext from 'auth/KeycloakContext';
 
 export default function withKeycloak(WrappedComponent) {
@@ -14,6 +14,14 @@ export default function withKeycloak(WrappedComponent) {
       return <KeycloakContext.Consumer>{this.renderWrappedComponent}</KeycloakContext.Consumer>;
     }
   }
+
+  WithKeycloakComponent.propTypes = {
+    forwardedRef: refType,
+  };
+
+  WithKeycloakComponent.defaultProps = {
+    forwardedRef: () => {},
+  };
 
   return forwardRef((props, ref) => <WithKeycloakComponent {...props} forwardedRef={ref} />);
 }
