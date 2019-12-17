@@ -147,6 +147,7 @@ class ConferenceForm extends PureComponent {
             <Grid item xs={12} sm={6}>
               <TextField
                 id="conference-conferencePrice"
+                type="number"
                 error={errors.conferencePrice && touched.conferencePrice}
                 helperText={getHelperText('conferencePrice')}
                 className={classes.textField}
@@ -160,6 +161,7 @@ class ConferenceForm extends PureComponent {
             <Grid item xs={12} sm={6}>
               <TextField
                 id="conference-conferenceId"
+                type="number"
                 error={errors.conferenceId && touched.conferenceId}
                 helperText={getHelperText('conferenceId')}
                 className={classes.textField}
@@ -212,6 +214,7 @@ class ConferenceForm extends PureComponent {
             <Grid item xs={12} sm={6}>
               <TextField
                 id="conference-venueLat"
+                type="number"
                 error={errors.venueLat && touched.venueLat}
                 helperText={getHelperText('venueLat')}
                 className={classes.textField}
@@ -225,6 +228,7 @@ class ConferenceForm extends PureComponent {
             <Grid item xs={12} sm={6}>
               <TextField
                 id="conference-venueLong"
+                type="number"
                 error={errors.venueLong && touched.venueLong}
                 helperText={getHelperText('venueLong')}
                 className={classes.textField}
@@ -238,6 +242,7 @@ class ConferenceForm extends PureComponent {
             <Grid item xs={12} sm={6}>
               <TextField
                 id="conference-venueId"
+                type="number"
                 error={errors.venueId && touched.venueId}
                 helperText={getHelperText('venueId')}
                 className={classes.textField}
