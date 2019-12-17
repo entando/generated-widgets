@@ -147,6 +147,7 @@ class ConferenceForm extends PureComponent {
             <Grid item xs={12} sm={6}>
               <TextField
                 id="conference-conferencePrice"
+                type="number"
                 error={errors.conferencePrice && touched.conferencePrice}
                 helperText={getHelperText('conferencePrice')}
                 className={classes.textField}
@@ -160,6 +161,7 @@ class ConferenceForm extends PureComponent {
             <Grid item xs={12} sm={6}>
               <TextField
                 id="conference-conferenceId"
+                type="number"
                 error={errors.conferenceId && touched.conferenceId}
                 helperText={getHelperText('conferenceId')}
                 className={classes.textField}
@@ -212,6 +214,7 @@ class ConferenceForm extends PureComponent {
             <Grid item xs={12} sm={6}>
               <TextField
                 id="conference-venueLat"
+                type="number"
                 error={errors.venueLat && touched.venueLat}
                 helperText={getHelperText('venueLat')}
                 className={classes.textField}
@@ -225,6 +228,7 @@ class ConferenceForm extends PureComponent {
             <Grid item xs={12} sm={6}>
               <TextField
                 id="conference-venueLong"
+                type="number"
                 error={errors.venueLong && touched.venueLong}
                 helperText={getHelperText('venueLong')}
                 className={classes.textField}
@@ -238,6 +242,7 @@ class ConferenceForm extends PureComponent {
             <Grid item xs={12} sm={6}>
               <TextField
                 id="conference-venueId"
+                type="number"
                 error={errors.venueId && touched.venueId}
                 helperText={getHelperText('venueId')}
                 className={classes.textField}
@@ -298,20 +303,21 @@ class ConferenceForm extends PureComponent {
               </Select>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <InputLabel>{t('entities.conference.logo')}</InputLabel>
+              <InputLabel htmlFor="logo-upload-file-button">
+                {t('entities.conference.logo')}
+              </InputLabel>
               <div>
                 <input
+                  data-testid="logo-uploader"
                   style={{ display: 'none' }}
                   id="logo-upload-file-button"
                   accept="image/*"
                   type="file"
                   onChange={handleFiles('logo')}
                 />
-                <label htmlFor="logo-upload-file-button">
-                  <Button className={classes.button} component="span">
-                    {t('common.selectImageFile')}
-                  </Button>
-                </label>
+                <Button className={classes.button} component="span">
+                  {t('common.selectImageFile')}
+                </Button>
               </div>
               {values.logo && (
                 <div>
@@ -331,6 +337,7 @@ class ConferenceForm extends PureComponent {
                 </a>
               )}
               <input
+                data-testid="content-uploader"
                 style={{ display: 'none' }}
                 id="content-upload-file-button"
                 type="file"
@@ -383,7 +390,7 @@ ConferenceForm.propTypes = {
   handleChange: PropTypes.func.isRequired,
   handleBlur: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  onCancelEditing: PropTypes.func.isRequired,
+  onCancelEditing: PropTypes.func,
   isSubmitting: PropTypes.bool.isRequired,
   setFieldValue: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired,
@@ -391,6 +398,7 @@ ConferenceForm.propTypes = {
 };
 
 ConferenceForm.defaultProps = {
+  onCancelEditing: () => {},
   classes: {},
   values: {},
   touched: {},

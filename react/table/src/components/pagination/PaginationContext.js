@@ -73,14 +73,3 @@ PaginationProvider.propTypes = {
 PaginationProvider.defaultProps = {
   paginationMode: '',
 };
-
-export function withPagination(Component) {
-  return function PaginatedComponent(props) {
-    return (
-      <PaginationContext.Consumer>
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        {context => <Component {...props} pagination={context} />}
-      </PaginationContext.Consumer>
-    );
-  };
-}

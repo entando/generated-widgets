@@ -5,7 +5,7 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import { createMuiTheme } from '@material-ui/core';
 
 import keycloakType from 'components/__types__/keycloak';
-import { withKeycloak } from 'auth/KeycloakContext';
+import withKeycloak from 'auth/withKeycloak';
 import { AuthenticatedView, UnauthenticatedView } from 'auth/KeycloakViews';
 import ConferenceDetails from 'components/ConferenceDetails';
 import Notification from 'components/common/Notification';
@@ -122,12 +122,13 @@ ConferenceDetailsContainer.propTypes = {
   onError: PropTypes.func,
   t: PropTypes.func.isRequired,
   keycloak: keycloakType.isRequired,
-  hideEditButton: PropTypes.bool.isRequired,
+  hideEditButton: PropTypes.bool,
 };
 
 ConferenceDetailsContainer.defaultProps = {
   onEdit: () => {},
   onError: () => {},
+  hideEditButton: false,
 };
 
 export default withKeycloak(withTranslation()(ConferenceDetailsContainer));

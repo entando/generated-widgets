@@ -22,14 +22,16 @@ const ConferenceDetails = ({ conference, hideEditButton, onEdit, t }) => {
 };
 
 ConferenceDetails.propTypes = {
-  onEdit: PropTypes.func.isRequired,
-  hideEditButton: PropTypes.bool.isRequired,
+  onEdit: PropTypes.func,
+  hideEditButton: PropTypes.bool,
   conference: conferenceType,
   t: PropTypes.func.isRequired,
 };
 
 ConferenceDetails.defaultProps = {
   conference: {},
+  onEdit: () => {},
+  hideEditButton: false,
 };
 
 export default withTranslation()(ConferenceDetails);
