@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import { fireEvent, render, wait } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
@@ -7,21 +8,25 @@ import 'i18n/__mocks__/i18nMock';
 import conferenceMock from 'components/__mocks__/conferenceMocks';
 
 jest.mock('api/conferences');
-jest.mock('@material-ui/pickers', () => ({
-  ...jest.requireActual('@material-ui/pickers'),
-  // eslint-disable-next-line react/prop-types
-  DateTimePicker: ({ id, value, name, label, onChange }) => {
-    const handleChange = event => onChange(event.currentTarget.value);
+
+jest.mock('@material-ui/pickers', () => {
+  const MockPicker = ({ id, value, name, label, onChange }) => {
+    const handleChange = event => onChange(event.target.value);
     return (
       <span>
         <label htmlFor={id}>{label}</label>
         <input id={id} name={name} value={value || ''} onChange={handleChange} />
       </span>
     );
-  },
-}));
+  };
+  return {
+    ...jest.requireActual('@material-ui/pickers'),
+    DateTimePicker: MockPicker,
+    DatePicker: MockPicker,
+  };
+});
 
-jest.mock('auth/KeycloakContext', () => {
+jest.mock('auth/withKeycloak', () => {
   const withKeycloak = Component => {
     return props => (
       <Component
@@ -34,8 +39,10 @@ jest.mock('auth/KeycloakContext', () => {
     );
   };
 
-  return { withKeycloak };
+  return withKeycloak;
 });
+
+const sampleFile = '(⌐□_□)';
 
 describe('ConferenceAddFormContainer', () => {
   beforeEach(() => {
@@ -49,10 +56,8 @@ describe('ConferenceAddFormContainer', () => {
   const onCreateMock = jest.fn();
 
   it('saves data', async () => {
-    apiConferencePost.mockImplementation(data => Promise.resolve(data));
-
     const { findByTestId, findByLabelText, queryByText, rerender } = render(
-      <ConferenceAddFormContainer onError={onErrorMock} onUpdate={onCreateMock} />
+      <ConferenceAddFormContainer onError={onErrorMock} onCreate={onCreateMock} />
     );
 
     const nameField = await findByLabelText('entities.conference.name');
@@ -100,19 +105,30 @@ describe('ConferenceAddFormContainer', () => {
     const regionField = await findByLabelText('entities.conference.region');
     fireEvent.change(regionField, { target: { value: conferenceMock.region } });
 
-    const logoField = await findByLabelText('entities.conference.logo');
-    fireEvent.change(logoField, { target: { value: conferenceMock.logo } });
+    const logoField = await findByTestId('logo-uploader');
+    const logoImage = new File([sampleFile], 'logo.png', {
+      type: conferenceMock.logoContentType,
+    });
+    Object.defineProperty(logoField, 'files', {
+      value: [logoImage],
+    });
+    fireEvent.change(logoField);
 
-    const contentField = await findByLabelText('entities.conference.content');
-    fireEvent.change(contentField, { target: { value: conferenceMock.content } });
+    const contentField = await findByTestId('content-uploader');
+    const contentImage = new File([sampleFile], 'content.png', {
+      type: conferenceMock.logoContentType,
+    });
+    Object.defineProperty(contentField, 'files', {
+      value: [contentImage],
+    });
+    fireEvent.change(contentField);
 
     const signatureField = await findByLabelText('entities.conference.signature');
     fireEvent.change(signatureField, { target: { value: conferenceMock.signature } });
 
-    rerender(<ConferenceAddFormContainer onError={onErrorMock} onUpdate={onCreateMock} />);
+    rerender(<ConferenceAddFormContainer onError={onErrorMock} onCreate={onCreateMock} />);
 
     const saveButton = await findByTestId('submit-btn');
-
     fireEvent.click(saveButton);
 
     await wait(() => {
@@ -130,7 +146,7 @@ describe('ConferenceAddFormContainer', () => {
     apiConferencePost.mockImplementation(() => Promise.reject());
 
     const { findByTestId, findByLabelText, queryByText, rerender } = render(
-      <ConferenceAddFormContainer onError={onErrorMock} onUpdate={onCreateMock} />
+      <ConferenceAddFormContainer onError={onErrorMock} onCreate={onCreateMock} />
     );
 
     const nameField = await findByLabelText('entities.conference.name');
@@ -178,16 +194,28 @@ describe('ConferenceAddFormContainer', () => {
     const regionField = await findByLabelText('entities.conference.region');
     fireEvent.change(regionField, { target: { value: conferenceMock.region } });
 
-    const logoField = await findByLabelText('entities.conference.logo');
-    fireEvent.change(logoField, { target: { value: conferenceMock.logo } });
+    const logoField = await findByTestId('logo-uploader');
+    const logoImage = new File([sampleFile], 'logo.png', {
+      type: conferenceMock.logoContentType,
+    });
+    Object.defineProperty(logoField, 'files', {
+      value: [logoImage],
+    });
+    fireEvent.change(logoField);
 
-    const contentField = await findByLabelText('entities.conference.content');
-    fireEvent.change(contentField, { target: { value: conferenceMock.content } });
+    const contentField = await findByTestId('content-uploader');
+    const contentImage = new File([sampleFile], 'content.png', {
+      type: conferenceMock.logoContentType,
+    });
+    Object.defineProperty(contentField, 'files', {
+      value: [contentImage],
+    });
+    fireEvent.change(contentField);
 
     const signatureField = await findByLabelText('entities.conference.signature');
     fireEvent.change(signatureField, { target: { value: conferenceMock.signature } });
 
-    rerender(<ConferenceAddFormContainer onError={onErrorMock} onUpdate={onCreateMock} />);
+    rerender(<ConferenceAddFormContainer onError={onErrorMock} onCreate={onCreateMock} />);
 
     const saveButton = await findByTestId('submit-btn');
 

@@ -298,20 +298,21 @@ class ConferenceForm extends PureComponent {
               </Select>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <InputLabel>{t('entities.conference.logo')}</InputLabel>
+              <InputLabel htmlFor="logo-upload-file-button">
+                {t('entities.conference.logo')}
+              </InputLabel>
               <div>
                 <input
+                  data-testid="logo-uploader"
                   style={{ display: 'none' }}
                   id="logo-upload-file-button"
                   accept="image/*"
                   type="file"
                   onChange={handleFiles('logo')}
                 />
-                <label htmlFor="logo-upload-file-button">
-                  <Button className={classes.button} component="span">
-                    {t('common.selectImageFile')}
-                  </Button>
-                </label>
+                <Button className={classes.button} component="span">
+                  {t('common.selectImageFile')}
+                </Button>
               </div>
               {values.logo && (
                 <div>
@@ -331,6 +332,7 @@ class ConferenceForm extends PureComponent {
                 </a>
               )}
               <input
+                data-testid="content-uploader"
                 style={{ display: 'none' }}
                 id="content-upload-file-button"
                 type="file"
@@ -383,7 +385,7 @@ ConferenceForm.propTypes = {
   handleChange: PropTypes.func.isRequired,
   handleBlur: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  onCancelEditing: PropTypes.func.isRequired,
+  onCancelEditing: PropTypes.func,
   isSubmitting: PropTypes.bool.isRequired,
   setFieldValue: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired,
@@ -391,6 +393,7 @@ ConferenceForm.propTypes = {
 };
 
 ConferenceForm.defaultProps = {
+  onCancelEditing: () => {},
   classes: {},
   values: {},
   touched: {},
