@@ -6,7 +6,7 @@ import { StylesProvider, ThemeProvider, jssPreset } from '@material-ui/core/styl
 import { createMuiTheme } from '@material-ui/core';
 import { create as jssCreate } from 'jss';
 
-import { KeycloakContext } from 'auth/KeycloakContext';
+import KeycloakContext from 'auth/KeycloakContext';
 import setLocale from 'i18n/setLocale';
 import {
   createWidgetEventPublisher,

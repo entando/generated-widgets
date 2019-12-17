@@ -5,7 +5,7 @@ import retargetEvents from 'react-shadow-dom-retarget-events';
 import { StylesProvider, jssPreset, createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { create } from 'jss';
 
-import { KeycloakContext } from 'auth/KeycloakContext';
+import KeycloakContext from 'auth/KeycloakContext';
 import { PaginationProvider } from 'components/pagination/PaginationContext';
 import ConferenceTableContainer from 'components/ConferenceTableContainer';
 import setLocale from 'i18n/setLocale';

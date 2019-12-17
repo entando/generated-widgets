@@ -9,10 +9,10 @@ import { withStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 
 import keycloakType from 'components/__types__/keycloak';
-import { withKeycloak } from 'auth/KeycloakContext';
+import withKeycloak from 'auth/withKeycloak';
 import { AuthenticatedView, UnauthenticatedView } from 'auth/KeycloakViews';
 import PaginationWrapper from 'components/pagination/PaginationWrapper';
-import { withPagination } from 'components/pagination/PaginationContext';
+import withPagination from 'components/pagination/withPagination';
 import FiltersContainer from 'components/filters/FiltersContainer';
 import ConferenceTable from 'components/ConferenceTable';
 import Notification from 'components/common/Notification';

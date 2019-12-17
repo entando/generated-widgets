@@ -4,7 +4,8 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { withTranslation } from 'react-i18next';
 import TablePagination from '@material-ui/core/TablePagination';
 
-import { withPagination, itemsPerPageOptions } from 'components/pagination/PaginationContext';
+import { itemsPerPageOptions } from 'components/pagination/PaginationContext';
+import withPagination from 'components/pagination/withPagination';
 import TablePaginationActions from 'components/pagination/TablePaginationActions';
 
 import conferenceType from 'components/__types__/conference';

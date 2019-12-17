@@ -5,7 +5,7 @@ import retargetEvents from 'react-shadow-dom-retarget-events';
 import { StylesProvider, jssPreset } from '@material-ui/core/styles';
 import { create } from 'jss';
 
-import { KeycloakContext } from 'auth/KeycloakContext';
+import KeycloakContext from 'auth/KeycloakContext';
 import ConferenceDetailsContainer from 'components/ConferenceDetailsContainer';
 import {
   subscribeToWidgetEvent,

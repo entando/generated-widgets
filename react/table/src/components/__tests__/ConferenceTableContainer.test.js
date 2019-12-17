@@ -9,7 +9,7 @@ import ConferenceTableContainer from 'components/ConferenceTableContainer';
 
 jest.mock('api/conferences');
 
-jest.mock('auth/KeycloakContext', () => {
+jest.mock('auth/withKeycloak', () => {
   const withKeycloak = Component => {
     return props => (
       <Component
@@ -22,7 +22,7 @@ jest.mock('auth/KeycloakContext', () => {
     );
   };
 
-  return { withKeycloak };
+  return withKeycloak;
 });
 
 describe('ConferenceTableContainer', () => {
