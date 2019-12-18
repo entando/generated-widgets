@@ -150,7 +150,7 @@ class ConferenceTableContainer extends Component {
 
     if (authenticated) {
       try {
-        // await apiConferenceDelete(item.id);
+        await apiConferenceDelete(item.id);
         onDelete(item);
         this.dispatch({ type: DELETE, payload: { id: item.id } });
       } catch (err) {

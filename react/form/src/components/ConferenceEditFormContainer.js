@@ -5,7 +5,7 @@ import { withTranslation } from 'react-i18next';
 import keycloakType from 'components/__types__/keycloak';
 import withKeycloak from 'auth/withKeycloak';
 import { AuthenticatedView, UnauthenticatedView } from 'auth/KeycloakViews';
-import { apiConferenceGet, apiConferencePut } from 'api/conferences';
+import { apiConferenceGet, apiConferenceDelete, apiConferencePut } from 'api/conferences';
 import Notification from 'components/common/Notification';
 import ConferenceForm from 'components/ConferenceForm';
 
@@ -90,7 +90,7 @@ class ConferenceEditFormContainer extends PureComponent {
 
     if (authenticated) {
       try {
-        // await apiConferenceDelete(conference.id);
+        await apiConferenceDelete(conference.id);
         onDelete(conference);
       } catch (err) {
         this.handleError(err);
