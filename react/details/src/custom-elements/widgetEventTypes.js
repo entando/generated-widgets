@@ -1,5 +1,6 @@
 export const INPUT_EVENT_TYPES = {
   tableSelect: 'conference.table.select',
+  tableDelete: 'conference.table.delete',
   formCancelEditing: 'conference.form.cancelEditing',
   formCreate: 'conference.form.create',
   formUpdate: 'conference.form.update',
