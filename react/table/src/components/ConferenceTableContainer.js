@@ -11,6 +11,7 @@ import AddIcon from '@material-ui/icons/Add';
 import keycloakType from 'components/__types__/keycloak';
 import withKeycloak from 'auth/withKeycloak';
 import { AuthenticatedView, UnauthenticatedView } from 'auth/KeycloakViews';
+import ConfirmationDialogTrigger from 'components/common/ConfirmationDialogTrigger';
 import PaginationWrapper from 'components/pagination/PaginationWrapper';
 import withPagination from 'components/pagination/withPagination';
 import FiltersContainer from 'components/filters/FiltersContainer';
@@ -20,7 +21,6 @@ import { apiConferencesGet, apiConferenceDelete } from 'api/conferences';
 import { reducer, initialState } from 'state/conference.reducer';
 import { ADD_FILTER, UPDATE_FILTER, DELETE_FILTER, CLEAR_FILTERS } from 'state/filter.types';
 import { DELETE, ERROR_FETCH, CLEAR_ERRORS, READ_ALL } from 'state/conference.types';
-import DeleteConferenceButton from 'components/DeleteConferenceButton';
 
 const styles = {
   fab: {
@@ -159,9 +159,9 @@ class ConferenceTableContainer extends Component {
     }
   }
 
-  handleCloseDeleteConfirmationDialog(action, item) {
+  handleConfirmationDialogAction(action, item) {
     switch (action) {
-      case DeleteConferenceButton.CONFIRM: {
+      case ConfirmationDialogTrigger.CONFIRM: {
         this.handleDelete(item);
         break;
       }
@@ -172,18 +172,28 @@ class ConferenceTableContainer extends Component {
 
   render() {
     const { items, count, errorMessage, errorStatus, filters } = this.state;
-    const { classes, onSelect, onAdd, t, keycloak, paginationMode = '' } = this.props;
+    const { classes, onSelect, onAdd, onDelete, t, keycloak, paginationMode = '' } = this.props;
+    const deleteLabel = t('common.delete');
 
-    const Actions = ({ item }) => (
-      <DeleteConferenceButton
-        onClose={action => this.handleCloseDeleteConfirmationDialog(action, item)}
-        Renderer={({ onClick }) => (
-          <IconButton aria-label="Remove" onClick={onClick}>
-            <DeleteForever />
-          </IconButton>
-        )}
-      />
-    );
+    const Actions = ({ item }) =>
+      onDelete ? (
+        <ConfirmationDialogTrigger
+          onCloseDialog={action => this.handleConfirmationDialogAction(action, item)}
+          dialog={{
+            title: t('entities.conference.deleteDialog.title'),
+            description: t('entities.conference.deleteDialog.description'),
+            confirmLabel: t('common.yes'),
+            discardLabel: t('common.no'),
+          }}
+          Renderer={({ onClick }) => (
+            <IconButton aria-label={deleteLabel} title={deleteLabel} onClick={onClick}>
+              <DeleteForever />
+            </IconButton>
+          )}
+        />
+      ) : (
+        ''
+      );
 
     return (
       <>
