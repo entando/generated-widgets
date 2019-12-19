@@ -15,8 +15,10 @@ export default class ConfirmationDialogTrigger extends PureComponent {
 
   constructor(props) {
     super(props);
-    this.handleOpen = this.handleOpen.bind(this);
     this.state = { open: false };
+    this.handleOpen = this.handleOpen.bind(this);
+    this.discard = this.discard.bind(this);
+    this.confirm = this.confirm.bind(this);
   }
 
   handleOpen() {
@@ -31,6 +33,14 @@ export default class ConfirmationDialogTrigger extends PureComponent {
       open: false,
     }));
     onCloseDialog(action);
+  }
+
+  discard() {
+    this.handleClose(ConfirmationDialogTrigger.DISCARD);
+  }
+
+  confirm() {
+    this.handleClose(ConfirmationDialogTrigger.CONFIRM);
   }
 
   render() {
@@ -55,13 +65,10 @@ export default class ConfirmationDialogTrigger extends PureComponent {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => this.handleClose(ConfirmationDialogTrigger.DISCARD)} autoFocus>
+            <Button onClick={this.discard} autoFocus>
               {discardLabel}
             </Button>
-            <Button
-              onClick={() => this.handleClose(ConfirmationDialogTrigger.CONFIRM)}
-              color="primary"
-            >
+            <Button onClick={this.confirm} color="primary">
               {confirmLabel}
             </Button>
           </DialogActions>
