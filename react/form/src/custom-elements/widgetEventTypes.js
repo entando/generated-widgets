@@ -3,6 +3,7 @@ export const INPUT_EVENT_TYPES = {
   tableSelect: 'conference.table.select',
   cancelEditing: 'conference.form.cancelEditing',
   create: 'conference.form.create',
+  delete: 'conference.form.delete',
   update: 'conference.form.update',
   edit: 'conference.details.edit',
 };
@@ -10,6 +11,7 @@ export const INPUT_EVENT_TYPES = {
 export const OUTPUT_EVENT_TYPES = {
   cancelEditing: 'conference.form.cancelEditing',
   create: 'conference.form.create',
+  delete: 'conference.form.delete',
   update: 'conference.form.update',
   errorCreate: 'conference.form.errorCreate',
   errorUpdate: 'conference.form.errorUpdate',

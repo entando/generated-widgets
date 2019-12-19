@@ -5,11 +5,14 @@
   "common": {
     "save": "Save",
     "cancel": "Cancel",
+    "delete": "Delete",
     "dataSaved": "Data successfully saved",
     "notAuthenticated": "User is not authenticated.",
     "selectFile": "Upload new file",
     "selectImageFile": "Upload new image",
-    "download": "Download"
+    "download": "Download",
+    "yes": "Yes",
+    "no": "No"
   },
   "validation": {
     "required": "{{field}} is required"
@@ -34,7 +37,11 @@
       "region": "entities.conference.region",
       "logo": "entities.conference.logo",
       "content": "entities.conference.content",
-      "signature": "entities.conference.signature"
+      "signature": "entities.conference.signature",
+      "deleteDialog": {
+        "title": "Delete conference",
+        "description": "Are you sure?"
+      }
     }
   }
 }

@@ -65,8 +65,11 @@ export const reducer = (state = initialState, action) => {
       return { ...state, items };
     }
     case DELETE:
-    case INPUT_EVENT_TYPES.formDelete:
-      return { ...state, items: state.items.filter(item => item.id !== action.payload.id) };
+    case INPUT_EVENT_TYPES.formDelete: {
+      const updatedItems = state.items.filter(item => item.id !== action.payload.id);
+      const count = updatedItems.length < state.items.length ? state.count - 1 : state.count;
+      return { ...state, items: updatedItems, count };
+    }
     default:
       return state;
   }

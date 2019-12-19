@@ -6,7 +6,10 @@
     "couldNotFetchData": "Unfortunately we could not fetch entity data",
     "notAuthenticated": "User is not authenticated.",
     "loadingMore": "Loading more...",
-    "download": "Download file"
+    "delete": "Delete",
+    "download": "Download file",
+    "yes": "Yes",
+    "no": "No"
   },
   "pagination": {
     "ariaLabels": {
@@ -52,7 +55,11 @@
       "region": "entities.conference.region",
       "logo": "entities.conference.logo",
       "content": "entities.conference.content",
-      "signature": "entities.conference.signature"
+      "signature": "entities.conference.signature",
+      "deleteDialog": {
+        "title": "Delete conference",
+        "description": "Are you sure?"
+      }
     }
   }
 }

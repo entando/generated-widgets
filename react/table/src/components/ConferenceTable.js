@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
+
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
@@ -12,6 +13,9 @@ import Checkbox from '@material-ui/core/Checkbox';
 import conferenceType from 'components/__types__/conference';
 
 const styles = {
+  icon: {
+    color: 'rgba(0, 0, 0, 0.54)',
+  },
   tableRoot: {
     marginTop: '10px',
   },
@@ -26,7 +30,7 @@ const styles = {
   },
 };
 
-const ConferenceTable = ({ items, onSelect, classes, t, i18n }) => {
+const ConferenceTable = ({ items, onSelect, classes, t, i18n, Actions }) => {
   const tableRows = items.map(item => (
     <TableRow hover className={classes.rowRoot} key={item.id} onClick={() => onSelect(item)}>
       <TableCell>
@@ -89,6 +93,11 @@ const ConferenceTable = ({ items, onSelect, classes, t, i18n }) => {
       <TableCell>
         <span>{item.signature}</span>
       </TableCell>
+      {Actions && (
+        <TableCell>
+          <Actions item={item} />
+        </TableCell>
+      )}
     </TableRow>
   ));
 
@@ -150,6 +159,7 @@ const ConferenceTable = ({ items, onSelect, classes, t, i18n }) => {
           <TableCell>
             <span>{t('entities.conference.signature')}</span>
           </TableCell>
+          {Actions && <TableCell />}
         </TableRow>
       </TableHead>
       <TableBody>{tableRows}</TableBody>
@@ -163,16 +173,19 @@ ConferenceTable.propTypes = {
   items: PropTypes.arrayOf(conferenceType).isRequired,
   onSelect: PropTypes.func,
   classes: PropTypes.shape({
+    icon: PropTypes.string,
     rowRoot: PropTypes.string,
     tableRoot: PropTypes.string,
     noItems: PropTypes.string,
   }).isRequired,
   t: PropTypes.func.isRequired,
   i18n: PropTypes.shape({ language: PropTypes.string }).isRequired,
+  Actions: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
 };
 
 ConferenceTable.defaultProps = {
   onSelect: () => {},
+  Actions: null,
 };
 
 export default withStyles(styles)(withTranslation()(ConferenceTable));

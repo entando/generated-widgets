@@ -1,22 +1,26 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
+
 import { Fab } from '@material-ui/core';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteForever from '@material-ui/icons/DeleteForever';
 import { withStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 
 import keycloakType from 'components/__types__/keycloak';
 import withKeycloak from 'auth/withKeycloak';
 import { AuthenticatedView, UnauthenticatedView } from 'auth/KeycloakViews';
+import ConfirmationDialogTrigger from 'components/common/ConfirmationDialogTrigger';
 import PaginationWrapper from 'components/pagination/PaginationWrapper';
 import withPagination from 'components/pagination/withPagination';
 import FiltersContainer from 'components/filters/FiltersContainer';
 import ConferenceTable from 'components/ConferenceTable';
 import Notification from 'components/common/Notification';
-import { apiConferencesGet } from 'api/conferences';
+import { apiConferencesGet, apiConferenceDelete } from 'api/conferences';
 import { reducer, initialState } from 'state/conference.reducer';
 import { ADD_FILTER, UPDATE_FILTER, DELETE_FILTER, CLEAR_FILTERS } from 'state/filter.types';
-import { ERROR_FETCH, CLEAR_ERRORS, READ_ALL } from 'state/conference.types';
+import { DELETE, ERROR_FETCH, CLEAR_ERRORS, READ_ALL } from 'state/conference.types';
 
 const styles = {
   fab: {
@@ -35,6 +39,7 @@ class ConferenceTableContainer extends Component {
 
     this.state = initialState;
 
+    this.handleDelete = this.handleDelete.bind(this);
     this.handleError = this.handleError.bind(this);
     this.closeNotification = this.closeNotification.bind(this);
     this.fetchData = this.fetchData.bind(this);
@@ -91,7 +96,7 @@ class ConferenceTableContainer extends Component {
               }),
         };
 
-        const { conferences, headers } = await apiConferencesGet(requestParameters);
+        const { body: conferences, headers } = await apiConferencesGet(requestParameters);
         const count = (headers && headers['X-Total-Count']) || null;
 
         this.dispatch({
@@ -139,9 +144,56 @@ class ConferenceTableContainer extends Component {
     });
   }
 
+  async handleDelete(item) {
+    const { onDelete, keycloak } = this.props;
+    const authenticated = keycloak.initialized && keycloak.authenticated;
+
+    if (authenticated) {
+      try {
+        await apiConferenceDelete(item.id);
+        onDelete(item);
+        this.dispatch({ type: DELETE, payload: { id: item.id } });
+      } catch (err) {
+        this.handleError(err);
+      }
+    }
+  }
+
+  handleConfirmationDialogAction(action, item) {
+    switch (action) {
+      case ConfirmationDialogTrigger.CONFIRM: {
+        this.handleDelete(item);
+        break;
+      }
+      default:
+        break;
+    }
+  }
+
   render() {
     const { items, count, errorMessage, errorStatus, filters } = this.state;
-    const { classes, onSelect, onAdd, t, keycloak, paginationMode = '' } = this.props;
+    const { classes, onSelect, onAdd, onDelete, t, keycloak, paginationMode = '' } = this.props;
+    const deleteLabel = t('common.delete');
+
+    const Actions = ({ item }) =>
+      onDelete ? (
+        <ConfirmationDialogTrigger
+          onCloseDialog={action => this.handleConfirmationDialogAction(action, item)}
+          dialog={{
+            title: t('entities.conference.deleteDialog.title'),
+            description: t('entities.conference.deleteDialog.description'),
+            confirmLabel: t('common.yes'),
+            discardLabel: t('common.no'),
+          }}
+          Renderer={({ onClick }) => (
+            <IconButton aria-label={deleteLabel} title={deleteLabel} onClick={onClick}>
+              <DeleteForever />
+            </IconButton>
+          )}
+        />
+      ) : (
+        ''
+      );
 
     return (
       <>
@@ -162,7 +214,7 @@ class ConferenceTableContainer extends Component {
           />
           <PaginationWrapper items={items} paginationMode={paginationMode} count={count}>
             <div className={classes.tableWrapper}>
-              <ConferenceTable items={items} onSelect={onSelect} />
+              <ConferenceTable items={items} onSelect={onSelect} Actions={Actions} />
             </div>
           </PaginationWrapper>
         </AuthenticatedView>
@@ -184,6 +236,7 @@ ConferenceTableContainer.propTypes = {
   onAdd: PropTypes.func,
   onError: PropTypes.func,
   onSelect: PropTypes.func,
+  onDelete: PropTypes.func,
   t: PropTypes.func.isRequired,
   keycloak: keycloakType.isRequired,
   paginationMode: PropTypes.string,
@@ -195,6 +248,7 @@ ConferenceTableContainer.propTypes = {
 
 ConferenceTableContainer.defaultProps = {
   onAdd: () => {},
+  onDelete: () => {},
   onError: () => {},
   onSelect: () => {},
   paginationMode: '',

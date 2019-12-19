@@ -5,7 +5,7 @@ import { withTranslation } from 'react-i18next';
 import keycloakType from 'components/__types__/keycloak';
 import withKeycloak from 'auth/withKeycloak';
 import { AuthenticatedView, UnauthenticatedView } from 'auth/KeycloakViews';
-import { apiConferenceGet, apiConferencePut } from 'api/conferences';
+import { apiConferenceGet, apiConferenceDelete, apiConferencePut } from 'api/conferences';
 import Notification from 'components/common/Notification';
 import ConferenceForm from 'components/ConferenceForm';
 
@@ -19,6 +19,7 @@ class ConferenceEditFormContainer extends PureComponent {
     };
 
     this.closeNotification = this.closeNotification.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -83,6 +84,20 @@ class ConferenceEditFormContainer extends PureComponent {
     }
   }
 
+  async handleDelete(conference) {
+    const { onDelete, keycloak } = this.props;
+    const authenticated = keycloak.initialized && keycloak.authenticated;
+
+    if (authenticated) {
+      try {
+        await apiConferenceDelete(conference.id);
+        onDelete(conference);
+      } catch (err) {
+        this.handleError(err);
+      }
+    }
+  }
+
   handleError(err) {
     const { t, onError } = this.props;
     onError(err);
@@ -106,6 +121,7 @@ class ConferenceEditFormContainer extends PureComponent {
             conference={conference}
             onSubmit={this.handleSubmit}
             onCancelEditing={onCancelEditing}
+            onDelete={this.handleDelete}
           />
         </AuthenticatedView>
         <Notification
@@ -123,12 +139,14 @@ ConferenceEditFormContainer.propTypes = {
   onCancelEditing: PropTypes.func,
   onError: PropTypes.func,
   onUpdate: PropTypes.func,
+  onDelete: PropTypes.func,
   t: PropTypes.func.isRequired,
   keycloak: keycloakType.isRequired,
 };
 
 ConferenceEditFormContainer.defaultProps = {
   onCancelEditing: () => {},
+  onDelete: () => {},
   onUpdate: () => {},
   onError: () => {},
 };

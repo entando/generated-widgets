@@ -17,6 +17,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
+import ConfirmationDialogTrigger from 'components/common/ConfirmationDialogTrigger';
 
 const styles = theme => ({
   root: {
@@ -41,6 +42,23 @@ const styles = theme => ({
 });
 
 class ConferenceForm extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.handleConfirmationDialogAction = this.handleConfirmationDialogAction.bind(this);
+  }
+
+  handleConfirmationDialogAction(action) {
+    const { onDelete, values } = this.props;
+    switch (action) {
+      case ConfirmationDialogTrigger.CONFIRM: {
+        onDelete(values);
+        break;
+      }
+      default:
+        break;
+    }
+  }
+
   render() {
     const {
       classes,
@@ -50,6 +68,7 @@ class ConferenceForm extends PureComponent {
       handleChange,
       handleBlur,
       handleSubmit: formikHandleSubmit,
+      onDelete,
       onCancelEditing,
       isSubmitting,
       setFieldValue,
@@ -362,6 +381,23 @@ class ConferenceForm extends PureComponent {
                 label={t('entities.conference.signature')}
               />
             </Grid>
+            {onDelete && (
+              <ConfirmationDialogTrigger
+                onCloseDialog={this.handleConfirmationDialogAction}
+                dialog={{
+                  title: t('entities.conference.deleteDialog.title'),
+                  description: t('entities.conference.deleteDialog.description'),
+                  confirmLabel: t('common.yes'),
+                  discardLabel: t('common.no'),
+                }}
+                Renderer={({ onClick }) => (
+                  <Button onClick={onClick} disabled={isSubmitting}>
+                    {t('common.delete')}
+                  </Button>
+                )}
+              />
+            )}
+
             <Button onClick={onCancelEditing} disabled={isSubmitting} data-testid="cancel-btn">
               {t('common.cancel')}
             </Button>
@@ -390,6 +426,7 @@ ConferenceForm.propTypes = {
   handleChange: PropTypes.func.isRequired,
   handleBlur: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
+  onDelete: PropTypes.func,
   onCancelEditing: PropTypes.func,
   isSubmitting: PropTypes.bool.isRequired,
   setFieldValue: PropTypes.func.isRequired,
@@ -403,6 +440,7 @@ ConferenceForm.defaultProps = {
   values: {},
   touched: {},
   errors: {},
+  onDelete: null,
 };
 
 const emptyConference = {

@@ -46,6 +46,7 @@ class ConferenceFormElement extends HTMLElement {
     this.unsubscribeFromKeycloakEvent = null;
     this.onCreate = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.create);
     this.onCancelEditing = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.cancelEditing);
+    this.onDelete = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.delete);
     this.onUpdate = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.update);
     this.onErrorCreate = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.errorCreate);
     this.onErrorUpdate = createWidgetEventPublisher(OUTPUT_EVENT_TYPES.errorUpdate);
@@ -124,7 +125,15 @@ class ConferenceFormElement extends HTMLElement {
 
   defaultWidgetEventHandler() {
     return evt => {
-      const { tableAdd, cancelEditing, create, edit, tableSelect, update } = INPUT_EVENT_TYPES;
+      const {
+        tableAdd,
+        cancelEditing,
+        create,
+        edit,
+        delete: performDelete,
+        tableSelect,
+        update,
+      } = INPUT_EVENT_TYPES;
       const { id, overrideEventHandler } = ATTRIBUTES;
 
       if (!this.isAttributeTruthy(overrideEventHandler)) {
@@ -143,6 +152,12 @@ class ConferenceFormElement extends HTMLElement {
           case cancelEditing:
           case update: {
             this.hidden = true;
+            break;
+          }
+          // cannot use simply "delete" as it's a keyword
+          case performDelete: {
+            this.hidden = true;
+            this.setAttribute(id, '');
             break;
           }
           case tableSelect: {
@@ -168,6 +183,7 @@ class ConferenceFormElement extends HTMLElement {
           ConferenceEditFormContainer,
           {
             id,
+            onDelete: this.onDelete,
             onUpdate: this.onUpdate,
             onError: this.onErrorUpdate,
             onCancelEditing: this.onCancelEditing,

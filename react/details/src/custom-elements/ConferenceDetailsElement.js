@@ -94,7 +94,14 @@ class ConferenceDetailsElement extends HTMLElement {
 
   defaultWidgetEventHandler() {
     return evt => {
-      const { formCancelEditing, formCreate, edit, formUpdate, tableSelect } = INPUT_EVENT_TYPES;
+      const {
+        formCancelEditing,
+        formCreate,
+        edit,
+        formUpdate,
+        tableDelete,
+        tableSelect,
+      } = INPUT_EVENT_TYPES;
       const { id, overrideEventHandler } = ATTRIBUTES;
 
       if (!this.isAttributeTruthy(overrideEventHandler)) {
@@ -114,6 +121,14 @@ class ConferenceDetailsElement extends HTMLElement {
           }
           case formUpdate: {
             this.hidden = false;
+            break;
+          }
+          case tableDelete: {
+            const deletedItemId = evt.detail.payload.id;
+            if (this.getAttribute(ATTRIBUTES.id) === deletedItemId.toString()) {
+              this.hidden = true;
+              this.setAttribute(id, '');
+            }
             break;
           }
           case tableSelect: {
