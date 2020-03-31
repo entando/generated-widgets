@@ -2,10 +2,10 @@
 
 ## Running locally
 
-Widgets use Keycloak for authentication. To use widget locally follow these steps (where prompted for port, use defaults):
+Widgets use Keycloak for authentication. To use a widget locally, follow these steps (where prompted for port, use defaults):
 
-1. Download and install Keycloak standalone server (this widget has been tested with Keycloak 7.0.1) from https://www.keycloak.org/downloads.html
-1. Go to <KEYCLOAK_SERVER_FOLDER>/bin and run `./standalone.sh -Djboss.socket.binding.port-offset=1000` - this will offset the Keycloak port to 9080 (which is a default port JHipster uses)
+1. Download and install a Keycloak standalone server (this widget has been tested with Keycloak 7.0.1) from https://www.keycloak.org/downloads.html
+1. Go to <KEYCLOAK_SERVER_FOLDER>/bin and run `./standalone.sh -Djboss.socket.binding.port-offset=1000` - this will offset the Keycloak port to 9080 (which is the default port JHipster uses). 
 1. Setup Keycloak by visiting http://localhost:9080/auth/ (administrator login `admin/admin`)
    1. Create realm named `jhipster`
    1. Add client with
@@ -14,7 +14,7 @@ Widgets use Keycloak for authentication. To use widget locally follow these step
       - root URL - `http://localhost:3000/`
       - valid redirect URIs - `http://localhost:3000/*`
    1. Add user with all roles assigned
-1. Create microservice application, add entity (this should create the widgets) and start the application.
+1. Create a microservice application, add entity (this should create the widgets) and start the application.
 1. If needed (should be automated in future releases), update SecurityConfiguration.java file (<MICROSERVICE_FOLDER>/src/main/java/<PACKAGE_NAME_FOLDERS>/config/SecurityConfiguration.java) to allow OPTIONS requests by adding:
    1. `import org.springframework.http.HttpMethod;` at the top
    1. `.antMatchers(HttpMethod.OPTIONS,"/api/**").permitAll()` after `.antMatchers("/api/auth-info").permitAll()`
@@ -34,7 +34,7 @@ Widgets use Keycloak for authentication. To use widget locally follow these step
 
 ### Environment variables
 
-There are several environment variables used in the widget that provide initial configuration of the widget. To set that up, create `.env` file in the root folder following constants:
+There are several environment variables used in the widget that provide the initial configuration of the widget. To set that up, create an `.env` file in the root folder following constants:
 
 - REACT_APP_DOMAIN - API endpoint for data (e.g., http://localhost:8081/services/jhipster/api)
 
@@ -54,7 +54,7 @@ In the project directory, you can run:
 
 Runs the app in the development mode.<br>
 
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Open [http://localhost:3000](http://localhost:3000) to view in a browser.
 
 The page will reload if you make edits.<br>
 
@@ -80,7 +80,7 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 ### `npm run lint`
 
-Runs Eslint to the root folder and fix all the issues that can be handled automatically.
+Runs Eslint to the root folder and fixes all the issues that can be handled automatically.
 
 ## Linter
 
